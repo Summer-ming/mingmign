@@ -1,0 +1,315 @@
+<!--
+ * @Description: 
+ * @Author: wb
+ * @others: 
+ * @Date: 2019-04-08 17:49:36
+ -->
+<!--
+ * @Description: 审核订单
+ * @Author: wb
+ * @others: 
+ * @Date: 2019-04-08 13:34:05
+ -->
+
+
+
+<template>
+     <div>
+        <b class="font_32">基础信息</b>
+        <row class='order_all'>
+      <dl>
+        <dt>采购单号：{{formItem.orderNo}}</dt>
+        <dd>采购公司：{{formItem.cusOrgName}}</dd>
+      </dl>
+      <dl>
+        <dt>供应商公司：{{formItem.shopOrgName}}</dt>
+        <dd>采购员：{{formItem.adminName}}</dd>
+      </dl>
+      <dl>
+        <dt>合同金额：{{formItem.money}}</dt>
+      </dl>
+        
+    </row>
+    <row>
+        <b class="font_32">合同信息</b>
+        <Table border ref="selection" :columns="columns4" :data="data1" @on-select='selectOne' style='margin-bottom:10px;'>
+        <!-- <div slot="footer" style="height:100px">
+          <td style="width:660px">合计</td>
+          <td style="width:100px;text-align: center;">11</td>
+          <td style="width:100px">-</td>
+          <td style="width:100px;text-align: center;">2222</td>
+        </div> -->
+        </Table>
+    </row>
+    <row>
+      <Button style="margin-right:10px" type="primary" @click="addBtn"> 审核通过</Button>
+      <Button type="primary" @click="deletBtn"> 关闭订单</Button>
+    </row>
+
+     </div>
+</template>
+
+<script>
+import {findOrdersInfoAll,
+updateOrdersStatus} from '@/api/data'
+import { mapMutations } from 'vuex'
+import Utils from '@/api/middle'
+export default {
+    name: 'review_order_info',
+    inject:['reload'],  //調用組建app.vue
+    data(){
+      return {
+        tableItem:{},
+        totalM:0, //表格分页总天数
+        pagesizea:1,//默认分页第一页
+        formItem: {
+          companyName:'',
+          orderNo:'',
+          cusOrgName:'',
+          shopOrgName:'',
+          adminName:'',
+          money:''
+          },
+          columns4: [
+                      {
+                        title: 'ID',
+                        key: 'id',
+                        align: 'center',
+                        width:'100'
+                    },
+                    {
+                        title: '品名',
+                        key: 'steelName',
+                        align: 'center',
+                        width:'100'
+                    },
+                    {
+                        title: '规格',
+                        key: 'steelGuige',
+                        align: 'center',
+                        width:'100'
+                    },
+                    {
+                        title: '材质',
+                        key: 'steelPaihao',
+                        align: 'center',
+                        width:'100'
+                    },
+                    {
+                        title: '钢厂',
+                        key: 'steelPinpai',
+                        align: 'center',
+                        width:'100'
+                    },
+                    {
+                        title: '提货方式',
+                        key: 'steelWorks',
+                        align: 'center',
+                        width:'100'
+                    },
+                     {
+                        title: '交货地',
+                        key: 'jiaohuodi',
+                        align: 'center',
+                        width:'100'
+                    },
+                    {
+                        title: '件数',
+                        key: 'jianshu',
+                        align: 'center',
+                        width:'100'
+                    },
+                     {
+                        title: '总重量',
+                        key: 'zongzhongliang',
+                        align: 'center',
+                        width:'100',
+                        render:(h,params)=>{
+                          return h('div',{
+                            props:{
+                            },
+                            attrs:{
+                              id:params.index
+                            },
+                          },this.$global.accPrecision(params.row.zongzhongliang,3))
+                        }
+                    },
+                     {
+                        title: '单价',
+                        key: 'guapaijia',
+                        align: 'center',
+                        width:'100',
+                        render:(h,params)=>{
+                          return h('div',{
+                            props:{
+                            },
+                            attrs:{
+                              id:params.index
+                            },
+                          },this.$global.accPrecision(params.row.guapaijia,2))
+                        }
+                    },
+                    
+                    {
+                        title: '捆包号',
+                        key: 'kunbaohao',
+                        align: 'center',
+                        width:'100'
+                    }
+                ],
+                data1: [
+                ],//表格展示的数据
+                dataCount:0,//总页数
+                // pageSize:10,  //每页总条数
+                searchPage:1 //初始化时查询的页码数
+                
+      }
+    },
+    
+    methods:{
+      setOrderInfo(){
+          this.formItem.orderNo               = this.$route.query.ordersNo     
+          this.formItem.cusOrgName            = this.$route.query.customerOrgName        
+          this.formItem.shopOrgName           = this.$route.query.shopOrgName          
+          this.formItem.adminName             = this.$route.query.userName        
+          this.formItem.money                 = this.$global.isMoneyShow(this.$route.query.moneyAll) 
+          this.getOrderInfo(); 
+      },
+      getOrderInfo(){//查询订单明细信息
+          let params = {};
+          params.orderNo = this.$route.query.ordersNo;
+          params.pageSize = 10000;
+          findOrdersInfoAll(params).then(res =>{
+            if(res.code =="100"){
+              this.data1 = res.data.list;
+              this.$Notice.success({
+                title:'获取订单明细成功'
+              })
+            }else{
+              this.$Notice.error({
+                title:'获取订单明细失败'
+              })
+            }
+          })
+      },
+       selectOne(row){
+         console.log(row)
+       },
+       remove(index){
+         this.data1.splice(index,1);
+       },
+       addBtn(){//TODO
+          let params = {};
+          params.id  = this.$route.query.id;
+          params.status  ="2"
+          params.statusNote  =""
+          params.userId  =this.$global.adminInfo.id
+
+          updateOrdersStatus(params).then(res =>{
+             if(res.code =='100'){
+                 this.$Notice.success({
+                     title:'审核通过',
+                     duration:1,
+                     onClose:res =>{
+                        console.log("关闭时回调")
+                       this.turnToOrderList();
+                     }
+                 })
+             }else{
+                 this.$Notice.error({
+                     title:'审核失败'
+                 })
+             }
+          })
+       },
+       deletBtn(){//删除订单
+           let params = {};
+          params.id  = this.$route.query.id;
+          params.status  ="99"
+          params.statusNote  =""
+          params.userId  =this.$global.adminInfo.id
+
+          updateOrdersStatus(params).then(res =>{
+             if(res.code =='100'){
+                 this.$Notice.success({
+                     title:'删除成功',
+                     duration:1,
+                     onClose:res =>{
+                        console.log("关闭时回调")
+                       this.turnToOrderList();
+                     }
+                 })
+             }else{
+                 this.$Notice.error({
+                     title:'删除失败'
+
+                 })
+             }
+          })
+       },
+       turnToOrderList(){//审核或者关闭之后跳转到
+          console.log("准备关闭")
+          this.closeTag({
+              name: 'review_order_info',
+              query:this.$route.query
+          })
+          setTimeout(() => {
+            this.toreload();
+          }, 1000);
+       },
+       toreload(){//通知列表页面刷新数据
+          console.log("准备关闭2")
+           Utils.$emit('demo','reload');
+       },
+        ...mapMutations([
+      'closeTag'
+    ]),
+
+    },
+    
+    mounted(){
+     this.setOrderInfo();
+    },
+    
+    created(){
+   
+    },
+}
+
+</script>
+<style <style lang="less">
+
+
+.order_all{
+  height:100px;
+  background:rgba(235,254,255,1);
+  border:1px dashed rgba(134,223,228,1);
+  display:flex;
+  dl{
+    flex:1;
+    padding-top:20px;
+    dt{
+     height:14px;
+      font-size:14px;
+      font-family:SourceHanSansCN-Regular;
+      font-weight:400;
+      color:rgba(51,51,51,1);
+      line-height:14px;
+      text-indent:20px;
+      margin-bottom:20px;
+    }
+    dd{
+      height:14px;
+      font-size:14px;
+      text-indent:20px;
+      font-family:SourceHanSansCN-Regular;
+      font-weight:400;
+      color:rgba(51,51,51,1);
+      line-height:14px
+    }
+  }
+}
+.font_32 {
+        font-size: 32;
+    }
+</style>
