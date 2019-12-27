@@ -32,3 +32,13 @@ export default {
   }
 }
 </script>
+<style lang="less" scoped>
+.sider-trigger-a{
+      margin-top: 2px!important;
+}
+.header-bar .custom-content-con{
+  line-height: 41px!important;
+}
+
+</style>
+

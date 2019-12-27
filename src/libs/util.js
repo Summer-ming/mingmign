@@ -8,6 +8,9 @@ export const TOKEN_KEY = 'token'
 export const USER_INFO = 'userInfo_2019'
 
 export const setToken = (token) => {
+    let dataTime=new Date().getTime();
+    // let cookieExpires=new Date(dataTime + 60 * 1000 );//1分钟
+    let cookieExpires=new Date(dataTime + 60 * 1000 * 60*12);//12小时
     Cookies.set(TOKEN_KEY, token, { expires: cookieExpires || 1 })
 }
 
@@ -21,7 +24,8 @@ export const setUserInfo = (userInfo) => {
 }
 export const getUserInfoAdmin = () => {
     const userInfo = Cookies.get(USER_INFO);
-    //console.log(userInfo)
+    console.log("getUserInfoAdmin读取用户信息")
+    console.log(userInfo)
     if (userInfo) return userInfo
     else return false
 }

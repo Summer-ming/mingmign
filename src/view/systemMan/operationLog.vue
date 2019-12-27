@@ -34,25 +34,61 @@
     </Card>
     <!--表格height="447" -->
     <Row>        
-         <Table border   ref="selection" :columns="columns4" :data="data1" @on-select='selectOne' style='margin-bottom:10px;'></Table>
-        
+         <!-- <Table border   ref="selection" :columns="columns4" :data="data1" @on-select='selectOne' style='margin-bottom:10px;'></Table> -->
+        <vxe-table
+          border
+           @cell-click="cellClickEvent"
+          :data.sync="data1">
+          <vxe-table-column type="index" width="80">
+            <template v-slot="{ seq }">
+              <span>seq= {{ seq }}</span>
+            </template>
+          </vxe-table-column>
+           <vxe-table-column field="cname" title="cname" sortable>
+          </vxe-table-column>
+          <vxe-table-column field="name" title="Name" sortable>
+            <template v-slot="{ rowIndex, columnIndex }">
+              <span>rowIndex= {{ rowIndex }}</span>
+              <span>columnIndex= {{ columnIndex }}</span>
+            </template>
+          </vxe-table-column>
+          <vxe-table-column field="sex" title="Sex" :filters="[{data: ''}]" :filter-method="filterSexMethod">
+            <template v-slot:header="{ column }">
+              <span style="color: red;">这样玩也行</span>
+            </template>
+            <template v-slot:filter="{ column, context }">
+              <template v-for="(option, index) in column.filters">
+                <input type="type" v-model="option.data" :key="index" @input="changeFilterEvent($event, option, context)">
+              </template>
+            </template>
+            <template v-slot="{ row }">
+              <span>{{ row.sex }} </span>
+              <vxe-button type="text">编辑</vxe-button>
+              <!-- <vxe-input v-model="" @change="inputChaneg" value="24" type="text"></vxe-input> -->
+
+            </template>
+          </vxe-table-column>
+          <vxe-table-column field="time" title="Time">
+            <template v-slot:header="{ column }">
+              <vxe-input placeholder="这样也行" size="mini"></vxe-input>
+            </template>
+            <template v-slot="{ row }">
+              <!-- <span>{{ formatDate(row.time) }}</span> -->
+              <vxe-input  size="mini" @change="inputChaneg"  type="text"></vxe-input>
+
+            </template>
+          </vxe-table-column>
+          <vxe-table-column field="address" title="Address" show-overflow>
+            <template v-slot="{ row, rowIndex }">
+              <select v-if="rowIndex === 1">
+                <option value="1">还可以这样</option>
+              </select>
+              <a href="https://github.com/xuliangzhan/vxe-table">{{ row.name }}</a>
+            </template>
+          </vxe-table-column>
+        </vxe-table>
         
         <Row span='8' style="margin-bottom:20px;display:flex;">
-             <!-- 功能添加删除 -->
-            <!-- <div style='flex:1'>
-            <Button  icon="md-add" type="primary"  @click='modal10=true'>指派业务员</Button>
-     
-      
-            <Button  icon="md-add" type="primary">新增</Button>
-       
-     
-            <Button  icon="ios-trash-outline" type="primary">通过审核</Button>
-    
-            <Button  icon="ios-trash-outline" type="primary">审核不通过</Button>
-            <Button  icon="ios-trash-outline" type="primary">锁定</Button>
-            <Button  icon="ios-trash-outline" type="primary">解锁</Button>
-             <Button  icon="ios-trash-outline" type="primary">删除</Button>
-            </div> -->
     
              <!-- 分页 -->
              <Page  @on-change='changePage'  :total="totalM"  show-elevator show-sizer  show-total style='flex:1'/>
@@ -107,7 +143,10 @@ import {accountManagement} from '@/api/data'
     name: 'operationLog',
     data(){
       return {
-          
+        clickRow:"",
+        clickRowIndex:"",
+        clickColumn:"",
+        clickColumnIndex:'',
         totalM:0, //表格分页总天数
         pagesizea:1,//默认分页第一页
         modal10:false,
@@ -198,6 +237,31 @@ import {accountManagement} from '@/api/data'
       }
     },
     methods:{
+      cellClickEvent({ row, rowIndex, column, columnIndex }, event){
+        console.log(rowIndex)
+        this.clickRow = row
+        this.clickRowIndex = rowIndex
+        this.clickColumn = column
+        this.clickColumnIndex = columnIndex
+      },
+      inputChaneg(value,row,index){
+          console.log("value"+value)
+          this.data1[this.clickRowIndex].cname = value;
+
+      },
+      formatDate (value) {
+          return "nihao "
+            },
+            filterSexMethod ({ option, row }) {
+              return row.sex === option.data
+            },
+            changeFilterEvent (evnt, option, context) {
+              console.log("111")
+              console.log(evnt)
+              console.log(option.data)
+              console.log(context)
+
+            },
       //确认
       okConfig(name){
           this.$refs[name].validate((valid) => {

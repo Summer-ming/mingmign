@@ -19,58 +19,109 @@
         <Row>
           <Col span="24">
            <FormItem label="供应商查询:">
-            <Select v-model="orgSearch" style="width:200px" filterable placeholder="请选择名称"  @on-change='getDian'  :label-in-value='true'>
+            <Select clearable v-model="orgSearch" style="width:100px" filterable placeholder="请选择名称"  @on-change='getDian'  :label-in-value='true'>
                <Option v-for="(item,index) in shopList" :value="item.cusorgId" :label="item.cusorgName" :key="index" >{{ item.cusorgName }}</Option>
       
             </Select>
           </FormItem>
             <FormItem label='创建时间'>
-              <DatePicker style="width:200px" @on-change="changeCreateTieme" format="yyyy-MM-dd" v-model="formItem.dateTime" type="daterange" :options="options" placement="bottom-end" placeholder="选择日期" >
+              <DatePicker style="width:100px" @on-change="changeCreateTieme" format="yyyy-MM-dd" v-model="formItem.dateTime" type="daterange" :options="options" placement="bottom-end" placeholder="选择日期" >
               </DatePicker>
             </FormItem>
            
           <FormItem label="管理员查询:">
-            <Select v-model="adminSearch"  style="width:200px" filterable placeholder="请选择名称"  @on-change='getAdmin'  :label-in-value='true'>
+            <Select clearable v-model="adminSearch"  style="width:100px" filterable placeholder="请选择名称"  @on-change='getAdmin'  :label-in-value='true'>
                <Option v-for="(item,index) in adminList " :value="item.id" :label="item.cname" :key="index" >{{ item.cname }}</Option>
       
             </Select>
           </FormItem>
            <FormItem label="每页显示:">
-            <Select v-model="formItem.length"  style="width:200px"  placeholder="请选择"   >
+            <Select v-model="formItem.length"  style="width:100px"  placeholder="请选择"   >
                <Option v-for="(item,index) in lengthListThis " :value="item.value" :label="item.value" :key="index" >{{ item.label }}</Option>
             </Select>
           </FormItem>
           <FormItem label='入库号'>
-            <Input style="width:200px" v-model='formItem.rukuNo' placeholder='请输入入库号码'/>
+            <Input clearable style="width:100px" v-model='formItem.rukuNo' placeholder='请输入入库号码'/>
           </FormItem>
            <FormItem label='捆包号'>
-            <Input style="width:200px" v-model='formItem.kunbaohao' placeholder='请输入捆包号'/>
+            <Input clearable style="width:100px" v-model='formItem.kunbaohao' placeholder='请输入捆包号'/>
           </FormItem>
           <FormItem label='是否显示全部'>
-             <Select v-model="formItem.isAll"  style="width:200px"  placeholder="请选择"   >
+             <Select clearable v-model="formItem.isAll"  style="width:100px"  placeholder="请选择"   >
                <Option  :value="-1"  >全部</Option>
                <Option  :value="0"  >已售完</Option>
                <Option  :value="1"  >未售完</Option>
             </Select>
           </FormItem>
+          <FormItem label="入库类型">
+            <Select clearable v-model="formItem.businessType" style="width:100px" placeholder="请选择入库类型">
+                <Option v-for="(item,index) in ISBusinessTypeListThis" :value="item.value" :lable="item.value" :key="index">{{item.label}}</Option>
+            </Select>
+          </FormItem>
+          <FormItem label="公司抬头:">
+            <Select clearable v-model="formItem.bankJgId"  style="width:100px"  placeholder="请选择"   >
+               <Option v-for="(item,index) in belongCompanyListThis " :value="item.value" :label="item.label" :key="index" >{{ item.label }}</Option>
+            </Select>
+          </FormItem>
           </Col>
-        
+
           <Col span="3">
-             <Button type='primary' icon="ios-search" @click='searchM()'>查询</Button>
-             <Button shape="circle" icon="md-refresh" @click="reloadSelf"></Button>
+             <Button size="small" type='primary' icon="ios-search" @click='searchM()'>查询</Button>
+             <Button size="small" shape="circle" icon="md-refresh" @click="reloadSelf"></Button>
 
           </Col>
         </Row>
-        <Table border ref="selection" size="small" :columns="columns4" :data="data1" @on-select='selectOne' style='margin-bottom:10px;'>
-            <!-- <div slot="footer" style="height:100px">
-              <td style="width:660px">合计</td>
-              <td style="width:100px;text-align: center;">11</td>
-              <td style="width:100px">-</td>
-              <td style="width:100px;text-align: center;">2222</td>
-            </div> -->
-        </Table>
+       <vxe-toolbar>
+          <template v-slot:buttons>
+             <Button  size='small'   @click="deleteRowItem">删除</Button>
+             <Button  size='small' style="margin-left:20px"  @click="changeRowItem">修改</Button>
+             <Button  size='small' style="margin-left:20px"  @click="getHistoryRowItem">使用记录</Button>
+             <Button  size='small' style="margin-left:20px"  @click="exportCsvEvent">默认导出csv</Button>
 
-        <Page @on-change="changePage" style="margin-top:10px;text-align:right;"   :total="totalM" show-total ></Page>
+          </template>
+        </vxe-toolbar>
+       <vxe-table
+              border
+              ref="xTable1"
+              size="mini"
+              height="400"
+              :data.sync="data1">
+              <!-- //第一部分采购单相关信息 -->
+           <vxe-table-column  width="80"  title="单选">
+                   <template v-slot="{row}">
+                        <el-radio v-model="single" @change="radioChangeEvent" :label="JSON.stringify(row)">{{row.id}}</el-radio>
+                    </template>
+          </vxe-table-column>
+              <!-- <vxe-table-column field="id"   title="ID"  min-width='80'></vxe-table-column> -->
+                <vxe-table-column width="100" field="steelName" title="品名"  ></vxe-table-column>
+                <vxe-table-column width="100" field="steelGuige" title="规格" ></vxe-table-column>
+                <vxe-table-column width="100" field="steelPaihao" title="材质" ></vxe-table-column>
+                <vxe-table-column width="100" field="steelPinpai" title="钢厂"></vxe-table-column>
+
+                <vxe-table-column width="100" field="jianshu"  title="入库件数"></vxe-table-column>
+                <vxe-table-column width="100" field="xuniJianshu"  title="剩余件数"></vxe-table-column>
+                <vxe-table-column width="100" field="weight" :formatter="this.$global.vxeTableWeight" title="单件重"></vxe-table-column>
+                <vxe-table-column width="100" field="zongzhongliang" :formatter="this.$global.vxeTableWeight" title="入库总重量"></vxe-table-column>
+                <vxe-table-column width="100" field="createTime"  title="入库时间"></vxe-table-column>
+                <vxe-table-column width="100" field="shopOrgName"  title="供应商名称"></vxe-table-column>
+                <vxe-table-column width="100" field="kunbaohao"  title="捆包号"></vxe-table-column>
+                <vxe-table-column width="100" field="inStockNo"  title="入库单号"></vxe-table-column>
+                <vxe-table-column width="100" field="guapaijia" :formatter="this.$global.vxeTableMoney"  title="入库单价"></vxe-table-column>
+                <vxe-table-column width="100" field="cusMoney" :formatter="this.$global.vxeTableMoney" title="入库总金额"></vxe-table-column>
+                <vxe-table-column width="100" field="businessType" :formatter="getBusinessTypeList" title="入库类型"></vxe-table-column>
+            </vxe-table>
+
+      <span>当页：入库重量合计：</span>
+      <span style="color:red;margin-right:20px">{{this.$global.accPrecision(tWeight,3)}}吨</span>
+      <br>
+      <span>全部：入库重量合计：</span>
+      <span style="color:red;margin-right:20px">{{this.$global.accPrecision(tAllWeight,3)}}吨</span>
+      <span>入库金额合计：</span>
+      <span style="color:red;margin-right:20px">{{this.$global.isMoneyShow(tAllMoney,2)}}元</span>
+     <p style="disaply:none">{{getTotal}}</p>
+
+      <br>
+        <Page @on-change="changePage" style="margin-top:10px;text-align:right;" :page-size="formItem.length"  :total="totalM" show-total ></Page>
         <br>
      </Form>
      </Card>    
@@ -113,8 +164,6 @@
         <FormItem label="入库总金额" style="width:200px" >
             <Input v-model="changeItem.cusMoney" placeholder="输入总金额"></Input>
         </FormItem>
-
-
             <div class="margin-top-20">
                   <Button style="margin-right:10px" type="primary" @click="changeBtn">修改</Button>
                   <Button  type="default" @click="modalCancel">取消</Button>
@@ -141,10 +190,10 @@ import {findInStock,
 findShop,
 findOrgCusAcc,
 updateInStock,
-getUserList} from '@/api/data'
-import {getReceiptStatusLabel,getInvoiceStatusLabel} from '@/libs/allStatus'
+getUserList,findInStockSum} from '@/api/data'
+import {getReceiptStatusLabel,getInvoiceStatusLabel,ISBusinessTypeStr} from '@/libs/allStatus'
 import Utils from '@/api/middle'
-import {lengthList} from '@/libs/global_type'
+import {lengthList,ISBusinessTypeList,belongCompanyList} from '@/libs/global_type'
 import {
     findOrdersInfoAll,
             } from '@/api/data_8889'
@@ -154,6 +203,9 @@ export default {
     inject:['reload'],  //調用組建app.vue
     data(){
       return {
+        single:false,
+        tAllMoney:0,
+        tAllWeight:0,
         columnsm1:[
                     {
                         title: '序号',
@@ -187,9 +239,13 @@ export default {
                         width:'200'
                     },
         ],
+        belongCompanyListThis:belongCompanyList,
+        ISBusinessTypeListThis:ISBusinessTypeList,
         datam1:[],
         modal:false,
         modal1:false,
+        tWeight:0,
+        selectRow: null,
         changeItem:{
           id:'',
           kunbaohao:'',
@@ -226,10 +282,12 @@ export default {
           dateTime:'',
           beginTime:"",
           endTime:"",
-          length:'',
+          length:10,
           rukuNo:'',//入库号码
           kunbaohao:'',//捆包号
           isAll:1,
+          businessType:'',//入库类型
+          bankJgId:''
           },
         options:{
           shortcuts:[
@@ -262,231 +320,59 @@ export default {
                         }
           ]
         },
-          columns4: [
-             {
-                        title: '操作',
-                        key: 'operate',
-                        align: 'center',
-                        width:'200',
-                        render: (h, params) => {
-                            return h('div', [
-
-                                h('Button', {
-                                    props: {
-                                        type: 'primary',
-                                        size: 'small'
-                                    },
-                                     style: {
-                                        marginRight: '5px'
-                                    },
-                                    on: {
-                                        click: () => {
-                                          // this.remove(params.index);
-                                          this.$Modal.confirm({
-                                           title:"确定需要删除吗",
-                                           onOk:()=>{
-                                             this.deleteItem(params.row);
-                                           }
-                                         })
-                                        }
-                                    }
-                                }, '删除'),
-                                h('Button', {
-                                    props: {
-                                        type: 'primary',
-                                        size: 'small'
-                                    },
-                                     style: {
-                                        marginRight: '5px'
-                                    },
-                                    on: {
-                                        click: () => {
-                                          this.modal = true;
-                                          this.setModalItem(params.row);
-                                        }
-                                    }
-                                }, '修改'),
-                                h('Button', {
-                                    props: {
-                                        type: 'primary',
-                                        size: 'small'
-                                    },
-                                     style: {
-                                        marginRight: '5px'
-                                    },
-                                    on: {
-                                        click: () => {
-                                          this.getItemUserList(params.row);
-                                        }
-                                    }
-                                }, '使用记录'),
-                             ]);
-                      }
-                        
-                    },
-                     {
-                        title: 'ID',
-                        key: 'id',
-                        align: 'center',
-                        width:'100'
-                    },
-                    {
-                        title: '入库单号',
-                        key: 'inStockNo',
-                        align: 'center',
-                        width:'200'
-                    },
-                    {
-                        title: '捆包号',
-                        key: 'kunbaohao',
-                        align: 'center',
-                        width:'100',
-                    },
-                    {
-                        title: '品名',
-                        key: 'steelName',
-                        align: 'center',
-                        width:'100',
-                    },
-                    {
-                        title: '规格',
-                        key: 'steelGuige',
-                        align: 'center',
-                        width:'100',
-                    },
-                    {
-                        title: '材质',
-                        key: 'steelPaihao',
-                        align: 'center',
-                        width:'150',
-                    },
-                    {
-                        title: '钢厂',
-                        key: 'steelPinpai',
-                        align: 'center',
-                        width:'120',
-                    },
-                    // {
-                    //     title: '提货方式',
-                    //     key: 'steelWorks',
-                    //     align: 'center',
-                    //     width:'100',
-                    // },
-                    //  {
-                    //     title: '交货地',
-                    //     key: 'jiaohuodi',
-                    //     align: 'center',
-                    //     width:'100',
-                    // },
-                    {
-                        title: '入库件数',
-                        key: 'jianshu',
-                        align: 'center',
-                        width:'100',
-                    },
-                    
-                     {
-                        title: '剩余件数',
-                        key: 'xuniJianshu',
-                        align: 'center',
-                        width:'100',
-                    },
-                    {
-                        title: '单件重',
-                        key: 'weight',
-                        align: 'center',
-                        width:'100',
-                         render:(h,params)=>{
-                          return h('div',{
-                            props:{
-                            },
-                            attrs:{
-                              id:params.index
-                            },
-                          },this.$global.accPrecision(params.row.weight,3))
-                        }
-                    },
-                     {
-                        title: '入库总重量',
-                        key: 'zongzhongliang',
-                        align: 'center',
-                        width:'100',
-                        render:(h,params)=>{
-                          return h('div',{
-                            props:{
-                            },
-                            attrs:{
-                              id:params.index
-                            },
-                          },this.$global.accPrecision(params.row.zongzhongliang,3))
-                        }
-                    },
-                     {
-                        title: '入库单价',
-                        key: 'guapaijia',
-                        align: 'center',
-                        width:'200',
-                        render:(h,params)=>{
-                          return h('div',{
-                            props:{
-                            },
-                            attrs:{
-                              id:params.index
-                            },
-                          },this.$global.accPrecision(params.row.guapaijia,2))
-                        }
-                    },
-                     {
-                        title: '入库总金额',
-                        key: 'cusMoney',
-                        align: 'center',
-                        width:'200',
-                        render:(h,params)=>{
-                          return h('div',{
-                            props:{
-                            },
-                            attrs:{
-                              id:params.index
-                            },
-                          },this.$global.accPrecision(params.row.cusMoney,2))
-                        }
-                    },
-                    
-                    {
-                        title: '入库时间',
-                        key: 'createTime',
-                        align: 'center',
-                        width:'200'
-                    },
-                    {
-                        title: '供应商名称',
-                        key: 'shopOrgName',
-                        align: 'center',
-                        width:'200'
-                    },
-                    // {
-                    //     title: '采购方名称',
-                    //     key: 'customerOrgName',
-                    //     align: 'center',
-                    //     width:'200'
-                    // },
-                    // {
-                    //     title: '管理员',
-                    //     key: 'createCname',
-                    //     align: 'center',
-                    //     width:'200'
-                    // },
-                    
-                ],
                 data1: [],//表格展示的数据
                 dataCount:0,//总页数
-                // pageSize:10,  //每页总条数
                 searchPage:1 //初始化时查询的页码数
                 
       }
     },
     
     methods:{
+      exportCsvEvent () {
+              this.$refs.xTable1.exportCsv()
+            },
+      deleteRowItem(){
+        if(this.selectRow){
+               this.$Modal.confirm({
+                         title:"确定需要删除吗",
+                         onOk:()=>{
+                           this.deleteItem(this.selectRow);
+                         }
+                       })
+        }else{
+          this.$Message.warning("请选择一条明细")
+        }
+      },
+      changeRowItem(){
+
+         if(this.selectRow){
+            this.modal = true;
+              this.setModalItem(this.selectRow);
+        }else{
+          this.$Message.warning("请选择一条明细")
+        }
+      },
+      getHistoryRowItem(){
+         if(this.selectRow){
+            this.getItemUserList(this.selectRow);
+        }else{
+          this.$Message.warning("请选择一条明细")
+        }
+      },
+      getBusinessTypeList({cellValue, row, column}){
+        return ISBusinessTypeStr(cellValue)
+      },
+       radioChangeEvent(row){
+            row = eval('('+row+')');;
+              this.selectRow = row
+              console.log('单选事件')
+              console.log(this.selectRow);
+            },
+           
+          
+            getRadioEvent1 () {
+              console.log(JSON.stringify(this.$refs.xTable1.getRadioRow()))
+            },
       getItemUserList(row){//获取库存明细的使用记录；即库存明细的订单明细
         // datam1
         let p  ={};
@@ -506,7 +392,6 @@ export default {
            }
         })
         this.modal1 = true;
-
       },
       setModalItem(row){
           this.changeItem.id             = row.id;
@@ -599,9 +484,11 @@ export default {
          })
        },
         getDian(item){
-        console.log(item)
-        this.shopOrgName = item.label;
-        this.shopOrgId = item.value;
+          if(item){
+            this.shopOrgName = item.label;
+            this.shopOrgId = item.value;
+          }
+        
        },
       changeCreateTieme(data){
         console.log(data);
@@ -614,8 +501,9 @@ export default {
         this.reload();
       },
       getAdmin(item){
-        console.log(item);
+        if(item){
         this.adminSearchId = item.value;
+        }
       },
         reloadSelf(){
             this.reload();
@@ -635,16 +523,18 @@ export default {
          //获取查询的input的值
          let param={};
         //  shopOrgId //店铺id
-         param.pageNum     = this.pagesizea      //分页
-         param.beginStatus = 1 ;
-         param.endStatus   = 11 ;
-         param.userId      = this.adminSearchId  //管理员查询
-         param.shopOrgId   = this.shopOrgId      //供应商
-         param.beginTime   = this.formItem.beginTime      //创建时间 
-         param.endTime     = this.formItem.endTime        //供应商
-         param.inStockNoLike     = this.formItem.rukuNo //入库单号        //供应商
+         param.pageNum       = this.pagesizea               //分页
+         param.beginStatus   = 1 ;
+         param.endStatus     = 11 ;
+         param.userId        = this.adminSearchId           //管理员查询
+         param.shopOrgId     = this.shopOrgId               //供应商
+         param.beginTime     = this.formItem.beginTime      //创建时间 
+         param.endTime       = this.formItem.endTime        //供应商
+         param.inStockNoLike = this.formItem.rukuNo         //入库单号        //供应商
          param.pageSize      = this.formItem.length;
-         param.kunbaohao = this.formItem.kunbaohao;
+         param.kunbaohao     = this.formItem.kunbaohao;
+         param.businessType  = this.formItem.businessType;
+         param.bankJgId = this.formItem.bankJgId;
          switch (this.formItem.isAll) {
            case -1:
              
@@ -666,8 +556,25 @@ export default {
             this.data1=res.data.list;
             this.totalM=res.data.total; 
             console.log(res.data.total);//总条数 
+            this.getListTotal(param);
           }  
          })
+       },
+       getListTotal(p){//获取汇总数据
+          findInStockSum(p).then(res =>{
+                if(res.code =='100'){
+                  let dic =res.data.list[0];
+                  this.tAllMoney =dic.cusMoney;
+                  this.tAllWeight = dic.zongzhongliang;
+                  this.$Notice.success({
+                    title:'查询汇总数据成功',
+                 })
+              }else{
+                   this.$Notice.error({
+                   title:'查询汇总数据失败'
+                  })
+              }
+           })
        },
        getAdminList(){
          let param = {};
@@ -694,7 +601,22 @@ export default {
        }
      })
     },
-    
+    watch: {
+        radioChangeEvent(row){
+          console.log("watch")
+          console.log(row)
+        }
+    },
+    computed:{
+      getTotal(){
+        let  a = 0;
+
+        this.data1.map(item=>{
+           a = this.$global.accAdd(a,item.zongzhongliang)
+        })
+        this.tWeight         = a;
+      }
+    },
     created(){
    
     },
@@ -705,5 +627,11 @@ export default {
 .width_150 {
 width: 200px;
 }
-
+.vxe-table.size--mini .vxe-body--column{
+        padding: 0px 0!important;
+       
+      }
+      .vxe-table{
+        padding: 0px 0!important;
+      }
 </style>

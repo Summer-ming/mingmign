@@ -64,12 +64,12 @@
           <Input style='width:150px' v-model='formItem.dikouMoney' placeholder='请输入抵扣金额'/>
           </FormItem>
           <FormItem label='备注'>
-          <Input type="textarea" style='width:300px' v-model='formItem.dikouMoney' placeholder='请输入备注'/>
+          <Input type="textarea" style='width:300px' v-model='formItem.note' placeholder='请输入备注'/>
           </FormItem>
         </Form>
       </row>
        <row>
-      <Button style="margin-right:10px" type="primary" @click="addBtn"> 提交</Button>
+      <Button style="margin-right:10px" type="primary" @click="addBtn" :disabled="isDisable"> 提交</Button>
       <Button type="primary" @click="deletBtn"> 删除</Button>
     </row>
      </div>
@@ -88,6 +88,7 @@ export default {
     inject:['reload'],  //調用組建app.vue
     data(){
       return {
+        isDisable:false,
         shopItem:'',
         shopO:'',
       shopList:[],//店铺data
@@ -206,7 +207,8 @@ export default {
           cusOrgName:'',
           shopOrgName:'',
           adminName:'',
-          money:''
+          money:'',
+          note:''
         },
         totalM:0, //表格分页总天数
         pagesizea:1,//默认分页第一页
@@ -522,7 +524,7 @@ export default {
       ]),
       getOrgPayList(){//获取订单已付款列表
           let p ={};
-          p.orderId = this.$route.query.id;
+          p.jgJieSuanOrderId = this.$route.query.id;
           findJgJieSuanInfo(p).then(res=>{
             if(res.code =="100"){
              this.data2=res.data.list
@@ -553,7 +555,7 @@ export default {
           this.formItem.cusOrgName            = this.$route.query.customerOrgName        
           this.formItem.shopOrgName           = this.$route.query.shopOrgName          
           this.formItem.adminName             = this.$route.query.userName     
-          this.formItem.payMoney              = parseFloat(this.$route.query.moneyAll)
+          this.formItem.payMoney              = 0;
           this.formItem.money                 = this.$global.isMoneyShow(this.$route.query.moneyAll) 
           this.getOrderInfo();
       },
@@ -577,13 +579,7 @@ export default {
             if(res.code =="100"){
               this.data = res.data.list;
               this.getOTmoenyList();
-              this.$Notice.success({
-                title:'获取订单明细成功'
-              })
             }else{
-              this.$Notice.error({
-                title:'获取订单明细失败'
-              })
             }
           })
       },
@@ -656,7 +652,7 @@ export default {
             }
           })
           //步骤3：获取对应的字段
-          for(var i in aList){
+          for( var i=0; i<aList.length;i++ ){
             let itema = aList[i];
             for(var j in cList){
               let itemb = cList[j];
@@ -701,29 +697,35 @@ export default {
             params.merchantsId             =  this.$route.query.merchantsId;           
             params.money                   =  this.formItem.payMoney //付款金额 
             params.updateDiKou             = this.formItem.dikouMoney //抵扣金额 
-            params.note                    =  ""    
+            params.note                    =  this.formItem.note
             params.operator                = this.$global.adminInfo.id         
             params.orderId                 = this.$route.query.id;      
             params.orderStatus             = "3"            
             params.statusNote              = "杂费付款"           
             params.userId                  = this.$global.adminInfo.id
-            params.orderType              = this.$route.query.ordersType 
+            params.orderType              = "1" //1 采购单 2销售 
             //新增的字段   
             params.dikouMoney = this.formItem.dikouMoney
             params.actualPayMoney = Number(this.formItem.payMoney) - Number(this.formItem.dikouMoney)
-            params.skOrgId = this.shopItem.orgId
-            params.skShopId = this.shopItem.id
+
+            params.skOrgId       = this.shopItem.orgId
+            params.skShopId      = this.shopItem.id
             params.skOrgAcountId = this.shopItem.accountId
-            params.skOrgName = this.shopItem.orgName
-            params.dkOrgName = this.$route.query.companyName;//本公司的公司名称
+            params.skOrgName     = this.shopItem.orgName
+            params.dkOrgName     = this.$route.query.companyName;  //本公司的公司名称
+
+            params.operatorType = "2"
+            params.auditStatus = "8"
+          
           updateFukuanZhenghe(params).then(res =>{
              if(res.code =='100'){
+               this.isDisable=true;
                  this.$Notice.success({
                      title:'提交付款申请成功',
                      duration:1,
                      onClose:res =>{
                         console.log("关闭时回调")
-                      //  this.closeSelf();
+                       this.closeSelf();
                      }
                  })
              }else{
@@ -738,7 +740,8 @@ export default {
        },
        closeSelf(){
          this.closeTag({
-              name: 'order_pay_info'
+              name: 'order_om_pay_info',
+              query:this.$route.query
           })
        }
     },

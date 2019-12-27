@@ -5,10 +5,6 @@
         <Steps :current="current"  status="finish"  direction="vertical">
           <Step  v-for="(item, index) in dataList"  :title="item.createTime"
            :content="getStatusStr(item)"  :key="index"></Step>
-        <!-- <Step title="2019年3月26日15:33:54  周一" content="付款300万  管理员"></Step>
-        <Step title="2019年3月26日15:33:54  周一" content="付款300万  管理员"></Step>
-        <Step title="2019年3月26日15:33:54  周一" content="付款300万  管理员"></Step>
-        <Step title="2019年3月26日15:33:54  周一" content="付款300万  管理员"></Step> -->
     </Steps>
       </row>
   </div>
@@ -28,6 +24,8 @@ import {getBuyOrderCaoZuoStatus} from '@/libs/allStatus'
     },
     methods:{
        getOrderAuditList(){//获取订单审核流信息
+            console.log("查询流水")
+            console.log(this.valueForm_allOrder_orderItem);
             let p  = {};
             p.id = this.valueForm_allOrder_orderItem.id;
             p.pageSize ="99999"
@@ -36,28 +34,21 @@ import {getBuyOrderCaoZuoStatus} from '@/libs/allStatus'
               if(res.code =='100' && res.data.list.length>0){
                   this.dataList = res.data.list
                   this.current = res.data.list.length;
-                  this.$Notice.success({
-                      title:'获取订单审核流水成功',
-                  })
               }else{
-                  this.$Notice.error({
-                      title:'获取订单审核流水失败'
-                  })
               }
             })
        },
        getStatusStr(item){
-         console.log(item.newOrderStatus);
          getBuyOrderCaoZuoStatus(item);
          let s = getBuyOrderCaoZuoStatus(item);
-         console.log(s);
          return s;
        }
     },
      watch: {
         allOrder_orderItem(val){
-            console.log("watch buy_examine");
+            console.log("这里是审核流组件");
             console.log(val.ordersNo);
+            console.log(val.id);
             this.valueForm_allOrder_orderItem = val;
             this.getOrderAuditList();
         }

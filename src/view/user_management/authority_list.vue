@@ -80,7 +80,7 @@ export default {
       let clickarr = this.$refs.leftTree.getSelectedNodes();
       let cdic = clickarr[0].attr;
       
-      let checkedArr = this.$refs.midTree.getCheckedNodes();
+      let checkedArr = this.$refs.midTree.getCheckedAndIndeterminateNodes();
       let pageVueRouter = [];
       
       checkedArr.forEach(item => {
@@ -118,23 +118,31 @@ export default {
         tree.forEach(item => {
           let obj = {};
           obj.title = item.title;
-          let a = this.judgeIsInarr(item.id);
-          obj.checked = a;
+        
           obj.attr = item;
           obj.expand = true;
           obj.selected = false;
           obj.id = item.id;
           obj.children = this.changeTree(item.children);
+          let a = this.judgeIsInarr(item.id,obj.children.length);
+          obj.checked = a;
           arr.push(obj);
         });
       }
       return arr;
     },
-    judgeIsInarr(key){
+    judgeIsInarr(key,slength){//判断是否在首页
       if(this.roleRouterArr.length>0){
 
         for(var i=0;i<this.roleRouterArr.length;i++){
           if(this.roleRouterArr[i].vueRouterId == key){
+            if(slength>0){ //如果大于0 说明，该节点是文件夹节点，下面可以继续展开，则判断是不用判断直接false
+            return false;
+
+            }else{
+            return true;
+
+            }
             return true;
           }
         }

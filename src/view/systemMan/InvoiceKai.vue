@@ -158,7 +158,7 @@
              <row class='buton_all'>
                <Button type="primary" @click="exportData(1)">下载excel</Button>
                <Button type="primary" @click="exportData(3)">下载开票excel</Button>
-               <!-- <Button type="primary" @click="modal1 = true">绑定新进项票</Button> -->
+               <Button type="primary" @click="modal1 = true">绑定新进项票</Button>
                <Button type="primary" @click='modal2 = true'>绑定新销项票</Button>
                <Button type="primary" @click='modal3 = true'>撤销申请</Button>
              </row>
@@ -173,7 +173,7 @@
          </row>
 
          <!-- 新进项票弹窗 -->
-         <!-- <Modal v-model="modal1" title="新增进项票弹窗"  @on-ok="ok"  @on-cancel="cancel">
+         <Modal v-model="modal1" title="新增进项票弹窗"  @on-ok="ok"  @on-cancel="cancel">
           <row>
             <Form :label-width="180"  :model="addFormOne">
                       <FormItem label="发票号码:" prop="fapiaohao">
@@ -214,7 +214,7 @@
 
           </row>
        
-         </Modal> -->
+         </Modal>
          <!-- 绑定新销项票 -->
         <Modal v-model="modal2" title="新增销项票并绑定"  @on-ok="ok"  @on-cancel="cancel">
           <row>

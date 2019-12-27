@@ -17,13 +17,13 @@
       </FormItem>
       <FormItem label='付款银行卡:'>
         <Select clearable  :label-in-value="true" class="width_300" v-model="addForm.card">
-          <Option v-for="(item, index) in addForm.cardList" :value="item.accId"  :key="index">{{item.accBank +'('+ item.accId +')'}}</Option>
+          <Option v-for="(item, index) in addForm.cardList" :value="item.accId"  :key="index">{{item.accBank +'('+'卡号'+item.accBankCode+ '所属支行联行号：'+item.accBblId +'银行卡id：'+item.accId+')'}}</Option>
         </Select>
       </FormItem>
     </Form>
     <div>
-            <Button v-show="addBtn" type="primary" @click="addNewShop">添加</Button>
-            <Button v-show="changeBtn"  type="primary" @click="changeShop">修改</Button>
+            <Button style="margin-right:10px" v-show="addBtn" type="primary" @click="addNewShop" :disabled="isDisable">添加</Button>
+            <Button style="margin-right:10px" v-show="changeBtn"  type="primary" @click="changeShop" :disabled="isDisableOne">修改</Button>
             <Button  type="primary" @click="closeSelf">关闭</Button>
     </div>
   </div>
@@ -37,6 +37,8 @@ export default {
   inject: ['reload'],
   data() {
     return {
+      isDisableOne:false,
+      isDisable:false,
       addBtn:true,
       changeBtn:true,
       deleteBtn:true,
@@ -77,13 +79,17 @@ export default {
         console.log(param)
       addShop(param).then(res=>{
         if(res.code =="100"){
-                        this.$Notice.success({
-                            title:'已经新增一个店铺',
-                        })
-                        setTimeout(() => {
-                          this.closeSelf();
-                        }, 1500);
-                    }
+          this.isDisable=true;
+          this.$Notice.success({
+                 title:'已经新增一个店铺',
+          })
+            let _that=this;
+            setTimeout(function(){
+               _that.closeTag({
+                name: 'shopListInfo'
+              })
+            }, 100);             
+          }
       })
     },
     changeShop(){//修改店铺
@@ -95,13 +101,17 @@ export default {
         param.accountId =this.addForm.card; 
       updateShop(param).then(res=>{
         if(res.code =="100"){
-                        this.$Notice.success({
-                            title:'修改成功',
-                        })
-                        setTimeout(() => {
-                          this.closeSelf();
-                        }, 1500);
-                    }
+          this.isDisableOne=true;
+          this.$Notice.success({
+                title:'修改成功',
+          })
+         let _that=this;
+            setTimeout(function(){
+               _that.closeTag({
+                name: 'shopListInfo'
+              })
+            }, 100);  
+        }
       })
     },
     deleteShop(){
@@ -157,7 +167,7 @@ export default {
 </script>
 <style>
 .width_300{
-  width: 500px;
+  width: 600px;
 }
 .top_20{
   margin-top: 20px

@@ -8,6 +8,8 @@ export default {
   name: 'ParentView',
   computed: {
     tagNavList () {
+      console.log('mmmmm---------============')
+      console.log(this.$store.state.app.tagNavList)
       return this.$store.state.app.tagNavList
     },
     notCacheName () {

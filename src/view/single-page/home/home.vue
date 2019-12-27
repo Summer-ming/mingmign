@@ -1,5 +1,12 @@
+<!--
+ * @Description: 
+ * @Author: gmm
+ * @Date: 2019-04-11 10:54:32
+ * @其他: 
+ -->
 <template>
   <div>
+    <h1>你好！管理员：{{$global.adminInfo.cname}},ID:{{$global.adminInfo.id}}</h1>
     <Row :gutter="20">
       <i-col :xs="12" :md="8" :lg="4" v-for="(infor, i) in inforCardData" :key="`infor-${i}`" style="height: 120px;padding-bottom: 10px;">
         <infor-card shadow :color="infor.color" :icon="infor.icon" :icon-size="36">
@@ -8,7 +15,7 @@
         </infor-card>
       </i-col>
     </Row>
-    <Row :gutter="20" style="margin-top: 10px;">
+    <!-- <Row :gutter="20" style="margin-top: 10px;">
       <i-col :md="24" :lg="8" style="margin-bottom: 20px;">
         <Card shadow>
           <chart-pie style="height: 300px;" :value="pieData" text="用户访问来源"></chart-pie>
@@ -24,7 +31,7 @@
       <Card shadow>
         <example style="height: 310px;"/>
       </Card>
-    </Row>
+    </Row> -->
   </div>
 </template>
 
@@ -33,8 +40,10 @@ import InforCard from '_c/info-card'
 import CountTo from '_c/count-to'
 import { ChartPie, ChartBar } from '_c/charts'
 import Example from './example.vue'
+import { setTimeout } from 'timers';
 export default {
   name: 'home',
+  inject:['reload'],
   components: {
     InforCard,
     CountTo,
@@ -71,11 +80,25 @@ export default {
     }
   },
   mounted () {
+    // alert('我是home')
+    //  let that=this;
+    //   let c= localStorage.getItem('isF')
+    //   console.log(c+'=======================================')
+    
+    // setTimeout(function(){
+    //    if(c=='true'){
+    //          // that.reload();
+    //        //  alert('nnnnn')
+    //           localStorage.setItem('isF',false)
+    //     }else{
+    //         //localStorage.setItem('isF',true)
+    //     }
+    // },10)
+
     //
   }
 }
 </script>
-
 <style lang="less">
 .count-style{
   font-size: 50px;

@@ -13,7 +13,7 @@
         <Row>
          
           <Col   span="5"><FormItem label="仓库名称:" style="margin-right:10px;">
-          <Input  placeholder="请输入仓库名称" v-model="formItem.input1"></Input>
+          <Input clearable  placeholder="请输入仓库名称" v-model="formItem.input1"></Input>
           </FormItem>
           </Col>
           <!-- <Col span="5"><FormItem label="仓库简称:" style="margin-right:10px;">
@@ -30,7 +30,7 @@
 
         <Row span='8' style="margin-bottom:20px;display:flex;">
             <div style='flex:1'>
-               <Button  icon="md-add" type="info"  @click='addClick'>新增仓库</Button>
+               <Button size="small"  icon="md-add" type="info"  @click='addClick'>新增仓库</Button>
                <!-- <Button  type="success">导出excel</Button> -->
             </div>
         </Row>

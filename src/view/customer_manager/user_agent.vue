@@ -25,7 +25,6 @@
             <Row span='8' style="margin-bottom:20px;display:flex;">
                             <div style='flex:1'>
                                <Button  icon="md-add" type="info"  @click='addClick'>新增代理商</Button>
-                               <Button  icon="md-add" type="info"  @click='addClick1'>ceshi</Button>
 
                             </div>
             </Row>

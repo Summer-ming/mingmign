@@ -542,7 +542,7 @@ export default {
            this.dataOne.splice(index,1)
           //  this.dataTwo.splice(index,1)
 
-           for(var i in this.dataTwo){
+           for(var i=0; i<this.dataTwo.length;i++ ){
              if(this.dataTwo[i].shopSteelId == row.shopSteelId){
                this.dataTwo.splice(i,1)
              }
@@ -567,10 +567,7 @@ export default {
                 console.log('我是上传的图片')
                 const reg=/,$/gi;//此处是正则
 
-                this.uploadList.map((item)=>{
-                  console.log(this.imgString.length+'我是打印的长度')
-                     this.imgString += item.url+','    
-                })
+                
             },
             handleFormatError(file) {
                 this.$Notice.warning({
@@ -662,7 +659,11 @@ export default {
                         this.dataThree.push(dic)
                   })
        },
-       getAdd(){ 
+       getAdd(){
+         this.uploadList.map((item)=>{
+                  console.log(this.imgString.length+'我是打印的长度')
+                     this.imgString += item.url+','    
+                }) 
        console.log(this.dataOne)
        this.reloadData();
          const param                = {};

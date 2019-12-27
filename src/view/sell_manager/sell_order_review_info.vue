@@ -18,7 +18,7 @@
         <b class="font_32">基础信息</b>
         <row class='order_all'>
       <dl>
-        <dt>采购单号：{{formItem.orderNo}}</dt>
+        <dt>销售单号：{{formItem.orderNo}}</dt>
         <dd>采购公司：{{formItem.cusOrgName}}</dd>
       </dl>
       <dl>
@@ -42,8 +42,19 @@
         </Table>
     </row>
     <row>
-      <Button style="margin-right:10px;" type="primary" @click="addBtn"> 审核通过</Button>
-      <Button type="primary" @click="deletBtn"> 关闭</Button>
+       <span>合同重量合计：</span>
+      <span style="color:red;margin-right:20px">{{this.$global.accPrecision(tWeight,3)}}吨</span>
+      <span>合同金额合计：</span>
+      <span style="color:red">{{this.$global.isMoneyShow(tMoney)}}元</span>
+    </row>
+    <p style="disaply:none">{{getTotal}}</p>
+
+    <row>
+        <buyImg1></buyImg1>
+    </row>
+    <row>
+      <Button style="margin-right:10px;" type="primary" @click="addBtn" :disabled="isDisable"> 审核通过</Button>
+      <Button type="error" @click="deletBtn"> 审核拒绝</Button>
     </row>
 
      </div>
@@ -52,13 +63,25 @@
 <script>
 import {findOrdersInfoAll,
 updateOrdersStatus} from '@/api/data_8889'
+import {addOrgMoneyRecord,
+findOrgMoneyRecord,
+addBillFlow
+} from '@/api/data'
 import { mapMutations } from 'vuex'
 import Utils from '@/api/middle'
+import buyImg1 from '@/view/buy_manager/buy_order_info_components/buy_img1'
 export default {
     name: 'sell_order_review_info',
     inject:['reload'],  //調用組建app.vue
+    components:{
+         buyImg1
+    },
     data(){
       return {
+        tMoney:0,
+        tWeight:0,
+        isDisable:false,
+        isAdd:true,//判断 是否调用确认出货按钮
         tableItem:{},
         totalM:0, //表格分页总天数
         pagesizea:1,//默认分页第一页
@@ -149,7 +172,43 @@ export default {
                           },this.$global.accPrecision(params.row.guapaijia,2))
                         }
                     },
-                    
+                    {
+                        title: '销售总额',
+                        key: 'cusMoney',
+                        align: 'center',
+                        width:'100',
+                        render:(h,params)=>{
+                          return h('div',{
+                          },this.$global.isMoneyShow(params.row.cusMoney,2))
+                        }
+                    },
+                    //2019年5月5日14:03:49 新增网价
+                    {
+                        title: '网价',
+                        key: 'internetMoney',
+                        align: 'center',
+                        width:'100'
+                    },
+                     {
+                        title: '浮动价格',
+                        key: 'floatMoney',
+                        align: 'center',
+                        width:'100'
+                    },
+                     {
+                        title: '网价区域',
+                        key: 'region',
+                        align: 'center',
+                        width:'100'
+                    },
+                    {
+                        title: '网价备注',
+                        key: 'internetMoneyNote',
+                        align: 'center',
+                        width:'100'
+                    },
+                   //2019年5月5日14:09:14 结束
+                   
                     {
                         title: '捆包号',
                         key: 'kunbaohao',
@@ -169,6 +228,52 @@ export default {
     },
     
     methods:{
+            payOnlineBusiness(){//合同审核线上付款
+          let p                     = {};
+          let plist                 = [];
+          let dic                   = {};
+              dic.billType          = '10010';  //账单类型
+              dic.fsMoney           = this.$global.accMinus(0,this.$route.query.moneyAll);  //发生金额
+              dic.ysMoney           = this.$route.query.moneyAll;  //应收金额
+              dic.dkpMoney          = '0';  //待开票金额
+
+              dic.sellerEmpDept     = '';  //卖家负责人部门
+              dic.sellerCompanyId   = this.$route.query.merchantsId;  //卖家公司id
+              dic.sellerCompanyName = this.$route.query.shopOrgName;  //卖家公司名称
+              dic.sellerEmpName     = this.$route.query.shopUserName;  //卖家负责人名称
+
+              dic.buyerEmpDept      = '';  //买家负责人部门 本公司
+              dic.buyerCompanyId    = this.$route.query.customerOrgId;  //买家公司id
+              dic.buyerEmpName      = this.$global.adminInfo.cname;  //买家负责人名称
+              dic.buyerCompanyName  = this.$route.query.customerOrgName;  //买家公司名称
+
+              dic.orderId           = this.$route.query.id;  //订单id
+              dic.orderNo           = this.$route.query.ordersNo;  //订单号
+
+              dic.accApply          = '';  //打款申请
+              dic.dkApply           = '';  //抵扣申请
+              dic.txApply           = '';  //提现申请
+              dic.kpApply           = '';  //开票申请
+              dic.zxStatus          = '1';  //注销状态
+              dic.note              = '合同账单';  //备注
+              dic.status            = '1';  //可用状态
+              dic.transactionType   = '1';  //交易账单类型（买家账单，卖家账单）
+            plist.push(dic);
+            p.billFlowList = plist;
+          addBillFlow(p).then(res =>{
+                if(res.code =='100'){
+                  this.$Notice.success({
+                    title:'添加电商流水成功',
+                    onClose:res =>{
+                    }
+                 })
+              }else{
+                   this.$Notice.error({
+                   title:'添加电商流水失败'
+                  })
+              }
+           })
+       },
       setOrderInfo(){
           this.formItem.orderNo               = this.$route.query.ordersNo     
           this.formItem.cusOrgName            = this.$route.query.customerOrgName        
@@ -183,14 +288,8 @@ export default {
           params.pageSize = 10000;
           findOrdersInfoAll(params).then(res =>{
             if(res.code =="100"){
-              this.data1 = res.data.list;
-              this.$Notice.success({
-                title:'获取订单明细成功'
-              })
+              this.data1 = res.data.list.reverse();
             }else{
-              this.$Notice.error({
-                title:'获取订单明细失败'
-              })
             }
           })
       },
@@ -200,15 +299,66 @@ export default {
        remove(index){
          this.data1.splice(index,1);
        },
-       addBtn(){//TODO
-          let params = {};
-          params.id  = this.$route.query.id;
-          params.status  ="2"
-          params.statusNote  =""
-          params.userId  =this.$global.adminInfo.id
+       //步骤1 审核通过
+       //步骤2 调用销售单 确认出货步骤。
+       addBtn(){//审核通过
+          this.step1OK();
+          if(this.isAdd){
+            this.step2OK();
+          }else{
 
+          }
+          // this.payOnlineBusiness();
+       },
+       step2OK(){//添加确认出货
+             console.log("修改成功");
+          let p                   = {};
+          let plist               = [];
+          let dic                 = {};
+          dic.customerId      = this.$route.query.customerId
+          dic.orderId         = this.$route.query.id;
+          dic.inMoney         = "0" ;
+          dic.outMoney        = this.tMoney;
+          dic.currentMoney    = "0"
+          dic.userId          = this.$global.adminInfo.id
+          dic.payMoneyType    = "5"
+          dic.note            = '销售单出货';
+          dic.orderNo         = this.$route.query.ordersNo;
+          dic.bankJgId        = this.$route.query.bankJgId;
+          dic.orgId           = this.$route.query.customerOrgId;
+          dic.orgName         = this.$route.query.customerOrgName;
+          dic.daozhangdanId   = '0'
+          dic.bankConnectedId = '0'
+          dic.zhidanApplyId   = '0';
+          dic.zhaiyao         = '销售单出货'
+          dic.direction        = ''
+          dic.type            = '1'//1客户 2供应商
+          dic.status = "1"
+
+          plist.push(dic);
+          p.list = plist;
+           
+             addOrgMoneyRecord(p).then(res=>{
+                        if(res.code =="100"){
+                          this.$Notice.success({
+                            title:'确认出货成功',
+                          })
+                        }else{
+                          this.$Notice.error({
+                            title:'确认出货失败'
+                          })
+                        }
+               })
+       },
+       step1OK(){//审核销售单
+          let params            = {};
+              params.id         = this.$route.query.id;
+              params.status     = "2"
+              params.statusNote = ""
+              params.userId     = this.$global.adminInfo.id
           updateOrdersStatus(params).then(res =>{
              if(res.code =='100'){
+                 this.isDisable=true;
                  this.$Notice.success({
                      title:'审核通过',
                      duration:1,
@@ -227,14 +377,14 @@ export default {
        deletBtn(){//删除订单
            let params = {};
           params.id  = this.$route.query.id;
-          params.status  ="99"
-          params.statusNote  =""
+          params.status  ="-1"
+          params.statusNote  ="审核拒绝"
           params.userId  =this.$global.adminInfo.id
 
           updateOrdersStatus(params).then(res =>{
              if(res.code =='100'){
                  this.$Notice.success({
-                     title:'删除成功',
+                     title:'审核拒绝成功',
                      duration:1,
                      onClose:res =>{
                         console.log("关闭时回调")
@@ -250,27 +400,58 @@ export default {
           })
        },
        turnToOrderList(){//审核或者关闭之后跳转到
-          console.log("准备关闭")
           this.closeTag({
               name: 'sell_order_review_info',
               query:this.$route.query
           })
           setTimeout(() => {
-            this.toreload();
-          }, 1000);
-       },
-       toreload(){//通知列表页面刷新数据
-          console.log("准备关闭2")
-           Utils.$emit('demo','reload');
+                const route = { 
+                    name: 'sell_order_list',
+                    query:''
+                }
+                this.$router.push(route);
+                Utils.$emit('sell_order_list','reload');
+          }, 100);
        },
         ...mapMutations([
       'closeTag'
     ]),
-
+    //获取订单是否已经确认出货
+      getOrderOrgMoneyRecordList(){
+        let p                = {};
+            p.pay_money_type = "5";
+            p.orderId        = this.$route.query.id;
+            p.type           = "1"
+        findOrgMoneyRecord(p).then(res =>{
+              if(res.code =='100' && res.data.list.length>0 ){
+                      this.isAdd = false;
+                    this.$Notice.error({
+                      title:'查询到已经确认出货',
+                  })
+                
+            }else{
+                 this.$Notice.success({
+                 title:'查询到未确认出货'
+                })
+            }
+         })
+      },
     },
-    
+    computed:{
+      getTotal(){
+        let  a = 0;
+        let b = 0;
+        this.data1.map(item=>{
+           a = this.$global.accAdd(a,item.zongzhongliang)
+           b = this.$global.accAdd(b,item.cusMoney)
+        })
+        this.tWeight = a;
+        this.tMoney = b;
+      }
+    },
     mounted(){
      this.setOrderInfo();
+     this.getOrderOrgMoneyRecordList();
     },
     
     created(){

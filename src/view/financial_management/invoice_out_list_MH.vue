@@ -58,9 +58,7 @@
                               <Option value="4">开票完成</Option>
                           </Select>
                       </FormItem>
-                 </row>
                  <!-- 订单号 规格 销售票绑定状态 -->
-                 <row>
                      <FormItem label="订单号:" prop="dingdanhao">
                       <i-input   style="width:200px" v-model="addForm.dingdanhao" placeholder="请输入订单号"/>
                      </FormItem>
@@ -74,9 +72,7 @@
                             </Select>
                         </FormItem>
                           
-                 </row>
                  <!-- 管理员  品名 订单本公司抬头 -->
-                 <row>
                       <FormItem label="品名:" prop="pinming">
                         <i-input   style="width:200px" v-model="addForm.pinming" placeholder="请输入订品名"/>
                       </FormItem>
@@ -101,9 +97,7 @@
                             </i-Col>
                         </FormItem>
  
-                  </row>
                   <!-- 代理商名称  进项票号码  销售票号码 -->
-                  <row>
                      <FormItem label='代理商名称'>
                             <Select @on-change='getDaili' style='width:200px'
                                 clearable
@@ -292,7 +286,7 @@ export default {
          isOKStatus:true,
          belongCompanyListThis:belongCompanyList,
          addForm:{
-           pageNum:"10",//每页显示个数
+           pageNum:10,//每页显示个数
            jinStatus:"1",//进项绑定状态
            dingdanhao:"",//订单号
            guige:"",//规格
@@ -308,7 +302,7 @@ export default {
          saleMing:[],
          options2:[],
          saleOne:[],
-         page_size:'10',
+         page_size:10,
          caigou:'',
          loading3:false,
          options3:[],//采购方
@@ -730,7 +724,8 @@ export default {
         p.noOut=this.addForm.xiaohao
         p.orderCustomerCompany = this.paramFirst.orderShopCompanyName
         p.pageSize = this.addForm.pageNum
-        this.page_size = this.addForm.pageNum
+       // this.page_size = this.addForm.pageNum
+       this.pageSize = this.addForm.pageNum
         getKaiPiao(p).then(res=>{
             if(res.code =="100"){
                this.dataAll=res.data.list
@@ -774,18 +769,14 @@ export default {
           return ;
         }
         let param1={};
-        if(this.companyTwo==''|| this.companyTwo==null){
-          param1.companyName=this.conmpanyOne
-          }else{
-          param1.companyName=this.companyTwo
-        }
+        param1.companyName  =this.addFormTwo.companyName1
         param1.invoiceNo    = this.addFormTwo.fapiaohao1
         param1.money        = this.allMprice
         param1.weight       = this.allWightp
         param1.status       = '1'
         param1.createUserId = this.$global.adminInfo.id
         param1.customerId   = this.addFormTwo.cusId
-        console.log()
+        console.log(param1)
         //新增销项票 todo1
          getBangDing(param1).then(res=>{
             if(res.code =="100"){
@@ -795,7 +786,7 @@ export default {
             }  
          })
       },
-      //步骤2 绑定新进项票
+      //步骤2 绑定新销项票
       okStep2(id,invoiceNo){
         let p  ={};
         p.statusOut = "4";

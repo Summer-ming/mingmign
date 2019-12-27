@@ -1,3 +1,9 @@
+<!--
+ * @Description: 
+ * @Author: gmm
+ * @Date: 2019-04-11 10:54:31
+ * @其他: 
+ -->
 <template>
   <div class="custom-bread-crumb">
     <Breadcrumb :style="{fontSize: `${fontSize}px`}">

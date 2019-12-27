@@ -10,7 +10,8 @@
         <br>
         <div  class="demo-upload-list" v-for="(item,index) in uploadList" :key='index' v-if="item">
             <template v-if="item.status === 'finished'">
-                <img :src="item.url" >
+                <img :src="item.url" v-if="item.url.indexOf('.pdf') ==-1" >
+                <img src="https://jgys.oss-cn-shenzhen.aliyuncs.com/baseImg/pdf.jpg" v-else >
                 <div class="demo-upload-list-cover">
                     <Icon type="ios-eye-outline" @click.native="handleView(item.name)"></Icon>
                     <Icon type="ios-trash-outline" @click.native="handleRemove(item)"></Icon>
@@ -21,12 +22,15 @@
             </template>
 </div>
 <Upload 
-ref="upload" :show-upload-list="false" :default-file-list="defaultList" :on-success="handleSuccess" :format="['jpg','jepg','png']" :max-size="5120" ror="handleFormatError" :on-exceeded-size="handleMaxSize" :before-upload="handleBeforeUpload"
+ref="upload" :show-upload-list="false" 
+:default-file-list="defaultList" 
+:on-success="handleSuccess" 
+:format="['jpg','jepg','png','pdf']" :max-size="5120" ror="handleFormatError" :on-exceeded-size="handleMaxSize" :before-upload="handleBeforeUpload"
     multiple type="drag" :action="updateImgUrl" style="display:inline-block;width:58px">
     <div style="width: 58px;height:58px;line-height: 58px;">
         <Icon type="ios-camera" size="20"></Icon>
     </div>
-    <Modal title="查看图片" v-model="visible">
+    <Modal   title="查看图片" v-model="visible">
         <img :src="this.$global.ossUrl + imgName" v-if="visible" style="width: 100%">
     </Modal>
 </Upload>
@@ -43,7 +47,7 @@ ref="upload" :show-upload-list="false" :default-file-list="defaultList" :on-succ
   </div>
 </template>
 <script>
-import {updateOrderStatus} from '@/api/data'
+import {updateOrderStatus} from '@/api/data_8889'
   export default {
     name: 'sell_img',
     props: ["allOrder_orderItem"],
@@ -51,18 +55,24 @@ import {updateOrderStatus} from '@/api/data'
       return {
       updateImgUrl: this.$global.updateImgUrl, //上传图片
       visible: false,
+      valueForm_allOrder_orderItem:'',
       defaultList: [],
       uploadList: [],
       imgString:"",//图片的参数
-      dataParent:'',//绑定父组件传过来的值
       }
     },
     methods:{
 
         //上传图片
          handleView(name) {
-                this.imgName = name;
-                this.visible = true;
+                        //判断如果是pdf 则打开新的窗口
+                        if(name.indexOf('.pdf') == -1){
+                        this.imgName = name;
+                        this.visible = true;
+                        }else{
+                        window.open(this.$global.ossUrl+name);
+
+                        }
                 },
          handleRemove(file) {
                 this.uploadList.splice(this.uploadList.indexOf(file), 1);
@@ -77,10 +87,6 @@ import {updateOrderStatus} from '@/api/data'
                 this.uploadList.push(file);
         
                 const reg=/,$/gi;//此处是正则
-
-                this.uploadList.map((item)=>{
-                     this.imgString += item.url+','    
-                })
             },
          handleFormatError(file) {
                 this.$Notice.warning({
@@ -112,7 +118,7 @@ import {updateOrderStatus} from '@/api/data'
                 })
             let params={
                 pageUpdateOrderList:[{
-                    id:this.$route.query.id,//订单id,
+                    id:this.valueForm_allOrder_orderItem.id,//订单id,
                     pictures:this.imgString
                 }]
             };
@@ -122,42 +128,44 @@ import {updateOrderStatus} from '@/api/data'
           }  
          })
          },
-      
+            setImageInfo(){
+                            Array.prototype.notempty = function() {
+                        var arr = [];
+                        this.map(function(val, index) {
+                        //过滤规则为，不为空串、不为null、不为undefined
+                        if (val !== "" && val != undefined) { arr.push(val); }});
+                        return arr;
+                    };
+                    let pa=[];
+                    if(this.valueForm_allOrder_orderItem.pictures.length>0){
+                        let photo=this.valueForm_allOrder_orderItem.pictures.split(',');
+                            let photM=photo.notempty();
+                            
+                            photM.map((item)=>{
+                                let photoParm={};//存放数组的对象
+                                console.log(item)
+                                photoParm.url=item
+                                let b=item.split('http://jgys.oss-cn-shenzhen.aliyuncs.com/')
+                                photoParm.name=b[1]
+                                photoParm.status='finished'
+                                    pa.push(photoParm)
+                            })
+                            console.log(pa)
+                            this.uploadList=pa
+                    }else{
+
+                    }
+            }
        
     },
      watch: {
         allOrder_orderItem(val){
-            // this.valueForm_allOrder_orderItem = val;
-            // this.getOrderAuditList();
-            this.dataParent=val
-            console.log('父组件传来的值')
-            console.log(val)
-            console.log('===============')
+            this.valueForm_allOrder_orderItem = val;
+            this.setImageInfo();
         }
+        
     },
     mounted(){
-        Array.prototype.notempty = function() {
-            var arr = [];
-            this.map(function(val, index) {
-            //过滤规则为，不为空串、不为null、不为undefined
-            if (val !== "" && val != undefined) { arr.push(val); }});
-            return arr;
-        };
-         let pa=[];
-         let photo=this.$route.query.pictures.split(',');
-         let photM=photo.notempty();
-         let photoParm={};//存放数组的对象
-         photM.map((item)=>{
-             console.log(item)
-              photoParm.url=item
-              let b=item.split('http://jgys.oss-cn-shenzhen.aliyuncs.com/')
-              photoParm.name=b[1]
-              photoParm.status='finished'
-                pa.push(photoParm)
-         })
-         console.log(pa)
-         this.uploadList=pa
-        console.log('mount')
      
     },
   }

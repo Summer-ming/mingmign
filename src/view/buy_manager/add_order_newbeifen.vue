@@ -110,9 +110,9 @@ ref="upload"
     </row>
 
 
-   
+  
     <!-- 2 -->
-     
+    
 
   </div>
 </template>
@@ -382,7 +382,7 @@ export default {
            this.dataOne.splice(index,1)
           //  this.dataTwo.splice(index,1)
 
-           for(var i in this.dataTwo){
+           for(var i=0; i<this.dataTwo.length;i++ ){
              if(this.dataTwo[i].shopSteelId == row.shopSteelId){
                this.dataTwo.splice(i,1)
              }
@@ -407,10 +407,7 @@ export default {
                 console.log('我是上传的图片')
                 const reg=/,$/gi;//此处是正则
 
-                this.uploadList.map((item)=>{
-                  console.log(this.imgString.length+'我是打印的长度')
-                     this.imgString += item.url+','    
-                })
+               
             },
             handleFormatError(file) {
                 this.$Notice.warning({
@@ -503,21 +500,25 @@ export default {
                   })
        },
        getAdd(){ 
+          this.uploadList.map((item)=>{
+                  console.log(this.imgString.length+'我是打印的长度')
+                     this.imgString += item.url+','    
+                })
        this.reloadData();
          const param                = {};
-               param.agentId        = this.agentId;
-               param.agentShortName = this.agentShortName,            //代理商名称
-               param.bankJgId       = this.bankJgId,                  //本公司抬头类型，1上海闽航，2福建亿钢
-               param.businessType   = '1',                            //写死
-               param.buyType        = "1",                            //写死
-               param.createCname    = this.$global.adminInfo.cname,   //登录人的名称
-               param.createEname    = this.$global.adminInfo.ename,   //登录人的英文名称
+              param.agentId        = this.agentId;
+              param.agentShortName = this.agentShortName,            //代理商名称11
+              param.bankJgId       = this.bankJgId,                  //本公司抬头类型，1上海闽航，2福建亿钢
+              param.businessType   = '1',                            //写死
+              param.buyType        = "1",                            //写死
+              param.createCname    = this.$global.adminInfo.cname,   //登录人的名称
+              param.createEname    = this.$global.adminInfo.ename,   //登录人的英文名称
          //cus的信息根据 bankJgId的类型来区分填写
-         param.customerId          = this.customerId,            //bankJgId = 1,写死1，bankJgId = 2,写死2
-         param.customerName        = this.customerName,          //bankJgId = 1,写死"上海市闽航电子商务有限公司"，bankJgId = 2,写死‘福建省亿钢电子商务有限公司’
-         param.customerOrgId       = this.customerOrgId,         //bankJgId = 1,写死"1"bankJgId = 2,写死2
-         param.customerOrgName     = this.customerOrgName,       //bankJgId = 1,写死"上海市闽航电子商务有限公司"，bankJgId = 2,写死‘福建省亿钢电子商务有限公司’
-         param.customerPhone       = "",                         //传空
+         param.customerId      = this.customerId,        //bankJgId = 1,写死1，bankJgId = 2,写死2
+         param.customerName    = this.customerName,      //bankJgId = 1,写死"上海市闽航电子商务有限公司"，bankJgId = 2,写死‘福建省亿钢电子商务有限公司’
+         param.customerOrgId   = this.customerOrgId,     //bankJgId = 1,写死"1"bankJgId = 2,写死2
+         param.customerOrgName = this.customerOrgName,   //bankJgId = 1,写死"上海市闽航电子商务有限公司"，bankJgId = 2,写死‘福建省亿钢电子商务有限公司’
+         param.customerPhone   = "",                     //传空
          //买家信息结束
          param.merMoneyAll         = this.addForm.totalDijia,                        //卖家总金额 TODO:
          param.moneyAll            = this.addForm.totalSum,                        //买家总金额

@@ -1,3 +1,9 @@
+/*
+ * @Description: 
+ * @Author: gmm
+ * @Date: 2019-08-12 16:47:59
+ * @其他: 
+ */
 import Main from '@/components/main'
 import parentView from '@/components/parent-view'
 
@@ -16,510 +22,6 @@ import parentView from '@/components/parent-view'
  *  beforeCloseName: (-) 设置该字段，则在关闭当前tab页时会去'@/router/before-close.js'里寻找该字段名对应的方法，作为关闭前的钩子函数
  * }
  */
-
-/*** 
-export default [{
-        path: '/login',
-        name: 'login',
-        meta: {
-            title: 'Login - 登录',
-            hideInMenu: true
-        },
-        component: () =>
-            import ('@/view/login/login.vue')
-    },
-    {
-        path: '/',
-        name: '_home',
-        redirect: '/home',
-        component: Main,
-        meta: {
-            hideInMenu: true,
-            notCache: true
-        },
-        children: [{
-            path: '/home',
-            name: 'home',
-            meta: {
-                hideInMenu: true,
-                title: '首页',
-                notCache: true,
-                icon: 'md-home'
-            },
-            component: () =>
-                import ('@/view/single-page/home')
-        }]
-    },
-    
-    {
-        path: '',
-        name: 'doc',
-        meta: {
-            title: '文档',
-            href: 'https://lison16.github.io/iview-admin-doc/#/',
-            icon: 'ios-book',
-            hideInMenu:true
-        }
-    },
-    {
-        path: '/join',
-        name: 'join',
-        component: Main,
-        meta: {
-            hideInBread: true,
-            hideInMenu:true
-        },
-        children: [{
-            path: 'join_page',
-            name: 'join_page',
-            meta: {
-                icon: '_qq',
-                title: 'QQ群'
-            },
-            component: () =>
-                import ('@/view/join-page.vue')
-        }]
-    },
-    {
-        path: '/message',
-        name: 'message',
-        component: Main,
-        meta: {
-            hideInBread: true,
-            hideInMenu: true
-        },
-        children: [{
-            path: 'message_page',
-            name: 'message_page',
-            meta: {
-                icon: 'md-notifications',
-                title: '消息中心'
-            },
-            component: () =>
-                import ('@/view/single-page/message/index.vue')
-        }]
-    },
-    {
-        path: '/components',
-        name: 'components',
-        meta: {
-            icon: 'logo-buffer',
-            title: '组件组件',
-            hideInMenu:true
-
-        },
-        component: Main,
-        children: [{
-                path: 'tree_select_page',
-                name: 'tree_select_page',
-                meta: {
-                    icon: 'md-arrow-dropdown-circle',
-                    title: '树状下拉选择器'
-                },
-                component: () =>
-                    import ('@/view/components/tree-select/index.vue')
-            },
-            {
-                path: 'count_to_page',
-                name: 'count_to_page',
-                meta: {
-                    icon: 'md-trending-up',
-                    title: '数字渐变'
-                },
-                component: () =>
-                    import ('@/view/components/count-to/count-to.vue')
-            },
-            {
-                path: 'drag_list_page',
-                name: 'drag_list_page',
-                meta: {
-                    icon: 'ios-infinite',
-                    title: '拖拽列表'
-                },
-                component: () =>
-                    import ('@/view/components/drag-list/drag-list.vue')
-            },
-            {
-                path: 'drag_drawer_page',
-                name: 'drag_drawer_page',
-                meta: {
-                    icon: 'md-list',
-                    title: '可拖拽抽屉'
-                },
-                component: () =>
-                    import ('@/view/components/drag-drawer')
-            },
-            {
-                path: 'org_tree_page',
-                name: 'org_tree_page',
-                meta: {
-                    icon: 'ios-people',
-                    title: '组织结构树'
-                },
-                component: () =>
-                    import ('@/view/components/org-tree')
-            },
-            {
-                path: 'tree_table_page',
-                name: 'tree_table_page',
-                meta: {
-                    icon: 'md-git-branch',
-                    title: '树状表格'
-                },
-                component: () =>
-                    import ('@/view/components/tree-table/index.vue')
-            },
-            {
-                path: 'cropper_page',
-                name: 'cropper_page',
-                meta: {
-                    icon: 'md-crop',
-                    title: '图片裁剪'
-                },
-                component: () =>
-                    import ('@/view/components/cropper/cropper.vue')
-            },
-            {
-                path: 'tables_page',
-                name: 'tables_page',
-                meta: {
-                    icon: 'md-grid',
-                    title: '多功能表格'
-                },
-                component: () =>
-                    import ('@/view/components/tables/tables.vue')
-            },
-            {
-                path: 'split_pane_page',
-                name: 'split_pane_page',
-                meta: {
-                    icon: 'md-pause',
-                    title: '分割窗口'
-                },
-                component: () =>
-                    import ('@/view/components/split-pane/split-pane.vue')
-            },
-            {
-                path: 'markdown_page',
-                name: 'markdown_page',
-                meta: {
-                    icon: 'logo-markdown',
-                    title: 'Markdown编辑器'
-                },
-                component: () =>
-                    import ('@/view/components/markdown/markdown.vue')
-            },
-            {
-                path: 'editor_page',
-                name: 'editor_page',
-                meta: {
-                    icon: 'ios-create',
-                    title: '富文本编辑器'
-                },
-                component: () =>
-                    import ('@/view/components/editor/editor.vue')
-            },
-            {
-                path: 'icons_page',
-                name: 'icons_page',
-                meta: {
-                    icon: '_bear',
-                    title: '自定义图标'
-                },
-                component: () =>
-                    import ('@/view/components/icons/icons.vue')
-            }
-        ]
-    },
-    {
-        path: '/update',
-        name: 'update',
-        meta: {
-            icon: 'md-cloud-upload',
-            title: '数据上传',
-            hideInMenu:true
-
-        },
-        component: Main,
-        children: [{
-                path: 'update_table_page',
-                name: 'update_table_page',
-                meta: {
-                    icon: 'ios-document',
-                    title: '上传Csv'
-                },
-                component: () =>
-                    import ('@/view/update/update-table.vue')
-            },
-            {
-                path: 'update_paste_page',
-                name: 'update_paste_page',
-                meta: {
-                    icon: 'md-clipboard',
-                    title: '粘贴表格数据'
-                },
-                component: () =>
-                    import ('@/view/update/update-paste.vue')
-            }
-        ]
-    },
-    {
-        path: '/excel',
-        name: 'excel',
-        meta: {
-            icon: 'ios-stats',
-            title: 'EXCEL导入导出',
-            hideInMenu:true
-
-        },
-        component: Main,
-        children: [{
-                path: 'upload-excel',
-                name: 'upload-excel',
-                meta: {
-                    icon: 'md-add',
-                    title: '导入EXCEL'
-                },
-                component: () =>
-                    import ('@/view/excel/upload-excel.vue')
-            },
-            {
-                path: 'export-excel',
-                name: 'export-excel',
-                meta: {
-                    icon: 'md-download',
-                    title: '导出EXCEL'
-                },
-                component: () =>
-                    import ('@/view/excel/export-excel.vue')
-            }
-        ]
-    },
-    {
-        path: '/tools_methods',
-        name: 'tools_methods',
-        meta: {
-            hideInBread: true,
-            hideInMenu:true
-
-        },
-        component: Main,
-        children: [{
-            path: 'tools_methods_page',
-            name: 'tools_methods_page',
-            meta: {
-                icon: 'ios-hammer',
-                title: '工具方法',
-                beforeCloseName: 'before_close_normal'
-            },
-            component: () =>
-                import ('@/view/tools-methods/tools-methods.vue')
-        }]
-    },
-    {
-        path: '/i18n',
-        name: 'i18n',
-        meta: {
-            hideInBread: true,
-            hideInMenu:true
-
-        },
-        component: Main,
-        children: [{
-            path: 'i18n_page',
-            name: 'i18n_page',
-            meta: {
-                icon: 'md-planet',
-                title: 'i18n - {{ i18n_page }}'
-            },
-            component: () =>
-                import ('@/view/i18n/i18n-page.vue')
-        }]
-    },
-    {
-        path: '/error_store',
-        name: 'error_store',
-        meta: {
-            hideInBread: true,
-            hideInMenu:true
-
-        },
-        component: Main,
-        children: [{
-            path: 'error_store_page',
-            name: 'error_store_page',
-            meta: {
-                icon: 'ios-bug',
-                title: '错误收集'
-            },
-            component: () =>
-                import ('@/view/error-store/error-store.vue')
-        }]
-    },
-    {
-        path: '/error_logger',
-        name: 'error_logger',
-        meta: {
-            hideInBread: true,
-            hideInMenu: true
-        },
-        component: Main,
-        children: [{
-            path: 'error_logger_page',
-            name: 'error_logger_page',
-            meta: {
-                icon: 'ios-bug',
-                title: '错误收集'
-            },
-            component: () =>
-                import ('@/view/single-page/error-logger.vue')
-        }]
-    },
-    {
-        path: '/directive',
-        name: 'directive',
-        meta: {
-            hideInBread: true,
-            hideInMenu:true
-
-        },
-        component: Main,
-        children: [{
-            path: 'directive_page',
-            name: 'directive_page',
-            meta: {
-                icon: 'ios-navigate',
-                title: '指令'
-            },
-            component: () =>
-                import ('@/view/directive/directive.vue')
-        }]
-    },
-    {
-        path: '/multilevel',
-        name: 'multilevel',
-        meta: {
-            icon: 'md-menu',
-            title: '多级菜单',
-            hideInMenu:true
-
-        },
-        component: Main,
-        children: [{
-                path: 'level_2_1',
-                name: 'level_2_1',
-                meta: {
-                    icon: 'md-funnel',
-                    title: '二级-1'
-                },
-                component: () =>
-                    import ('@/view/multilevel/level-2-1.vue')
-            },
-            {
-                path: 'level_2_2',
-                name: 'level_2_2',
-                meta: {
-                    access: ['super_admin'],
-                    icon: 'md-funnel',
-                    showAlways: true,
-                    title: '二级-2'
-                },
-                component: parentView,
-                children: [{
-                        path: 'level_2_2_1',
-                        name: 'level_2_2_1',
-                        meta: {
-                            icon: 'md-funnel',
-                            title: '三级'
-                        },
-                        component: () =>
-                            import ('@/view/multilevel/level-2-2/level-2-2-1.vue')
-                    },
-                    {
-                        path: 'level_2_2_2',
-                        name: 'level_2_2_2',
-                        meta: {
-                            icon: 'md-funnel',
-                            title: '三级'
-                        },
-                        component: () =>
-                            import ('@/view/multilevel/level-2-2/level-2-2-2.vue')
-                    }
-                ]
-            },
-            {
-                path: 'level_2_3',
-                name: 'level_2_3',
-                meta: {
-                    icon: 'md-funnel',
-                    title: '二级-3'
-                },
-                component: () =>
-                    import ('@/view/multilevel/level-2-3.vue')
-            }
-        ]
-    },
-    {
-        path: '/argu',
-        name: 'argu',
-        meta: {
-            hideInMenu: true
-        },
-        component: Main,
-        children: [{
-                path: 'params/:id',
-                name: 'params',
-                meta: {
-                    icon: 'md-flower',
-                    title: route => `{{ params }}-${route.params.id}`,
-                    notCache: true,
-                    beforeCloseName: 'before_close_normal'
-                },
-                component: () =>
-                    import ('@/view/argu-page/params.vue')
-            },
-            {
-                path: 'query',
-                name: 'query',
-                meta: {
-                    icon: 'md-flower',
-                    title: route => `{{ query }}-${route.query.id}`,
-                    notCache: true
-                },
-                component: () =>
-                    import ('@/view/argu-page/query.vue')
-            }
-        ]
-    },
-    {
-        path: '/401',
-        name: 'error_401',
-        meta: {
-            hideInMenu: true
-        },
-        component: () =>
-            import ('@/view/error-page/401.vue')
-    },
-    {
-        path: '/500',
-        name: 'error_500',
-        meta: {
-            hideInMenu: true
-        },
-        component: () =>
-            import ('@/view/error-page/500.vue')
-    },
-    {
-        path: '*',
-        name: 'error_404',
-        meta: {
-            hideInMenu: true
-        },
-        component: () =>
-            import ('@/view/error-page/404.vue')
-    }
-]
-*/
 
 export default [{
         path: '/login',
@@ -556,17 +58,22 @@ export default [{
         path: '/customer_manager',
         name: 'customer_manager',
         meta: {
-            hide: true,
+            hideInMenu: getIsHide("customer_manager"),
             icon: 'ios-aperture',
-            title: '客户管理'
+            title: '客户管理',
+            showAlways:true,
+            notCache: false
         },
         component: Main,
-        children: [{
+        children: [
+            {
                 path: 'customerlist',
                 name: 'customerlist',
                 meta: {
                     icon: "md-cube",
-                    title: "客户列表"
+                    title: "客户列表",
+                    hideInMenu:getIsHide("customerlist"),
+                    notCache:false,
                 },
                 component: () =>
                     import ('@/view/customer_manager/customerlist.vue')
@@ -576,7 +83,9 @@ export default [{
                 name: 'supplierList',
                 meta: {
                     icon: "md-cube",
-                    title: "供应商管理"
+                    title: "供应商管理",
+                    hideInMenu:getIsHide("supplierList"),
+                    notCache:false,
                 },
                 component: () =>
                     import ('@/view/customer_manager/supplierList.vue')
@@ -586,20 +95,63 @@ export default [{
                 name: 'shopList',
                 meta: {
                     icon: "md-cube",
-                    title: "店铺管理"
+                    title: "店铺管理",
+                    hideInMenu:getIsHide("shopList"),
+                    notCache:false,
+
                 },
                 component: () =>
                     import ('@/view/customer_manager/shopList.vue')
             },
             {
-                path: 'user_agent',
-                name: 'user_agent',
+                path: 'xiangmu',
+                name: 'xiangmu',
                 meta: {
-                    icon: "md-cube",
-                    title: "代理商管理"
+                    icon: 'md-funnel',
+                    title: '工程名称管理',
+                    notCache:false,
                 },
                 component: () =>
-                    import ('@/view/customer_manager/user_agent.vue')
+                    import ('@/view/customer_manager/xiangmu.vue')
+            },
+            {
+                path: 'xiangDetail',
+                name: 'xiangDetail',
+                meta: {
+                    icon: 'md-funnel',
+                    title: '工程名称详情',
+                    notCache:true,
+                    hideInMenu: true,
+
+                },
+                component: () =>
+                    import ('@/view/customer_manager/xiangDetail.vue')
+            },
+            // {
+            //     path: 'user_agent',
+            //     name: 'user_agent',
+            //     meta: {
+            //         icon: "md-cube",
+            //         title: "代理商管理",
+            //         hideInMenu:getIsHide("user_agent"),
+
+            //     },
+            //     component: () =>
+            //         import ('@/view/customer_manager/user_agent.vue')
+            // },
+            //tiXianShenHe 提现审核
+            {
+                path: 'tiXianShenHe',
+                name: 'tiXianShenHe',
+                meta: {
+                    icon: "md-cube",
+                    title: "提现审核",
+                    hideInMenu:getIsHide("tiXianShenHe"),
+                    notCache:true,
+
+                },
+                component: () =>
+                    import ('@/view/customer_manager/tiXianShenHe.vue')
             },
             {
                 path: 'supplierList_add',
@@ -607,7 +159,9 @@ export default [{
                 meta: {
                     icon: "md-cube",
                     title: "供应商详情",
-                    hideInMenu: true
+                    hideInMenu: true,
+                   notCache: false
+
                 },
                 component: () =>
                     import ('@/view/customer_manager/supplierList_add.vue')
@@ -618,7 +172,9 @@ export default [{
                 meta: {
                     icon: "md-cube",
                     title: "店铺详情",
-                    hideInMenu: true
+                    hideInMenu: true,
+                   notCache: false
+
                 },
                 component: () =>
                     import ('@/view/customer_manager/shopListInfo.vue')
@@ -629,7 +185,9 @@ export default [{
                 meta: {
                     icon: "md-cube",
                     title: "银行卡详情",
-                    hideInMenu: true
+                    hideInMenu: true,
+                   notCache: true
+
                 },
                 component: () =>
                     import ('@/view/customer_manager/org_bankAccount.vue')
@@ -643,39 +201,92 @@ export default [{
         meta: {
             hide: true,
             icon: 'ios-aperture',
-            title: '采购管理'
+            title: '采购管理',
+            hideInMenu:getIsHide("buy_manager"),
+            showAlways:true,
+            notCache:false,
         },
         component: Main,
-        children: [{
+        children: [
+            {
                 path: 'buy_order_list',
                 name: 'buy_order_list',
                 meta: {
                     icon: "md-cube",
-                    title: "采购单列表"
+                    title: "采购单列表",
+                    hideInMenu:getIsHide("buy_order_list"),
+                    notCache:false,
+
                 },
                 component: () =>
                     import ('@/view/buy_manager/buy_order_list.vue')
             },
+            // {
+            //     path: 'MyTable',
+            //     name: 'MyTable',
+            //     meta: {
+            //         icon: "md-cube",
+            //         title: "采购单列表2222",
+            //         hideInMenu:getIsHide("MyTable"),
+            //         notCache:false,
+
+            //     },
+            //     component: () =>
+            //         import ('@/view/buy_manager/MyTable.vue')
+            // },
+           
             {
                 path: 'add_order_delivery_actual',
                 name: 'add_order_delivery_actual',
                 meta: {
                     icon: "md-cube",
                     title: "采购单入库",
-                    hideInMenu: true
+                    hideInMenu: true,
+                   notCache: true
+
                 },
                 component: () =>
                     import ('@/view/buy_manager/add_order_delivery_actual.vue')
+            },
+            //入账
+            {
+                path: 'buy_order_pay_info',
+                name: 'buy_order_pay_info',
+                meta: {
+                    icon: "md-cube",
+                    title: "采购单入账",
+                    hideInMenu: true,
+                   notCache: true
+
+                },
+                component: () =>
+                    import ('@/view/buy_manager/buy_order_pay_info.vue')
             },
             {
                 path: 'review_order_list',
                 name: 'review_order_list',
                 meta: {
                     icon: "md-cube",
-                    title: "审核采购单"
+                    title: "审核采购单",
+                    hideInMenu:getIsHide("review_order_list"),
+                    notCache:true,
+
                 },
                 component: () =>
                     import ('@/view/buy_manager/review_order_list.vue')
+            },
+            {
+                path: 'buy_cai_order_list',
+                name: 'buy_cai_order_list',
+                meta: {
+                    icon: "md-cube",
+                    title: "采购明细查询",
+                    hideInMenu:getIsHide("buy_cai_order_list"),
+                    notCache:false,
+
+                },
+                component: () =>
+                    import ('@/view/buy_manager/buy_cai_order_list.vue')
             },
             {
                 path: 'review_order_info',
@@ -683,7 +294,9 @@ export default [{
                 meta: {
                     icon: "md-cube",
                     title: "审核采购单详情",
-                    hideInMenu: true
+                    hideInMenu: true,
+                   notCache: true
+
                 },
                 component: () =>
                     import ('@/view/buy_manager/review_order_info.vue')
@@ -694,7 +307,9 @@ export default [{
                 meta: {
                     icon: "md-cube",
                     title: "采购单申请付款",
-                    hideInMenu: true
+                    hideInMenu: true,
+                   notCache: true
+
                 },
                 component: () =>
                     import ('@/view/buy_manager/order_pay_info.vue')
@@ -705,7 +320,9 @@ export default [{
                 meta: {
                     icon: "md-cube",
                     title: "采购单申请杂费付款",
-                    hideInMenu: true
+                    hideInMenu: true,
+                   notCache: true
+
                 },
                 component: () =>
                     import ('@/view/buy_manager/order_om_pay_info.vue')
@@ -717,7 +334,7 @@ export default [{
                     icon: "md-cube",
                     title: "采购单详情",
                     hideInMenu: true,
-                    notCache: true
+                   notCache: true
                 },
                 component: () =>
                     import ('@/view/buy_manager/order_buy_info.vue')
@@ -734,6 +351,31 @@ export default [{
                 component: () =>
                     import ('@/view/buy_manager/buy_order_change_info.vue')
             },
+            //测试使用
+            {
+                path: 'buy_order_change_info1',
+                name: 'buy_order_change_info1',
+                meta: {
+                    icon: "md-cube",
+                    title: "修改采购单明细",
+                    hideInMenu: true,
+                    notCache: true
+                },
+                component: () =>
+                    import ('@/view/buy_manager/buy_order_change_info1.vue')
+            },
+            {
+                path: 'buy_order_change_Oinfo',
+                name: 'buy_order_change_Oinfo',
+                meta: {
+                    icon: "md-cube",
+                    title: "修改采购单基础信息",
+                    hideInMenu: true,
+                    notCache: true
+                },
+                component: () =>
+                    import ('@/view/buy_manager/buy_order_change_Oinfo.vue')
+            },
             {
                 path: 'add_order_new',
                 name: 'add_order_new',
@@ -741,7 +383,7 @@ export default [{
                     icon: "md-cube",
                     title: "新增采购单",
                     hideInMenu: true,
-                    notCache: true
+                    notCache: false
                 },
                 component: () =>
                     import ('@/view/buy_manager/add_order_new.vue')
@@ -782,6 +424,18 @@ export default [{
                 component: () =>
                     import ('@/view/buy_manager/add_order_new_byInfo.vue')
             }, //kaiPiao
+            {
+                path: 'buy_order_change_delivery_actual',
+                name: 'buy_order_change_delivery_actual',
+                meta: {
+                    icon: "md-cube",
+                    title: "修改采购单实提信息",
+                    hideInMenu: true,
+                    notCache: true
+                },
+                component: () =>
+                    import ('@/view/buy_manager/buy_order_change_delivery_actual.vue')
+            },
         ]
     }, //采购管理
 
@@ -790,7 +444,9 @@ export default [{
         name: 'sell_manager',
         meta: {
             icon: 'md-calculator',
-            title: '销售管理'
+            title: '销售管理',
+            showAlways:true,
+            notCache:false,
         },
         component: Main,
         children: [{
@@ -798,18 +454,22 @@ export default [{
                 name: 'sell_order_list',
                 meta: {
                     icon: 'md-calculator',
-                    title: '销售单列表'
+                    title: '销售单列表',
+                    notCache:false,
                 },
                 component: () =>
                     import ('@/view/sell_manager/sell_order_list.vue')
-            },
+            },//sell_xiao_search
+         
             {
                 path: 'sell_order_info',
                 name: 'sell_order_info',
                 meta: {
                     icon: 'md-calculator',
                     title: '销售单明细',
-                    hideInMenu: true
+                    hideInMenu: true,
+                   notCache: true
+
                 },
                 component: () =>
                     import ('@/view/sell_manager/sell_order_info.vue')
@@ -820,9 +480,45 @@ export default [{
                 meta: {
                     icon: 'md-calculator',
                     title: '审核销售单',
+                    notCache:true,
                 },
                 component: () =>
                     import ('@/view/sell_manager/sell_order_review_list.vue')
+            },
+            {
+                path: 'sell_xiao_search',
+                name: 'sell_xiao_search',
+                meta: {
+                    icon: 'md-calculator',
+                    title: '销售单明细查询',
+                    notCache:false,
+                },
+                component: () =>
+                    import ('@/view/sell_manager/sell_xiao_search.vue')
+            },
+            {
+                path: 'sell_xiao_interest_list',
+                name: 'sell_xiao_interest_list',
+                meta: {
+                    icon: 'md-calculator',
+                    title: '销售单Tree查询11',
+                    notCache:false,
+                },
+                component: () =>
+                    import ('@/view/sell_manager/sell_xiao_interest_list.vue')
+            },
+          
+            // 新增杂费列表
+            {
+                path: 'zaFei',
+                name: 'zaFei',
+                meta: {
+                    icon: 'md-calculator',
+                    title: '杂费列表',
+                    notCache:false,
+                },
+                component: () =>
+                    import ('@/view/sell_manager/zaFei.vue')
             },
             {
                 path: 'sell_order_review_info',
@@ -830,7 +526,9 @@ export default [{
                 meta: {
                     icon: 'md-calculator',
                     title: '审核销售单明细',
-                    hideInMenu: true
+                    hideInMenu: true,
+                   notCache: true
+
                 },
                 component: () =>
                     import ('@/view/sell_manager/sell_order_review_info.vue')
@@ -841,18 +539,23 @@ export default [{
                 meta: {
                     icon: 'md-calculator',
                     title: '新增库存销售单',
-                    hideInMenu: true
+                    hideInMenu: true,
+                   notCache: false
+
                 },
                 component: () =>
                     import ('@/view/sell_manager/add_sell_order.vue')
             },
+           
             {
                 path: 'add_sell_order_excel',
                 name: 'add_sell_order_excel',
                 meta: {
                     icon: 'md-calculator',
                     title: '新增先销后进单',
-                    hideInMenu: true
+                    hideInMenu: true,
+                   notCache: true
+
                 },
                 component: () =>
                     import ('@/view/sell_manager/add_sell_order_excel.vue')
@@ -863,10 +566,25 @@ export default [{
                 meta: {
                     icon: 'md-calculator',
                     title: '销售单确认收款',
-                    hideInMenu: true
+                    hideInMenu: true,
+                   notCache: true
+
                 },
                 component: () =>
                     import ('@/view/sell_manager/sell_order_pay_info.vue')
+            },
+            {
+                path: 'sell_order_with_order_pay_info',
+                name: 'sell_order_with_order_pay_info',
+                meta: {
+                    icon: 'md-calculator',
+                    title: '销售单订单确认收款',
+                    hideInMenu: true,
+                   notCache: true
+
+                },
+                component: () =>
+                    import ('@/view/sell_manager/sell_order_with_order_pay_info.vue')
             },
             {
                 path: 'sell_order_change_info',
@@ -874,10 +592,78 @@ export default [{
                 meta: {
                     icon: 'md-calculator',
                     title: '修改销售单',
-                    hideInMenu: true
+                    hideInMenu: true,
+                   notCache: true
+
                 },
                 component: () =>
                     import ('@/view/sell_manager/sell_order_change_info.vue')
+            },
+            {
+                path: 'sell_order_change_oinfo',
+                name: 'sell_order_change_oinfo',
+                meta: {
+                    icon: 'md-calculator',
+                    title: '修改销售单明细',
+                    hideInMenu: true,
+                   notCache: true
+
+                },
+                component: () =>
+                    import ('@/view/sell_manager/sell_order_change_oinfo.vue')
+            },
+            {
+                path: 'sell_order_change_oinfo_vxeTable',
+                name: 'sell_order_change_oinfo_vxeTable',
+                meta: {
+                    icon: 'md-calculator',
+                    title: '修改销售单明细',
+                    hideInMenu: true,
+                   notCache: true
+
+                },
+                component: () =>
+                    import ('@/view/sell_manager/sell_order_change_oinfo_vxeTable.vue')
+            },
+            {
+                path: 'sell_order_changeActual',
+                name: 'sell_order_changeActual',
+                meta: {
+                    icon: 'md-calculator',
+                    title: '销售单录实提',
+                    hideInMenu: true,
+                    notCache: true
+
+                },
+                component: () =>
+                    import ('@/view/sell_manager/sell_order_changeActual.vue')
+            },
+            //测试
+            {
+                path: 'sell_order_changeActual1',
+                name: 'sell_order_changeActual1',
+                meta: {
+                    icon: 'md-calculator',
+                    title: '销售单录实提',
+                    hideInMenu: true,
+                    notCache: true
+
+                },
+                component: () =>
+                    import ('@/view/sell_manager/sell_order_changeActual1.vue')
+            },
+            {
+                path: 'sell_order_addOrgMoneyRecord',
+                name: 'sell_order_addOrgMoneyRecord',
+                meta: {
+                    icon: 'md-calculator',
+                    title: '销售单确认出货',
+                    hideInMenu: true,
+                    notCache: true
+
+                },
+                component: () =>
+                    import ('@/view/sell_manager/sell_order_addOrgMoneyRecord.vue')
             },
             {
                 path: 'sell_order_kaiPiao',
@@ -885,11 +671,25 @@ export default [{
                 meta: {
                     icon: 'md-calculator',
                     title: '销售单开票申请',
-                    hideInMenu: true
+                    hideInMenu: true,
+                    notCache: true
                 },
                 component: () =>
                     import ('@/view/sell_manager/sell_order_kaiPiao.vue')
             },
+            {
+                path: 'sell_order_om_pay_info',
+                name: 'sell_order_om_pay_info',
+                meta: {
+                    icon: 'md-calculator',
+                    title: '销售单杂费付款申请',
+                    hideInMenu: true,
+                    notCache: true
+                },
+                component: () =>
+                    import ('@/view/sell_manager/sell_order_om_pay_info.vue')
+            },
+            
         ]
     }, //销售管理
     {
@@ -897,8 +697,9 @@ export default [{
         name: 'stock',
         meta: {
             icon: 'md-menu',
-            title: '库存管理'
-                // showAlways: true
+            title: '库存管理',
+            showAlways: true,
+            notCache:true,
         },
         component: Main,
         children: [{
@@ -906,7 +707,9 @@ export default [{
                 name: 'stock_manager',
                 meta: {
                     icon: 'md-funnel',
-                    title: '仓库管理'
+                    title: '仓库管理',
+                    notCache:true,
+                    
                 },
                 component: () =>
                     import ('@/view/stock/stock_manager.vue')
@@ -916,7 +719,8 @@ export default [{
                 name: 'in_stock_list',
                 meta: {
                     icon: 'md-funnel',
-                    title: '库存列表'
+                    title: '库存列表',
+                    notCache:true,
                 },
                 component: () =>
                     import ('@/view/stock/in_stock_list.vue')
@@ -930,15 +734,19 @@ export default [{
         name: 'financial_management',
         meta: {
             icon: 'md-calculator',
-            title: '财务管理'
+            title: '财务管理',
+            showAlways:true,
+            notCache:false,
         },
         component: Main,
-        children: [{
+        children: [
+            {
                 path: 'buy_order_payment_list',
                 name: 'buy_order_payment_list',
                 meta: {
                     icon: 'md-calculator',
-                    title: '采购单付款列表'
+                    title: '采购单付款抵扣列表',
+                    notCache:true,
                 },
                 component: () =>
                     import ('@/view/financial_management/buy_order_payment_list.vue')
@@ -948,97 +756,144 @@ export default [{
                 name: 'buy_order_pay_online',
                 meta: {
                     icon: 'md-calculator',
-                    title: '采购单线上制单付款'
+                    title: '线上制单付款',
+                    notCache:false,
                 },
                 component: () =>
                     import ('@/view/financial_management/buy_order_pay_online.vue')
             },
+
+            //新增线上制单
             {
-                path: 'daozhangdan_fj',
-                name: 'daozhangdan_fj',
+                path: 'buy_new_online',
+                name: 'buy_new_online',
                 meta: {
                     icon: 'md-calculator',
-                    title: '福建亿钢到账单管理'
+                    title: '公司内部划转金额',
+                    notCache:true,
                 },
-                component: parentView,
-                children: [{
-                        path: 'daozhangdanFJ_List',
-                        name: 'daozhangdanFJ_List',
-                        meta: {
-                            icon: 'md-funnel',
-                            title: '到账单列表(福建亿钢)'
-                        },
-                        component: () =>
-                            import ('@/view/financial_management/daozhangdan_fj/daozhangdanFJ_List.vue')
-                    },
-                    {
-                        path: 'daozhangdanFJ_backList',
-                        name: 'daozhangdanFJ_backList',
-                        meta: {
-                            icon: 'md-funnel',
-                            title: '回退到账单列表(福建亿钢)'
-                        },
-                        component: () =>
-                            import ('@/view/financial_management/daozhangdan_fj/daozhangdanFJ_backList.vue')
-                    },
-                    {
-                        path: 'chuzhangdanFJ_List',
-                        name: 'chuzhangdanFJ_List',
-                        meta: {
-                            icon: 'md-funnel',
-                            title: '出账单列表(福建亿钢)'
-                        },
-                        component: () =>
-                            import ('@/view/financial_management/daozhangdan_fj/chuzhangdanFJ_List.vue')
-                    },
-                ]
+                component: () =>
+                    import ('@/view/financial_management/buy_new_online.vue')
             },
             {
-                path: 'daozhangdan_sh',
-                name: 'daozhangdan_sh',
+                path: 'daozhangdan_summary',
+                name: 'daozhangdan_summary',
                 meta: {
                     icon: 'md-calculator',
-                    title: '上海闽航到账单管理'
+                    title: '到账单汇总',
+                    notCache:true,
                 },
-                component: parentView,
-                children: [{
-                        path: 'daozhangdanSH_List',
-                        name: 'daozhangdanSH_List',
-                        meta: {
-                            icon: 'md-funnel',
-                            title: '到账单列表(上海闽航)'
-                        },
-                        component: () =>
-                            import ('@/view/financial_management/daozhangdan_sh/daozhangdanSH_List.vue')
-                    },
-                    {
-                        path: 'daozhangdanSH_backList',
-                        name: 'daozhangdanSH_backList',
-                        meta: {
-                            icon: 'md-funnel',
-                            title: '回退到账单列表(上海闽航)'
-                        },
-                        component: () =>
-                            import ('@/view/financial_management/daozhangdan_sh/daozhangdanSH_backList.vue')
-                    },
-                    {
-                        path: 'chuzhangdanSH_List',
-                        name: 'chuzhangdanSH_List',
-                        meta: {
-                            icon: 'md-funnel',
-                            title: '出账单列表(上海闽航)'
-                        },
-                        component: () =>
-                            import ('@/view/financial_management/daozhangdan_sh/chuzhangdanSH_List.vue')
-                    },
-                ]
+                component: () =>
+                    import ('@/view/financial_management/daozhangdan_summary.vue')
             },
+
+            {
+                path: 'jieSuo',
+                name: 'jieSuo',
+                meta: {
+                    icon: 'md-calculator',
+                    title: '已对账订单解锁',
+                    notCache:true,
+                },
+                component: () =>
+                    import ('@/view/financial_management/jieSuo.vue')
+            },
+            // {
+            //     path: 'daozhangdan_fj',
+            //     name: 'daozhangdan_fj',
+            //     meta: {
+            //         icon: 'md-calculator',
+            //         title: '福建亿钢到账单管理',
+            //         notCache:true,
+            //     },
+            //     component: parentView,
+            //     children: [{
+            //             path: 'daozhangdanFJ_List',
+            //             name: 'daozhangdanFJ_List',
+            //             meta: {
+            //                 icon: 'md-funnel',
+            //                 title: '到账单列表(福建亿钢)',
+            //                 notCache:true,
+            //             },
+            //             component: () =>
+            //                 import ('@/view/financial_management/daozhangdan_fj/daozhangdanFJ_List.vue')
+            //         },
+            //         {
+            //             path: 'daozhangdanFJ_backList',
+            //             name: 'daozhangdanFJ_backList',
+            //             meta: {
+            //                 icon: 'md-funnel',
+            //                 title: '回退到账单列表(福建亿钢)',
+            //                 notCache:true,
+            //             },
+            //             component: () =>
+            //                 import ('@/view/financial_management/daozhangdan_fj/daozhangdanFJ_backList.vue')
+            //         },
+            //         {
+            //             path: 'chuzhangdanFJ_List',
+            //             name: 'chuzhangdanFJ_List',
+            //             meta: {
+            //                 icon: 'md-funnel',
+            //                 title: '出账单列表(福建亿钢)',
+            //                 notCache:true,
+            //             },
+            //             component: () =>
+            //                 import ('@/view/financial_management/daozhangdan_fj/chuzhangdanFJ_List.vue')
+            //         },
+            //     ]
+            // },
+            // {
+            //     path: 'daozhangdan_sh',
+            //     name: 'daozhangdan_sh',
+            //     meta: {
+            //         icon: 'md-calculator',
+            //         title: '上海闽航到账单管理',
+            //         notCache:true,
+            //     },
+            //     component: parentView,
+            //     children: [
+            //         {
+            //             path: 'daozhangdanSH_List',
+            //             name: 'daozhangdanSH_List',
+            //             meta: {
+            //                 icon: 'md-funnel',
+            //                 title: '到账单列表(上海闽航)',
+            //                 notCache:true,
+            //             },
+            //             component: () =>
+            //                 import ('@/view/financial_management/daozhangdan_sh/daozhangdanSH_List.vue')
+            //         },
+            //         {
+            //             path: 'daozhangdanSH_backList',
+            //             name: 'daozhangdanSH_backList',
+            //             meta: {
+            //                 icon: 'md-funnel',
+            //                 title: '回退到账单列表(上海闽航)',
+            //                 notCache:true,
+            //             },
+            //             component: () =>
+            //                 import ('@/view/financial_management/daozhangdan_sh/daozhangdanSH_backList.vue')
+            //         },
+            //         {
+            //             path: 'chuzhangdanSH_List',
+            //             name: 'chuzhangdanSH_List',
+            //             meta: {
+            //                 icon: 'md-funnel',
+            //                 title: '出账单列表(上海闽航)',
+            //                 notCache:true,
+            //             },
+            //             component: () =>
+            //                 import ('@/view/financial_management/daozhangdan_sh/chuzhangdanSH_List.vue')
+            //         },
+            //     ]
+            // },
             {
                 path: 'invoice_manage',
                 name: 'invoice_manage',
                 meta: {
                     icon: 'md-calculator',
-                    title: '发票管理'
+                    title: '发票管理',
+                    notCache:true,
                 },
                 component: parentView,
                 children: [{
@@ -1046,7 +901,8 @@ export default [{
                         name: 'invoice_in_list',
                         meta: {
                             icon: 'md-funnel',
-                            title: '进项票列表'
+                            title: '进项票列表',
+                            notCache:true,
                         },
                         component: () =>
                             import ('@/view/financial_management/invoice_manage/invoice_in_list.vue')
@@ -1056,56 +912,380 @@ export default [{
                         name: 'invoice_out_list',
                         meta: {
                             icon: 'md-funnel',
-                            title: '销项票列表'
+                            title: '销项票列表',
+                            notCache:true,
                         },
                         component: () =>
                             import ('@/view/financial_management/invoice_manage/invoice_out_list.vue')
                     },
                 ]
             },
+            // {
+            //     path: 'invoice_out_list_MH',
+            //     name: 'invoice_out_list_MH',
+            //     meta: {
+            //         icon: 'md-funnel',
+            //         title: '销项票开票列表(闽航)'
+            //     },
+            //     component: () =>
+            //         import ('@/view/financial_management/invoice_out_list_MH.vue')
+            // },
+            // {
+            //     path: 'invoice_out_list_FJ',
+            //     name: 'invoice_out_list_FJ',
+            //     meta: {
+            //         icon: 'md-funnel',
+            //         title: '销项票开票列表(亿钢)'
+            //     },
+            //     component: () =>
+            //         import ('@/view/financial_management/invoice_out_list_FJ.vue')
+            // },
+            //entry_out_list_MH
             {
-                path: 'invoice_out_list_MH',
-                name: 'invoice_out_list_MH',
+                path: 'entry_out_list_MH',
+                name: 'entry_out_list_MH',
                 meta: {
                     icon: 'md-funnel',
-                    title: '销项票开票列表(闽航)'
+                    title: '进项票收票列表',
+                    notCache:true,
                 },
                 component: () =>
-                    import ('@/view/financial_management/invoice_out_list_MH.vue')
+                    import ('@/view/financial_management/entry_out_list_MH.vue')
             },
+            //invoice_out_list1_MH  新的销项票列表
             {
-                path: 'invoice_out_list_FJ',
-                name: 'invoice_out_list_FJ',
+                path: 'invoice_out_list1_MH',
+                name: 'invoice_out_list1_MH',
                 meta: {
                     icon: 'md-funnel',
-                    title: '销项票开票列表(亿钢)'
+                    title: '销项票开票列表',
+                    notCache:true,
                 },
                 component: () =>
-                    import ('@/view/financial_management/invoice_out_list_FJ.vue')
+                    import ('@/view/financial_management/invoice_out_list1_MH.vue')
             },
-
+            {
+                path: 'invoice_omoney_list',
+                name: 'invoice_omoney_list',
+                meta: {
+                    icon: 'md-funnel',
+                    title: '杂费收票列表',
+                    notCache:true,
+                },
+                component: () =>
+                    import ('@/view/financial_management/invoice_omoney_list.vue')
+            },
+            {
+                path: 'invoice_omoney_list_info',
+                name: 'invoice_omoney_list_info',
+                meta: {
+                    icon: 'md-funnel',
+                    title: '杂费申请明细',
+                    notCache:true,
+                    hideInMenu:true
+                },
+                component: () =>
+                    import ('@/view/financial_management/invoice_omoney_list_info.vue')
+            },
+            {
+                path: 'bank_balance',
+                name: 'bank_balance',
+                meta: {
+                    icon: 'md-calculator',
+                    title: '银行卡余额',
+                    notCache:false,
+                },
+                component: () =>
+                    import ('@/view/report_management/bank_balance.vue')
+            },
 
 
         ]
     }, //财务管理
-    { //报表管理
-        path: '/report_management',
-        name: 'report_management',
+    {
+        path: '/buy',
+        name: 'buy',
         meta: {
-            hide: true,
-            icon: 'ios-aperture',
-            title: '报表管理'
+            icon: 'md-calculator',
+            title: '报表-采购',
+            notCache:false,
+            showAlways:false,
         },
         component: Main,
-        children: [{
-                path: 'buy_order_info_list',
-                name: 'buy_order_info_list',
+        children:[
+             //供应商余额
+                    {
+                        path: '/buy/Supplier_balance',
+                        name: '/buy/Supplier_balance',
+                        meta: {
+                            icon: 'md-calculator',
+                            title: '供应商余额',
+                            notCache:false,
+                            showAlways:false,
+                        },
+                        component: parentView,
+                        children: [
+                            {
+                                path: '/buy/Supplier_balance/Supplier_business',
+                                name: '/buy/Supplier_balance/Supplier_business',
+                                meta: {
+                                    icon: 'md-funnel',
+                                    title: '供应商业务余额',
+                                    notCache:false,
+                                },
+                                component: () =>
+                                    import ('@/view/buy/Supplier_balance/Supplier_business.vue')
+                            },
+                            {
+                                path: 'Supplier_contacts',
+                                name: 'Supplier_contacts',
+                                meta: {
+                                    icon:'md-calculator',
+                                    title: '供应商业务往来表',
+                                    notCache:false,
+                                },
+                                component: () =>
+                                    import ('@/view/buy/Supplier_balance/Supplier_contacts.vue')
+                            },
+                            {
+                                path: 'Supplier_Finance',
+                                name: 'Supplier_Finance',
+                                meta: {
+                                    icon: 'md-calculator',
+                                    title: '供应商财务票额表',
+                                    notCache:false,
+                                },
+                                component: () =>
+                                    import ('@/view/buy/Supplier_balance/Supplier_Finance.vue')
+                            },
+                            {
+                                path: 'Supplier_invoice_contacts',
+                                name: 'Supplier_invoice_contacts',
+                                meta: {
+                                    icon:'md-calculator',
+                                    title: '供应商票额往来表',
+                                    notCache:false,
+                                },
+                                component: () =>
+                                    import ('@/view/buy/Supplier_balance/Supplier_invoice_contacts.vue')
+                            },
+                            {
+                                path: 'supplierMoneyInfo',
+                                name: 'supplierMoneyInfo',
+                                meta: {
+                                    icon:'md-calculator',
+                                    title: '供应商业务余额组成表',
+                                    notCache:false,
+                                    hideInMenu: true
+                                },
+                                component: () =>
+                                    import ('@/view/buy/Supplier_balance/supplierMoneyInfo.vue')
+                            },
+
+                            {
+                                path: 'appPlay',
+                                name: 'appPlay',
+                                meta: {
+                                    icon:'md-calculator',
+                                    title: '供应商业务余额组成',
+                                    notCache:true,
+                                    hideInMenu: true
+                                },
+                                component: () =>
+                                    import ('@/view/buy/Supplier_balance/appPlay.vue')
+                            },
+                        ]
+                    },
+                    {
+                        path: 'buy_order_summary_list',
+                        name: 'buy_order_summary_list',
+                        meta: {
+                            icon: 'md-calculator',
+                            title: '采购单汇总',
+                            notCache:false,
+                        },
+                        component: () =>
+                            import ('@/view/buy/buy_order_summary_list.vue')
+                    },
+                    {
+                        path: 'buy_order_info_list',
+                        name: 'buy_order_info_list',
+                        meta: {
+                            icon: 'md-calculator',
+                            title: '采购明细表',
+                            notCache:false,
+                        },
+                        component: () =>
+                            import ('@/view/buy/buy_order_info_list.vue')
+                    },
+                 
+                    {
+                        path: 'buy_engineer_sum_list',
+                        name: 'buy_engineer_sum_list',
+                        meta: {
+                            icon: 'md-calculator',
+                            title: '采购单工程汇总',
+                            notCache:false,
+                        },
+                        component: () =>
+                            import ('@/view/buy/buy_engineer_sum_list.vue')
+                    },
+     //供应商余额
+     
+        ] 
+    },
+    {
+        path: '/sell',
+        name: 'sell',
+        meta: {
+            icon: 'md-calculator',
+            title: '报表-销售',
+            notCache:false,
+            hideInMenu: false,
+            showAlways:true,
+            
+        },
+        component: Main,
+        children:[
+            {
+                path: '/sell/Customer_balance',
+                name: '/sell/Customer_balance',
                 meta: {
                     icon: 'md-calculator',
-                    title: '采购明细表',
+                    title: '客户余额',
+                    notCache:false,
+                    showAlways:true,
+                },
+                component: parentView,
+                children: [
+                    {
+                        path: '/sell/Customer_balance/Customer_Business',
+                        name: '/sell/Customer_balance/Customer_Business',
+                        meta: {
+                            icon: 'md-funnel',
+                            title: '客户业务余额表',
+                            notCache:false,
+                        },
+                        component: () =>
+                            import ('@/view/sell/Customer_balance/Customer_Business.vue')
+                    },
+                    {
+                        path: '/sell/Customer_balance/org_money_record_list',
+                        name: '/sell/Customer_balance/org_money_record_list',
+                        meta: {
+                            icon:'md-calculator',
+                            title: '客户业务往来表',
+                        },
+                        component: () =>
+                            import ('@/view/sell/Customer_balance/org_money_record_list.vue')
+                    },
+                    {
+                        path: '/sell/Customer_balance/org_invoice_balance_list',
+                        name: '/sell/Customer_balance/org_invoice_balance_list',
+                        meta: {
+                            icon: 'md-calculator',
+                            title: '客户财务票额表',
+                            notCache:false,
+                        },
+                        component: () =>
+                            import ('@/view/sell/Customer_balance/org_invoice_balance_list.vue')
+                    },
+                   
+                    {
+                        path: '/sell/Customer_balance/org_invoice_money_record_list',
+                        name: '/sell/Customer_balance/org_invoice_money_record_list',
+                        meta: {
+                            icon:'md-calculator',
+                            title: '客户发票往来表',
+                            notCache:false,
+                        },
+                        component: () =>
+                            import ('@/view/sell/Customer_balance/org_invoice_money_record_list.vue')
+                    },
+                    {
+                        path: '/sell/Customer_balance/cusMoneyInfo',
+                        name: '/sell/Customer_balance/cusMoneyInfo',
+                        meta: {
+                            icon:'md-calculator',
+                            title: '客户业务余额组成表',
+                            notCache:false,
+                            hideInMenu: true
+                        },
+                        component: () =>
+                            import ('@/view/sell/Customer_balance/cusMoneyInfo.vue')
+                    },
+
+                    {
+                        path: '/appLoad',
+                        name: 'appLoad',
+                        meta: {
+                            icon:'md-calculator',
+                            title: '客户业务余额组成',
+                            notCache:true,
+                            hideInMenu: true
+                        },
+                        component: () =>
+                            import ('@/view/sell/Customer_balance/appLoad.vue')
+                    },
+                ]
+            },
+            {
+                path: 'other_balance',
+                name: 'other_balance',
+                meta: {
+                    icon: 'md-calculator',
+                    title: '杂费余额',
+                    notCache:false,
+                    showAlways:true,
+                },
+                component: parentView,
+                children: [
+                    {
+                        path: 'other_money_list',
+                        name: 'other_money_list',
+                        meta: {
+                            icon: 'md-funnel',
+                            title: '杂费余额表',
+                            notCache:false,
+                        },
+                        component: () =>
+                            import ('@/view/sell/other_balance/other_money_list.vue')
+                    },
+                    {
+                        path: 'other_money_flow_list',
+                        name: 'other_money_flow_list',
+                        meta: {
+                            icon: 'md-funnel',
+                            title: '杂费出入表',
+                            notCache:false,
+                        },
+                        component: () =>
+                            import ('@/view/sell/other_balance/other_money_flow_list.vue')
+                    }
+                ]
+            },
+            {
+                path: 'sell_order_summary_list',
+                name: 'sell_order_summary_list',
+                meta: {
+                    icon: 'md-calculator',
+                    title: '销售单汇总',
+                    notCache:false,
                 },
                 component: () =>
-                    import ('@/view/report_management/buy_order_info_list.vue')
+                    import ('@/view/sell/sell_order_summary_list.vue')
+            },
+            {
+                path: 'sell_order_summary_list_simple',
+                name: 'sell_order_summary_list_simple',
+                meta: {
+                    icon: 'md-calculator',
+                    title: '销售单汇总(简)',
+                    notCache:false,
+                    hideInMenu:true//本页面暂时隐藏，等后续有需求在释放，并修改。2019年11月13日 星期三
+                },
+                component: () =>
+                    import ('@/view/sell/sell_order_summary_list_simple.vue')
             },
             {
                 path: 'sell_order_info_list',
@@ -1113,41 +1293,158 @@ export default [{
                 meta: {
                     icon: 'md-calculator',
                     title: '销售明细表',
+                    notCache:false,
                 },
                 component: () =>
-                    import ('@/view/report_management/sell_order_info_list.vue')
+                    import ('@/view/sell/sell_order_info_list.vue')
             },
             {
-                path: 'sell_order_info_profit_list',
-                name: 'sell_order_info_profit_list',
+                path: 'sell_order_info_profit_list1',
+                name: 'sell_order_info_profit_list1',
                 meta: {
                     icon: 'md-calculator',
-                    title: '销售利润表',
+                    title: '销售利润订单明细表',
+                    notCache:false,
                 },
                 component: () =>
-                    import ('@/view/report_management/sell_order_info_profit_list.vue')
+                    import ('@/view/sell/sell_order_info_profit_list1.vue')
             },
             {
-                path: 'bank_flow_FJ_list',
-                name: 'bank_flow_FJ_list',
+                path: 'profit_simple',
+                name: 'profit_simple',
                 meta: {
                     icon: 'md-calculator',
-                    title: '福建客户流水',
+                    title: '销售利润订单表',
+                    notCache:false,
                 },
                 component: () =>
-                    import ('@/view/report_management/bank_flow_FJ_list.vue')
+                    import ('@/view/sell/profit_simple.vue')
             },
             {
-                path: 'bank_flow_SH_list',
-                name: 'bank_flow_SH_list',
+                path: 'sell_engineer_sum_list',
+                name: 'sell_engineer_sum_list',
                 meta: {
                     icon: 'md-calculator',
-                    title: '上海客户流水',
+                    title: '销售单工程汇总',
+                    notCache:false,
                 },
                 component: () =>
-                    import ('@/view/report_management/bank_flow_SH_list.vue')
+                    import ('@/view/sell/sell_engineer_sum_list.vue')
             },
         ]
+    },//Customer_Business //客户业务余额表
+    
+    {
+        path: 'org_balance_list',
+        name: 'org_balance_list',
+        meta: {
+            icon: 'md-calculator',
+            title: '客户业务余额表',
+            notCache:false,
+            hideInMenu: true
+            
+        },
+        component: () =>
+            import ('@/view/report_management/org_balance_list.vue')
+    },//Customer_Business //客户业务余额表
+    { //报表管理
+        path: '/report_management',
+        name: 'report_management',
+        meta: {
+            hide: true,
+            icon: 'ios-aperture',
+            title: '报表管理',
+            showAlways:false,
+            notCache:false,
+
+        },
+        component: Main,
+        children: [
+            {
+                path: 'duizhangList',
+                name: 'duizhangList',
+                meta: {
+                    icon:'md-calculator',
+                    title: '项目对账统计表',
+                    notCache:false,
+                },
+                component: () =>
+                    import ('@/view/report_management/duizhangList.vue')
+            },
+           
+           
+            {
+                path: 'org_money_record_all_list',
+                name: 'org_money_record_all_list',
+                meta: {
+                    icon:'md-calculator',
+                    title: '全部流水表',
+                    notCache:false,
+                },
+                component: () =>
+                    import ('@/view/report_management/org_money_record_all_list.vue')
+            },
+            {
+                path: 'payList',
+                name: 'payList',
+                meta: {
+                    icon:'md-calculator',
+                    title: '付款明细表',
+                    notCache:false,
+                },
+                component: () =>
+                    import ('@/view/report_management/payList.vue')
+            },
+            {
+                path: 'pay_oMoney_list',
+                name: 'pay_oMoney_list',
+                meta: {
+                    icon:'md-calculator',
+                    title: '杂费申请明细',
+                    hideInMenu:true,
+                    notCache:false,
+                },
+                component: () =>
+                    import ('@/view/report_management/pay_oMoney_list.vue')
+            },
+            {
+                path: 'onlineBusiness',
+                name: 'onlineBusiness',
+                meta: {
+                  icon: 'md-funnel',
+                  title: '线上流水测试'
+                },
+                component: parentView,
+                children: [
+                  {
+                    path: 'online_list',
+                    name: 'online_list',
+                    meta: {
+                      icon: 'md-funnel',
+                      title: '线上全部流水',
+                      notCache:true,
+
+                    },
+                    component: () => import('@/view/report_management/onlineBusiness/online_list.vue')
+                  },
+                  {
+                    path: 'online_listTotal',
+                    name: 'online_listTotal',
+                    meta: {
+                      icon: 'md-funnel',
+                      title: '线上全部流水汇总',
+                     
+                    },
+                    component: () => import('@/view/report_management/onlineBusiness/online_listTotal.vue')
+                  },
+                ]
+              },
+
+          
+          
+           
+        ],
+        
     }, //报表管理
     {
         path: '/shop_management',
@@ -1156,7 +1453,9 @@ export default [{
             hide: true,
             icon: 'ios-aperture',
             title: '店铺管理',
-            hideInMenu: true
+            hideInMenu: true,
+            notCache: true
+
         },
         component: Main,
         children: [{
@@ -1164,20 +1463,23 @@ export default [{
             name: 'publish_resources',
             meta: {
                 icon: 'ios-hammer',
-                title: '发布资源'
+                title: '发布资源',
+                notCache: true
             },
             component: () =>
                 import ('@/view/shop_management/publish_resources.vue')
         }, {
             path: 'inquiry_summary',
             name: 'inquiry_summary',
-            meta: {
-                icon: 'ios-hammer',
-                title: '询价汇总'
-            },
-            component: () =>
+        meta: {
+        icon: 'ios-hammer',
+        title:   '询价汇总',
+        notCache: true
+    },
+        component: () =>
                 import ('@/view/shop_management/inquiry_summary.vue')
-        }]
+        }
+    ]
     }, //店铺管理
 
     {
@@ -1185,7 +1487,9 @@ export default [{
         name: 'systemMan',
         meta: {
             icon: 'ios-build',
-            title: '系统管理'
+            title: '系统管理',
+            hideInMenu: getIsHide('systemMan'),
+            showAlways:true
         },
         component: Main,
         children: [
@@ -1199,6 +1503,37 @@ export default [{
             //   component: () =>
             //     import ('@/view/systemMan/organizationa.vue')
             // },
+            {
+                path: 'wb_test_2',
+                name: 'wb_test_2',
+                meta: {
+                    icon: "md-cube",
+                    title: "大数据表格渲染问题"
+                },
+                component: () =>
+                    import ('@/view/systemMan/wb_test_2.vue')
+            },//table
+            {
+                path: 'table11',
+                name: 'table11',
+                meta: {
+                    icon: "md-cube",
+                    title: "表格嵌套"
+                },
+                component: () =>
+                    import ('@/view/systemMan/table11.vue')
+            },
+            {
+                path: 'wb_test_1',
+                name: 'wb_test_1',
+                meta: {
+                    icon: "md-cube",
+                    title: "测试列表相同项合并"
+                },
+                component: () =>
+                    import ('@/view/systemMan/wb_test_1.vue')
+            },
+            
             {
                 path: 'wb_test',
                 name: 'wb_test',
@@ -1389,6 +1724,27 @@ export default [{
                 component: () =>
                     import ('@/view/systemMan/InvoiceKai.vue')
             },
+            {
+                path: 'boList',
+                name: 'boList',
+                meta: {
+                    icon: "md-cube",
+                    title: "采购单列表测试"
+                },
+                component: () =>
+                    import ('@/view/systemMan/boList.vue')
+            },
+             
+            {
+                path: 'boListTest',
+                name: 'boListTest',
+                meta: {
+                    icon: "md-cube",
+                    title: "采购单列表测试vxe"
+                },
+                component: () =>
+                    import ('@/view/systemMan/boListTest.vue')
+            },
         ],
     }, //listOrder InvoiceKai  saleSlip takeGoods  orderOne  系统管理supCustomers listBuy  purchMan customerlist purchase  supplier supplierManage operationLog  customerInformation cusInformation  organizationalStructure
     {
@@ -1397,10 +1753,23 @@ export default [{
         meta: {
             icon: 'ios-build',
             title: '系统管理1',
-            hideInMenu: getIsHide('user_management')
+            hideInMenu: getIsHide('user_management'),
+            showAlways:true
         },
         component: Main,
-        children: [{
+        children: [
+            {
+                path: 'updateLog',
+                name: 'updateLog',
+                meta: {
+                    icon: 'md-calculator',
+                    title: '更新日志',
+                    notCache:false,
+                },
+                component: () =>
+                    import ('@/view/user_management/updateLog.vue')
+            },
+            {
                 path: 'org_structure',
                 name: 'org_structure',
                 meta: {
@@ -1452,7 +1821,8 @@ export default [{
         name: 'addM',
         meta: {
             icon: 'md-menu',
-            title: '我是测试'
+            title: '我是测试',
+            hideInMenu: true
         },
         component: Main,
         children: [{
@@ -1512,8 +1882,14 @@ export default [{
 let a = 0;
 let bTime = +new Date();
 var roleList = [];
+// var tempList = [
+//     'name':customer_manager',
+//     'name':'customerlist',
+
+// ];
 
 function getIsHide(key) {
+
     let hide = false;
     if (key == "_home") {
         hide = true;
@@ -1522,27 +1898,45 @@ function getIsHide(key) {
     }
     a++;
     let endtime = +new Date();
-    hide = judge(roleList, key) == undefined ? hide : judge(roleList, key);
-    // console.log(key + '=' + hide);
-    // console.log("运行时间" + endtime);
-    // console.log("时间差值=" + (endtime - bTime) + 'ms');
-    // return hide;
-    //开发模式 默认 都显示
-    return false;
-    // return env == 'development1' ? false : hide;
-}
-
-function judge(obj, key) {
-    for (var i in obj) {
-        var item = obj[i];
-        if (item.children) {
-            judge(item.children, key);
-        } else {
-            if (item.name == key) {
-                return item.hideInMenu;
-            } else {
-                return undefined;
-            }
-        }
+    //let a = localStorage.getItem('routeArr');
+    let a=localStorage.getItem('arr');
+  //  console.log(localStorage.getItem('arr'))
+    if(a=='null'|| a== null){
+        a=[]   
     }
+    if(a.length>0){
+        roleList = eval('(' + a + ')');
+    }else{
+        roleList = [];
+    }
+    
+    if(key == "user_management" && process.env.NODE_ENV == 'development'){//生产环境
+        hide = false;
+    }else if(key == "user_management" && process.env.NODE_ENV == 'production'){
+         hide = true;
+    }else{
+        hide = false;
+    }
+
+    if(key == "systemMan" && process.env.NODE_ENV == 'development'){//生产环境
+        hide = false;
+    }else if(key == "systemMan" && process.env.NODE_ENV == 'production'){
+         hide = true;
+    }else{
+        hide = false;
+    }
+    //权限控制 开启后按照页面权限显示页面
+    // if(roleList.indexOf(key) != -1){
+    //     console.log(key+':'+'有')
+    //     return false;
+        
+    // }else{
+    //     console.log(key+':'+'没有')
+    //     return true;
+    // }
+
+    //return hide;
+    //开发模式 默认 都显示 
+    return hide;
+    // return env == 'development1' ? false : hide;
 }

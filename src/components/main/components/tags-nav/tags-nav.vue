@@ -1,3 +1,9 @@
+<!--
+ * @Description: 
+ * @Author: gmm
+ * @Date: 2019-04-11 10:54:31
+ * @其他: 
+ -->
 <template>
   <div class="tags-nav">
     <div class="close-con">
@@ -138,7 +144,7 @@ export default {
     },
     handleClick (item) {
       this.$emit('input', item)
-      this.reload()
+      // this.reload()
     },
     showTitleInside (item) {
       return showTitle(item, this)

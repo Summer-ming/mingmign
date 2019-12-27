@@ -40,13 +40,7 @@ import {getBuyOrderCaoZuoStatus} from '@/libs/allStatus'
               if(res.code =='100' && res.data.list.length>0){
                   this.dataList = res.data.list
                   this.current = res.data.list.length;
-                  this.$Notice.success({
-                      title:'获取订单审核流水成功',
-                  })
               }else{
-                  this.$Notice.error({
-                      title:'获取订单审核流水失败'
-                  })
               }
             })
        },

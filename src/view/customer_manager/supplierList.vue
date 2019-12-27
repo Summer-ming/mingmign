@@ -55,7 +55,7 @@
     </Card>
     <!--表格height="447" -->
     <Row>        
-         <Table border   ref="selection" :columns="columns4" :data="data1" @on-select='selectOne' style='margin-bottom:10px;'></Table>
+         <Table border height="470"  ref="selection" :columns="columns4" :data="data1" @on-select='selectOne' style='margin-bottom:10px;'></Table>
         
         
         <Row span='8' style="margin-bottom:20px;display:flex;">
@@ -205,18 +205,31 @@
                 },
                 addForm: { //新增客户添加的字段
                 },
-                columns4: [{
+                columns4: [
+                    {
                         title: '选中',
                         type: 'selection',
                         width: 60,
-                        align: 'center'
-                    }, {
+                        align: 'center',
+                        fixed:'left',
+                    }, 
+                     {
+                        title: 'ID',
+                        key: 'orgid',
+                        align: 'center',
+                        fixed:'left',
+                        width: '80'
+
+                    }, 
+                    {
                         title: '公司名称',
                         key: 'cusorgName',
+                        fixed:'left',
                         align: 'center',
                         width: '220'
 
-                    }, {
+                    }, 
+                    {
                         title: '业务员',
                         key: 'orgcreateCname',
                         align: 'center',
@@ -228,11 +241,38 @@
                         width: '200'
                     },
                     {
+                        title: '资料是否完整',
+                        key: '',
+                        align: 'center',
+                        width: '100',
+                        render:(h,params) =>{
+                                let a = "-";
+                            if(params.row.orgorgName && params.row.orgkaipiaoPhoto && params.row.orgshuiwudengjiPhoto && params.row.orgtaxNo)
+                            {
+                                a = "是"
+                            }else{
+                                a = "否"
+                            }
+                            return h('div',[
+                                h('div',{
+                                },a)
+                            ])
+                        }
+
+                    },
+                    {
+                        title: '类型',
+                        key: 'org',
+                        align: 'center',
+                        width: '100'
+                    }, 
+                    {
                         title: '添加时间',
                         key: 'orgcreateTime',
                         align: 'center',
                         width: '200'
-                    }, {
+                    }, 
+                    {
                         title: '操作',
                         key: 'operate',
                         align: 'center',
@@ -515,9 +555,10 @@
                 paramB.bankAbbreviation = this.bankString //银行名称
                 paramB.bankBranchLineCity = this.Provinces //省
                 paramB.prefectureLevel = this.city //市
+                paramB.pageSize ="99999999"
                 getBankDot(paramB).then(res => {
                     if (res.code == "100") {
-                        this.bankDotList = res.data;
+                        this.bankDotList = res.data.list;
                     }
                 })
 

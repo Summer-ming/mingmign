@@ -90,6 +90,8 @@ export default {
                         commit('setToken', res.data.token)
                         commit('setUserInfo', res.datas[0]); //存储登录的角色信息
                         localStorage.setItem('caName', res.datas[0].cname)
+                        localStorage.setItem('userInfoErp', JSON.stringify(res.datas[0]))
+
                         resolve(res)
                     } else {
                         resolve(res);
@@ -105,9 +107,14 @@ export default {
             return new Promise((resolve, reject) => {
                 console.log('我退出了')
                 localStorage.setItem('caName', '')
+                localStorage.setItem('userInfoErp','')
+                localStorage.setItem('tagNaveList','');
+                window.localStorage.setItem('reloaded','');
                 commit('setToken', '')
                 commit('setAccess', [])
                 commit('setUserInfo', []); //存储登录的角色信息
+                localStorage.setItem('routeArr','')
+
                 resolve()
                     // logout(state.token).then(() => {
                     //         console.log('我退出了')

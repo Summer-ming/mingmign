@@ -1,3 +1,9 @@
+/*
+ * @Description: 
+ * @Author: gmm
+ * @Date: 2019-08-12 16:47:59
+ * @其他: 
+ */
 // The Vue build version to load with the `import` command
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import Vue from 'vue'
@@ -20,10 +26,18 @@ import VueResource from 'vue-resource'
 //引入elemant
 import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
+//引入vex-element表格
+import VXETable from 'vxe-table'
+import 'vxe-table/lib/index.css'
+import VXETablePluginElement from 'vxe-table-plugin-element'
+import 'vxe-table-plugin-element/dist/style.css'
+import Utils from '@/api/middle'
 // 实际打包时应该不引入mock
 /* eslint-disable */
 // if (process.env.NODE_ENV !== 'production') require('@/mock')
-
+console.log(process.env.NODE_ENV)
+VXETable.use(VXETablePluginElement)
+Vue.use(VXETable)
 Vue.use(iView, {
     i18n: (key, value) => i18n.t(key, value)
 })
@@ -34,7 +48,6 @@ Vue.use(ElementUI, {
 Vue.use(TreeTable)
 Vue.use(VOrgTree)
 Vue.use(VueResource)
-
 
 /**
  * @description 注册admin内置插件
@@ -49,12 +62,18 @@ Vue.config.productionTip = false
      */
 Vue.prototype.$config = config
 Vue.prototype.$global = global;
+Vue.prototype.$Utils = Utils;
+
 /**
  * 注册指令
  */
 importDirective(Vue)
 Vue.directive('clickOutside', clickOutside)
-
+Vue.directive('focus', {
+    inserted: (el) => {
+      el.focus()
+    }
+  })
 //全局提示
 // Vue.prototype.$Message.config({
 //     top: 300,

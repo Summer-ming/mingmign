@@ -23,11 +23,25 @@
                 <Option v-for="(item,index) in bankAdd" :value="item.bankAbbreviation" :key="index">{{ item.bankAbbreviation}}</Option>
             </Select>
          </FormItem>
-         <FormItem label="退款银行所在地区:"  >
+         <!-- <FormItem label="退款银行所在地区:"  >
              <Cascader :data="dataOne1" v-model="valueOne" @on-change='getCityOne' style='width:180px'></Cascader>
-         </FormItem>
+         </FormItem> -->
+
+        <!-- 解决地区卡顿 -->
+        <FormItem label="退款银行所在地区:" >
+            <el-cascader style='width:180px' 
+                 filterable
+                :options="dataOne1"
+                :placeholder="addForm.cityWhere_placeholder"
+                v-model="addForm.cityWhere"
+                @change='getCityOne' ref='cascaderAddr'>
+            </el-cascader>
+        </FormItem>
+
+
+
         <FormItem label='退款银行开户网点名称:' >
-            <Select :label-in-value="true" :placeholder="bankDot_placeholder" v-model="bankDot" filterable style='width:180px;' @on-change='getChangeDot'>
+            <Select  :label-in-value="true"  :placeholder="bankDot_placeholder" v-model="bankDot" filterable style='width:180px;' @on-change='getChangeDot'>
                 <Option v-for="(item,index) in bankDotList" :value="item.bankBranchLineId" :key="index">{{ item.branchFullName}}</Option>
             </Select>
         </FormItem>
@@ -79,6 +93,7 @@ export default {
         bankDot_placeholder:'请选择支行名称',
         dataOne1: city,
         addForm: {
+          cityWhere_placeholder:"请选择银行地区",
           companyName:'',
           orgId:'',
           bankCode:'',
@@ -146,6 +161,7 @@ export default {
               // 开始查询
               console.log("开始查询")
               param.accountId = item.accId
+              param.status = '1';
               findShop(param).then(res=>{
                 if(res.data.list.length >0){
                   this.$Notice.error({
@@ -185,12 +201,12 @@ export default {
         },
         addNewCard(){
               let param = {};
-            	param.accBankCode = this.addForm.bankCode;
+            	param.accBankCode = this.addForm.bankCode.replace(/\s*/g,"");
               param.accBblId = this.returnBankItem.value;
 				      param.accBank = this.returnBankItem.label;
             	param.accType = 30;
             	param.accAuditStatus = 8;
-				      param.accOrgId = this.addForm.orgId;
+              param.accOrgId = this.addForm.orgId;
           addAccount(param).then(res=>{
                 if(res.code =="100"){
                         this.$Notice.success({
@@ -239,7 +255,6 @@ export default {
             //选中开户行确定的数据
             getChange(item) {
                 this.bankString = item.value;
-                this.getBankDotName();
             },
             //选中开户网点的名字
             getChangeDot(item) {
@@ -252,20 +267,24 @@ export default {
                 paramB.bankAbbreviation = this.bankString //银行名称
                 paramB.bankBranchLineCity = this.Provinces //省
                 paramB.prefectureLevel = this.city //市
+                paramB.pageSize ="99999999"
                 getBankDot(paramB).then(res => {
                     if (res.code == "100") {
-                        this.bankDotList = res.data;
+                        this.bankDotList = res.data.list;
+
                     }
                 })
 
             }, //银行所在地区
-            getCityOne(value, selectedData) {
-                this.Provinces = selectedData[0].label
-                this.city = selectedData[1].label
-                if (selectedData.length == '2') {
-                    this.cityStringOne = selectedData[0].label + ',' + selectedData[1].label
-                } else {
-                    this.cityStringOne = selectedData[0].label + ',' + selectedData[1].label + ',' + selectedData[2].label
+            getCityOne(item) {
+               let labels=this.$refs['cascaderAddr'].currentLabels
+              console.log(labels)
+                this.Provinces = labels[0]
+                this.city = labels[1]
+                if (labels.length == '2') {
+                    this.cityStringOne = labels[0]+ ',' + labels[1]
+                } else {//选择了3个地址后才获取数据
+                    this.cityStringOne = labels[0] + ',' + labels[1]+ ',' + labels[2]
                 }
                 this.getBankDotName();
             },

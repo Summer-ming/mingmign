@@ -10,7 +10,15 @@
         <br>
         <div  class="demo-upload-list" v-for="(item,index) in uploadList" :key='index' v-if="item">
             <template v-if="item.status === 'finished'">
-                <img :src="item.url" >
+                <template v-if="item.url.indexOf('.pdf') !=-1">
+                    <img src="https://jgys.oss-cn-shenzhen.aliyuncs.com/baseImg/pdf.jpg"  >
+                </template>
+                <template v-else-if="item.url.indexOf('.xlsx') !=-1 || item.url.indexOf('.xls') !=-1">
+                    <img src="https://jgys.oss-cn-shenzhen.aliyuncs.com/baseImg/excel.jpg"  >
+                </template>
+                <template v-else>
+                    <img :src="item.url"  >
+                </template>
                 <div class="demo-upload-list-cover">
                     <Icon type="ios-eye-outline" @click.native="handleView(item.name)"></Icon>
                     <Icon type="ios-trash-outline" @click.native="handleRemove(item)"></Icon>
@@ -21,7 +29,10 @@
             </template>
 </div>
 <Upload 
-ref="upload" :show-upload-list="false" :default-file-list="defaultList" :on-success="handleSuccess" :format="['jpg','jepg','png']" :max-size="5120" ror="handleFormatError" :on-exceeded-size="handleMaxSize" :before-upload="handleBeforeUpload"
+ref="upload" :show-upload-list="false" :default-file-list="defaultList" 
+:on-success="handleSuccess" 
+:format="['jpg','jepg','png','pdf','xls','xlsx']" 
+:max-size="5120" ror="handleFormatError" :on-exceeded-size="handleMaxSize" :before-upload="handleBeforeUpload"
     multiple type="drag" :action="updateImgUrl" style="display:inline-block;width:58px">
     <div style="width: 58px;height:58px;line-height: 58px;">
         <Icon type="ios-camera" size="20"></Icon>
@@ -61,8 +72,19 @@ import {updateOrderStatus} from '@/api/data'
 
         //上传图片
          handleView(name) {
-                this.imgName = name;
-                this.visible = true;
+                        //判断如果是pdf 则打开新的窗口
+                        if(name.indexOf('.pdf') != -1){
+                            window.open(this.$global.ossUrl+name);
+                        }
+                        else if(name.indexOf('.xlsx') != -1 || name.indexOf('.xls') != -1){
+                            window.open(this.$global.ossUrl+name);
+
+                        }
+                        else{
+                              this.imgName = name;
+                            this.visible = true;
+
+                        }
                 },
          handleRemove(file) {
                 this.uploadList.splice(this.uploadList.indexOf(file), 1);
@@ -77,10 +99,6 @@ import {updateOrderStatus} from '@/api/data'
                 this.uploadList.push(file);
         
                 const reg=/,$/gi;//此处是正则
-
-                this.uploadList.map((item)=>{
-                     this.imgString += item.url+','    
-                })
             },
          handleFormatError(file) {
                 this.$Notice.warning({
@@ -112,17 +130,37 @@ import {updateOrderStatus} from '@/api/data'
                 })
             let params={
                 pageUpdateOrderList:[{
-                    id:this.$route.query.id,//订单id,
+                    id:this.dataParent.id,//订单id,
                     pictures:this.imgString
                 }]
             };
             updateOrderStatus(params).then(res=>{
              if(res.code =="100"){
                 this.$Message.success("修改成功")
-          }  
+            }else{
+                this.$Message.error("修改失败")
+            }
          })
          },
-      
+         setImgList(){
+             
+                 let pa=[];
+         if(this.dataParent.pictures !=''||this.dataParent.pictures !=null){
+          var photo=this.dataParent.pictures.split(','); 
+         }
+         let photM=photo.notempty();
+         console.log(photM)
+         photM.map((item)=>{
+              let photoParm={};//存放数组的对象
+              photoParm.url=item
+              let b=item.split('http://jgys.oss-cn-shenzhen.aliyuncs.com/')
+              photoParm.name=b[1]
+              photoParm.status='finished'
+             pa.push(photoParm)
+
+         })
+         this.uploadList=pa
+         }
        
     },
      watch: {
@@ -130,6 +168,7 @@ import {updateOrderStatus} from '@/api/data'
             // this.valueForm_allOrder_orderItem = val;
             // this.getOrderAuditList();
             this.dataParent=val
+            this.setImgList();
             console.log('父组件传来的值')
             console.log(val)
             console.log('===============')
@@ -143,27 +182,29 @@ import {updateOrderStatus} from '@/api/data'
             if (val !== "" && val != undefined) { arr.push(val); }});
             return arr;
         };
-         let pa=[];
-         console.log("pa1")
+        //  let pa=[];
+        //  console.log("pa1")
+        //  console.log(this.$route.query.ordersNo)
+        //  if(this.$route.query.pictures !=''||this.$route.query.pictures !=null){
+        //   var photo=this.$route.query.pictures.split(','); 
+        //  }
+        //  let photM=photo.notempty();
+        //  console.log(photM)
+        //  photM.map((item)=>{
+        //       let photoParm={};//存放数组的对象
+        //       photoParm.url=item
+        //       let b=item.split('http://jgys.oss-cn-shenzhen.aliyuncs.com/')
+        //       photoParm.name=b[1]
+        //       photoParm.status='finished'
+        //      pa.push(photoParm)
 
-         let photo=this.$route.query.pictures.split(',');
-         let photM=photo.notempty();
-         console.log(photM)
-         let photoParm={};//存放数组的对象
-         photM.map((item)=>{
-              photoParm.url=item
-              let b=item.split('http://jgys.oss-cn-shenzhen.aliyuncs.com/')
-              photoParm.name=b[1]
-              photoParm.status='finished'
-             pa.push(photoParm)
-
-         })
-         console.log("pa")
-         console.log(pa)
-         this.uploadList=pa
+        //  })
+        //  console.log("pa")
+        //  console.log(pa)
+        //  this.uploadList=pa
        
         
-        console.log('mount')
+        // console.log('mount')
      
     },
   }

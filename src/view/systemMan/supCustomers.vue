@@ -524,11 +524,12 @@ import city from '@/api/city_houtai' //三级城市
       paramB.bankAbbreviation=this.bankString //银行名称
       paramB.bankBranchLineCity=this.Provinces //省
       paramB.prefectureLevel = this.city //市
+      paramB.pageSize ="99999999"
       getBankDot(paramB).then(res=>{
         if(res.code =="100"){
           console.log("我调用了")
           console.log(res)
-          this.bankDotList=res.data;
+          this.bankDotList=res.data.list;
           // res.data.map((value,index,arr)=>{
           //        this.bankDotList.push(arr[index].branchFullName)
           // })

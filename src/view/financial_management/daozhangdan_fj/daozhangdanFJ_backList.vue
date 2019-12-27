@@ -509,9 +509,10 @@ export default {
                 paramB.bankAbbreviation = this.bankString //银行名称
                 paramB.bankBranchLineCity = this.Provinces //省
                 paramB.prefectureLevel = this.city //市
+                paramB.pageSize ="99999999"
                 getBankDot(paramB).then(res => {
                     if (res.code == "100") {
-                        this.bankDotList = res.data;
+                        this.bankDotList = res.data.list;
                     }
                 })
 

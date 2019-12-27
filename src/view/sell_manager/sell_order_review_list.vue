@@ -11,16 +11,17 @@
      <Card :border="false" :dis-hover="true">  <!--border是否显示边框,dis-hover禁用鼠标悬停显示阴影-->
      <Form :model="formItem" :label-width="80">
         <Row>
-          <Col span="5"><FormItem label="公司名称:" style="margin-right:10px;">
-          <Input  placeholder="请输入公司名称" v-model="formItem.companyName"></Input>
-          </FormItem>
-          </Col>
+          <i-Col span="5">
+            <FormItem label="公司名称:" style="margin-right:10px;">
+            <Input clearable placeholder="请输入公司名称" v-model="formItem.companyName"></Input>
+            </FormItem>
+          </i-Col>
         
-          <Col span="3">
+          <i-Col span="3">
              <Button type='primary' icon="ios-search" @click='searchM()'>查询</Button>
              <Button shape="circle" icon="md-refresh" @click="reloadSelf"></Button>
 
-          </Col>
+          </i-Col>
         </Row>
         <Table border ref="selection" size="small" :columns="columns4" :data="data1" @on-select='selectOne' style='margin-bottom:10px;'>
             
@@ -35,8 +36,9 @@
 </template>
 
 <script>
-import {findOrdersAll,findShop,updateShop} from '@/api/data_8889'
+import {findOrdersAll} from '@/api/data_8889'
 import Utils from '@/api/middle'
+import { mapMutations } from 'vuex'
 
 export default {
     name: 'sell_order_review_list',
@@ -57,7 +59,17 @@ export default {
                         width:'60'
                     },
                      {
-                        title: '订单号',
+                        title: '收货时间',
+                        key: 'createTime',
+                        align: 'center',
+                        width:'100',
+                         render:(h,params) =>{
+                          return h('div',{
+                          },params.row.createTime.substr(0,10))
+                        }
+                    },
+                     {
+                        title: '销售单号',
                         key: 'ordersNo',
                         align: 'center',
                         width:'180',
@@ -66,9 +78,11 @@ export default {
                             on:{
                                 click: () => {
                                            params.row.operateType  ="1"//查看
+                                           sessionStorage.setItem('XiaoShou','')
+                                           sessionStorage.setItem('XiaoShou',JSON.stringify(params.row))
                                                const route = {
                                                   name: 'sell_order_info',
-                                                  query: params.row
+                                                //  query: params.row
 
                                                 }
                                                 this.$router.push(route)
@@ -78,22 +92,22 @@ export default {
                         }
                     },
                     {
-                        title: '采购方名称',
+                        title: '客户',
                         key: 'customerOrgName',
                         align: 'center',
-                        width:'250'
+                        width:'200'
                     },
                     {
                         title: '供应商名称',
                         key: 'shopOrgName',
                         align: 'center',
-                        width:'250'
+                        width:'200'
                     },
                       {
                         title: '合同金额(元)',
                         key: 'moneyAll',
-                        align: 'center',
-                        width:'250',
+                        align: 'right',
+                        width:'100',
                         render:(h,params) =>{
                           return h('div',{
                           },this.$global.isMoneyShow(params.row.moneyAll))
@@ -103,8 +117,8 @@ export default {
                      {
                         title: '实提重量(吨)',
                         key: 'deliveryTotalWeight',
-                        align: 'center',
-                        width:'250',
+                        align: 'right',
+                        width:'100',
                         render:(h,params) =>{
                           return h('div',{
                           },this.$global.accPrecision(params.row.deliveryTotalWeight,3))
@@ -113,30 +127,25 @@ export default {
                       {
                         title: '实提总货款 (元)',
                         key: 'deliveryTotalMoneyCus',
-                        align: 'center',
-                        width:'250',
+                        align: 'right',
+                        width:'100',
                         render:(h,params) =>{
                           return h('div',{
                           },this.$global.isMoneyShow(params.row.deliveryTotalMoneyCus))
                         }
                     },
-                    {
-                        title: '下单时间',
-                        key: 'createTime',
-                        align: 'center',
-                        width:'250'
-                    },
+                   
                      {
                         title: '管理员',
                         key: 'userName',
                         align: 'center',
-                        width:'250'
+                        width:'100'
                     },
                      {
                         title: '状态',
                         key: 'status',
                         align: 'center',
-                        width:'250'
+                        width:'100'
                     },
                      {
                         title: '操作',
@@ -156,6 +165,9 @@ export default {
                                     },
                                     on: {
                                         click: () => {
+                                           this.closeTag({
+                                                name: 'sell_order_review_list'
+                                            })
                                             params.row.operateType  ="1"//审核采购单列表
                                                const route = {
                                                   name: 'sell_order_review_info',
@@ -182,6 +194,9 @@ export default {
     },
     
     methods:{
+        ...mapMutations([
+      'closeTag'
+    ]),
       propsClick(){
         console.log("回调成功");
         this.reload();

@@ -1,6 +1,13 @@
+<!--
+ * @Description: 
+ * @Author: gmm
+ * @Date: 2019-07-18 15:06:02
+ * @其他: 
+ -->
 <template>
   <Layout style="height: 100%" class="main">
-    <Sider hide-trigger collapsible :width="256" :collapsed-width="64" v-model="collapsed" class="left-sider" :style="{overflow: 'hidden'}">
+    <!-- 256 左侧菜单列表 -->
+    <Sider hide-trigger collapsible :width="200" :collapsed-width="64" v-model="collapsed" class="left-sider" :style="{overflow: 'hidden'}">
       <side-menu accordion ref="sideMenu" :active-name="$route.name" :collapsed="collapsed" @on-select="turnToPage" :menu-list="menuList">
         <!-- 需要放在菜单上面的内容，如Logo，写在side-menu标签内部，如下 -->
         <div class="logo-con">
@@ -19,14 +26,16 @@
           <fullscreen v-model="isFullscreen" style="margin-right: 10px;"/>
         </header-bar>
       </Header>
-      <Content class="main-content-con">
+      <Content class="main-content-con" style='background:blue'>
         <Layout class="main-layout-con">
+          <!-- 这里是tab表头的路由 -->
           <div class="tag-nav-wrapper">
             <tags-nav :value="$route" @input="handleClick" :list="tagNavList" @on-close="handleCloseTag"/>
           </div>
-          <Content class="content-wrapper">
+            <!--组件是否会被缓存  include 表示name的组件都会被缓存 -->
+          <Content class="content-wrapper" style="padding:6px;">
             <keep-alive :include="cacheList">
-              <router-view/>
+             <router-view/>
             </keep-alive>
             <ABackTop :height="100" :bottom="80" :right="50" container=".content-wrapper"></ABackTop>
           </Content>
@@ -52,6 +61,7 @@ import maxLogo from '@/assets/images/logo.jpg'
 import './main.less'
 export default {
   name: 'Main',
+   inject:['reload'],  //調用組建app.vue
   components: {
     SideMenu,
     HeaderBar,
@@ -115,14 +125,20 @@ export default {
       'getUnreadMessageCount'
     ]),
     turnToPage (route) {
+      // console.log('111111111')
+      // console.log(route)
+      // console.log('--------------')
       let { name, params, query } = {}
       if (typeof route === 'string') name = route
       else {
         name = route.name
         params = route.params
         query = route.query
+       // console.log('3333333333333333333333333')
       }
       if (name.indexOf('isTurnByHref_') > -1) {
+        // console.log('444444444444')
+        // console.log(name)
         window.open(name.split('_')[1])
         return
       }
@@ -136,6 +152,8 @@ export default {
       this.collapsed = state
     },
     handleCloseTag (res, type, route) {
+      console.log('我是关闭的路由')
+      console.log(route)
       if (type !== 'others') {
         if (type === 'all') {
           this.turnToPage(this.$config.homeName)
@@ -148,12 +166,35 @@ export default {
       this.setTagNavList(res)
     },
     handleClick (item) {
-      this.turnToPage(item)
+       console.log('我是点击的路由')
+      // console.log('22222222')
+       console.log(item)
+        //  const route = {
+        //                  name: item.name,
+        //                  query: item.query,
+        //                  meta:item.meta
+        //                 }
+        //                 this.$router.push(route)
+       this.turnToPage(item)
     }
   },
   watch: {
     '$route' (newRoute) {
       const { name, query, params, meta } = newRoute
+      console.log(newRoute)
+      console.log('你好路由')
+       let b=newRoute.fullPath.split('/')
+      let c=[];
+      b.map(item=>{
+         if (item !== "" && item != undefined) {
+            c.push(item);
+          }
+      })
+      console.log(c)
+      // let c=b.split('/')
+      if(c.length>=4){
+        this.reload();  //暂时这样处理页面跳转错误
+      }
       this.addTag({
         route: { name, query, params, meta },
         type: 'push'
@@ -164,12 +205,16 @@ export default {
     }
   },
   mounted () {
+      
     /**
      * @description 初始化设置面包屑导航和标签导航
      */
     this.setTagNavList()
+
     this.setHomeRoute(routers)
     const { name, params, query, meta } = this.$route
+    // console.log('路由那你呢年女女')
+    // console.log(this.$route)
     this.addTag({
       route: { name, params, query, meta }
     })
@@ -183,9 +228,20 @@ export default {
       })
     }
     // 获取未读消息条数
-    this.getUnreadMessageCount()
+    //this.getUnreadMessageCount()
+
+    console.log('================我是路有数据')
+    console.log(this.$route)
 
 
   }
 }
 </script>
+<style lang="less" scoped>
+.ivu-layout-header{
+      height: 41px!important;
+    line-height:41px!important;
+}
+
+</style>
+

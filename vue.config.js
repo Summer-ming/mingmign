@@ -6,6 +6,7 @@ const resolve = dir => {
     return path.join(__dirname, dir)
 }
 
+
 // 项目部署基础
 // 默认情况下，我们假设你的应用将被部署在域的根目录下,
 // 例如：https://www.my-app.com/
@@ -14,7 +15,7 @@ const resolve = dir => {
 // 例如：https://www.foobar.com/my-app/
 // 需要将它改为'/my-app/'
 // iview-admin线上演示打包路径： https://file.iviewui.com/admin-dist/
-const BASE_URL = process.env.NODE_ENV === 'production' ?
+const BASE_URL = process.env.NODE_ENV === 'development' ?
     '/jgerp/' :
     '/jgerp/'
 
@@ -42,4 +43,10 @@ module.exports = {
     // devServer: {
     //   proxy: 'localhost:3000'
     // }
+    configureWebpack: (config)=>{
+        if(process.env.NODE_ENV === 'production'){
+          config.optimization.minimizer[0].options.terserOptions.compress.drop_console = true
+        }
+      }
+   
 }

@@ -1,559 +1,50 @@
-import axios from '@/libs/api_8889.request'
+/*
+ * @Description: 
+ * @Author: gmm
+ * @Date: 2019-09-16 17:26:55
+ * @其他: 
+ */
+import axios from '@/libs/api.request'
 
-
-export const getTableData = () => {
-        return axios.request({
-            url: 'get_table_data',
-            method: 'get'
-        })
-    }
-    //管理员登录请求 测试使用
-export const getJgLogin = (ename, passWord) => {
-    return axios.request({
-        url: 'Login',
-        method: 'get',
-        params: {
-            ename,
-            passWord
-        }
-    })
-}
-export const getJgLoginTest = (param) => {
-        return axios.request({
-            url: 'Login',
-            method: 'get',
-            params: param
-        })
-    }
     //修改订单状态
 export const updateOrderStatus = (param) => {
         return axios.request({
-            url: 'order/updateOrder',
+            url: 'order/updateOrder89',
             method: 'post',
             data: param
         })
     }
-    //获取买家流水信息
-export const getCusFlowList = (param) => {
-        return axios.request({
-            url: 'customer/findCustomerMoneyRecord',
-            method: 'get',
-            params: param
-        })
-    }
-    //获取管理员列表
-export const getUserList = (param) => {
-        return axios.request({
-            url: 'employee/findEmployee',
-            method: 'get',
-            params: param
-        })
-    }
-    //批量添加客户科目明细
-export const addCustomerAccountRecord = (param) => {
-        return axios.request({
-            url: 'car/addCustomerAccountRecord',
-            method: 'post',
-            data: param
-        })
-    }
-    //客户科目明细表——查询客户明细
-export const findCustomerAccountRecord = (param) => {
-    return axios.request({
-        url: 'car/findCustomerAccountRecord',
-        methor: 'get',
-        params: param
-    })
-}
 
-//客户科目明细表-删除列表中的客户明细记录
-export const deleteCustomerAccountItem = (param) => {
-        return axios.request({
-            url: 'car/updateCustomerAccountRecord',
-            method: 'post',
-            data: param
-        })
-    }
-    //客户科目明细表-修改客户科目明细
 
-export const updateCustomerAccountRecord = (param) => {
-        return axios.request({
-            url: 'car/updateCustomerAccountRecord',
-            method: 'post',
-            data: param
-        })
-    }
-    /**
-     * 供应商科目-查询供应商科目明细
-     * @param {} param 
-     */
-export const findSupplierAccountRecord = (param) => {
-        return axios.request({
-            url: 'sar/findSupplierAccountRecord',
-            method: 'get',
-            params: param
-        })
-    }
-    /**
-     * 供应商科目-批量添加供应商科目明细
-     * @param {*} param 
-     */
-export const addSupplierAccountRecord = (param) => {
-        return axios.request({
-            url: 'sar/addSupplierAccountRecord',
-            method: 'post',
-            data: param
-        })
-    }
-    /**
-     * 供应商科目-批量修改供应商科目明细
-     * @param {*} param 
-     */
-export const updateSupplierAccountRecord = (param) => {
-        return axios.request({
-            url: 'sar/updateSupplierAccountRecord',
-            method: 'post',
-            data: param
-        })
-    }
-    /**付款申请
-     * 添加付款申请
-     */
-export const addPaymentRequest = (param) => {
-        return axios.request({
-            url: 'paymentRequest/addPaymentRequest',
-            method: 'post',
-            data: param
-        })
-    }
-    /**付款申请
-     * 查询付款申请列表信息
-     */
-export const findPaymentRequest = (param) => {
-    return axios.request({
-        url: 'paymentRequest/findPaymentRequest',
-        method: 'get',
-        params: param
-    })
-}
-export const updatePaymentRequest = (param) => {
-    return axios.request({
-        url: 'paymentRequest/updatePaymentRequest',
-        method: 'post',
-        data: param
-    })
-}
-
-/**部门组织架构
- * 查询部门
- */
-export const findPersonnelDept = (param) => {
-        return axios.request({
-            url: 'Personnel/findPersonnelDept',
-            method: 'get',
-            params: param
-        })
-    }
-    /**部门组织结构
-     * 添加部门
-     */
-export const addPersonnelDept = (param) => {
-        return axios.request({
-            url: 'Personnel/addPersonnelDept',
-            method: 'post',
-            data: param
-        })
-    }
-    /**部门组织结构
-     * 修改部门信息
-     */
-export const updatePersonnelDept = (param) => {
-        return axios.request({
-            url: 'Personnel/updatePersonnelDept',
-            method: 'post',
-            data: param
-        })
-    }
-    /**部门组织结构
-     * 判断组织下面有没有岗位 返回100 说明有 101 说明没有
-     */
-export const isNotItHaveRole = (param) => {
-        return axios.request({
-            url: 'Personnel/isNotItHaveRole',
-            method: 'get',
-            params: param
-        })
-    }
-    /**部门组织结构
-     * 查询角色
-     */
-export const findPersonnelRole = (param) => {
-        return axios.request({
-            url: 'Personnel/findPersonnelRole',
-            method: 'get',
-            params: param
-        })
-    }
-    /**部门组织结构
-     * 添加角色
-     */
-export const addRole = (param) => {
-        return axios.request({
-            url: 'Personnel/addRole',
-            method: 'post',
-            data: param
-        })
-    }
-    /**部门组织结构
-     * 修改角色
-     */
-export const updateRole = (param) => {
-        return axios.request({
-            url: 'Personnel/updateRole',
-            method: 'post',
-            data: param
-        })
-    }
-    /**部门组织结构
-     * 查询角色下面是不是有人员
-     */
-export const findRoleEmp = (param) => {
-        return axios.request({
-            url: 'Personnel/findRoleEmp',
-            method: 'post',
-            data: param
-        })
-    }
-    /**部门组织结构
-     * 添加人员
-     */
-export const addEmployee = (param) => {
-        return axios.request({
-            url: 'employee/addEmployee',
-            method: 'post',
-            data: param
-        })
-    }
-    /**部门组织结构
-     * 修改人员信息
-     */
-export const updateEmployee = (param) => {
-        return axios.request({
-            url: 'employee/updateEmployee',
-            method: 'post',
-            data: param
-        })
-    }
-    /**部门组织结构
-     * 赋值权限
-     */
-export const addRoleEmp = (param) => {
-        return axios.request({
-            url: 'Personnel/addRoleEmp',
-            method: 'post',
-            data: param
-        })
-    }
-    /**部门组织结构
-     * 删除角色
-     */
-export const deleteRoleEmp = (param) => {
-        return axios.request({
-            url: 'Personnel/deleteRoleEmp',
-            method: 'post',
-            data: param
-        })
-    }
-    /**页面侧边栏
-     * 查询侧边栏列表 list状
-     */
-export const findVueRouter1 = (param) => {
-        return axios.request({
-            url: 'vueRouter/findVueRouter1',
-            method: 'get',
-            params: param
-        })
-    }
-    /**
-     * 页面侧边栏
-     *  树状结构查询
-     * @param {*} param 
-     */
-export const findVueRouter2 = (param) => {
-        return axios.request({
-            url: 'vueRouter/findVueRouter2',
-            method: 'get',
-            params: param
-        })
-    }
-    /**
-     * 页面侧边栏
-     * 修改信息
-     * @param {*} param 
-     */
-export const updateVueRouter = (param) => {
-        return axios.request({
-            url: 'vueRouter/updateVueRouter',
-            method: 'post',
-            data: param
-        })
-    }
-    /**
-     * 页面侧边栏
-     * 添加
-     * @param {*} param 
-     */
-export const addVueRouter = (param) => {
-        return axios.request({
-            url: 'vueRouter/addVueRouter',
-            method: 'post',
-            data: param
-        })
-    }
-    /**
-     * 角色权限
-     * 查询
-     * @param {*} param 
-     */
-export const findRoleVue = (param) => {
-        return axios.request({
-            url: 'vueRouter/findRoleVue',
-            method: 'get',
-            params: param
-        })
-    }
-    /**
-     * 角色权限
-     * 添加
-     * @param {*} param 
-     */
-export const addRoleVue = (param) => {
-        return axios.request({
-            url: 'vueRouter/addRoleVue',
-            method: 'post',
-            data: param
-        })
-    }
-    /**
-     * 角色权限
-     * 删除
-     * @param {*} param 
-     */
-export const deleterRoleVue = (param) => {
-        return axios.request({
-            url: 'vueRouter/deleterRoleVue',
-            method: 'post',
-            data: param
-        })
-    }
-    /**
-     * 客户管理
-     * 添加客户
-     * @param {*} param 
-     */
-export const addcus = (param) => {
-        return axios.request({
-            url: 'customer/addOrgCustomer',
-            method: 'post',
-            data: param
-        })
-    }
-    /**
-     * 客户管理
-     * 添加客户和供应商
-     * @param {*} param 
-     */
-export const addOrgCustomer = (param) => {
-        return axios.request({
-            url: 'customer/addOrgCustomer',
-            method: 'post',
-            data: param
-        })
-    }
-    // 查询公司信息
-export const findOrgList = (param) => {
-        return axios.request({
-            url: 'customer/findOrgCusAcc',
-            method: 'get',
-            params: param
-        })
-    }
-    //修改cus表信息
-export const updateCusVipStatus = (param) => {
-        return axios.request({
-            url: 'customer/updateCustomer',
-            method: 'post',
-            data: param
-        })
-    }
-    //org表信息
-export const updateOrgVipStatus = (param) => {
-        return axios.request({
-            url: 'orginization/updateOrginization',
-            method: 'post',
-            data: param
-        })
-    }
-    //修改买家卖家信息
-export const updateOrgCus = (param) => {
-        return axios.request({
-            url: 'customer/updateOrgCustomer',
-            method: 'post',
-            data: param
-        })
-    }
-    //小代码管理
-    //查询代码类型
-export const findCodeType = (param) => {
-    return axios.request({
-        url: 'codeType/findCodeType',
-        method: 'get',
-        params: param
-    })
-}
-
-//小代码 管理
-//查询代码信息
-export const findCodeInfo = (param) => {
-    return axios.request({
-        url: 'codeType/findCodeInfo',
-        method: 'get',
-        params: param
-    })
-}
-
-//小代码管理
-//修改小代码信息
-export const updateCodeInfo = (param) => {
-    return axios.request({
-        url: 'codeType/updateCodeInfo',
-        method: 'post',
-        data: param
-    })
-}
-
-//小代码管理
-//修改小代码类型
-export const updateCodeType = (param) => {
-        return axios.request({
-            url: 'codeType/updateCodeType',
-            method: 'post',
-            data: param
-        })
-    }
-    //小代码管理
-    //添加小代码信息
-export const addCodeInfo = (param) => {
-    return axios.request({
-        url: 'codeType/addCodeInfo',
-        method: 'post',
-        data: param
-    })
-}
-
-//小代码管理
-//添加小代码类型
-export const addCodeType = (param) => {
-        return axios.request({
-            url: 'codeType/addCodeType',
-            method: 'post',
-            data: param
-        })
-    }
-    //账户管理/employee/findEmployee
-export const accountManagement = (param) => {
-    return axios.request({
-        url: 'employee/findEmployee',
-        method: 'get',
-        params: param
-    })
-}
-
-//查询公司
-export const findOrginization = (param) => {
-    return axios.request({
-        url: 'orginization/findOrginization',
-        method: 'get',
-        params: param
-    })
-}
-
-//查询公司
-export const findOrgCusAcc = (param) => {
-    return axios.request({
-        url: 'customer/findOrgCusAcc',
-        method: 'get',
-        params: param
-    })
-}
-
-/**
- * 店铺管理
- * 添加店铺
- * @param {*} param 
- */
-export const addShop = (param) => {
-        return axios.request({
-            url: 'shop/addShop',
-            method: 'post',
-            data: param
-        })
-    }
-    //查询店铺
-export const findShop = (param) => {
-        return axios.request({
-            url: 'shop/findShop',
-            method: 'get',
-            params: param
-        })
-    }
-    //删除店铺
-export const updateShop = (param) => {
-        return axios.request({
-            url: 'shop/updateShop',
-            method: 'post',
-            data: param
-        })
-    }
-    //查询银行卡
-export const findAccount = (param) => {
-    return axios.request({
-        url: 'account/findAccount',
-        method: 'get',
-        params: param
-    })
-}
-
-//删除银行卡
-export const updateAccount = (param) => {
-    return axios.request({
-        url: 'account/updateAccount',
-        method: 'post',
-        data: param
-    })
-}
-
-//添加银行卡
-export const addAccount = (param) => {
-        return axios.request({
-            url: 'account/addAccount',
-            method: 'post',
-            data: param
-        })
-    }
-    //查询订单
+    //查询销售订单
 export const findOrdersAll = (param) => {
     return axios.request({
-        url: 'order/findOrdersAll',
+        url: 'order/findOrdersAll89',
         method: 'get',
         params: param
     })
 }
+    //查询销售订单89命名
+    export const findOrdersAll89 = (param) => {
+        return axios.request({
+            url: 'order/findOrdersAll89',
+            method: 'get',
+            params: param
+        })
+    }
+    //查询销售订单合计
+    export const findOrdersAllSum89 = (param) => {
+        return axios.request({
+            url: 'order/findOrdersAllSum89',
+            method: 'get',
+            params: param
+        })
+    }
 
 //查询订单明细
 export const findOrdersInfoAll = (param) => {
         return axios.request({
-            url: 'order/findOrdersInfoAll',
+            url: 'order/findOrdersInfoAll89',
             method: 'get',
             params: param
         })
@@ -561,7 +52,7 @@ export const findOrdersInfoAll = (param) => {
     //查询订单明细
 export const findOrdersInfoAll5 = (param) => {
         return axios.request({
-            url: 'order/findOrdersInfoAll5',
+            url: 'order/findOrdersInfoAll589',
             method: 'get',
             params: param
         })
@@ -569,7 +60,7 @@ export const findOrdersInfoAll5 = (param) => {
     //审核订单等，值修改状态，同时变更流水
 export const updateOrdersStatus = (param) => {
         return axios.request({
-            url: 'order/updateOrdersStatus',
+            url: 'order/updateOrdersStatus89',
             method: 'post',
             data: param
         })
@@ -577,24 +68,17 @@ export const updateOrdersStatus = (param) => {
     //采购单付款申请
 export const updateFukuanZhenghe = (param) => {
         return axios.request({
-            url: 'customer/updateFukuanZhenghe',
+            url: 'customer/updateFukuanZhenghe89',
             method: 'post',
             data: param
         })
     }
-    //查询抵扣列表
-export const findJgJieSuanInfo = (param) => {
-    return axios.request({
-        url: 'customer/findJgJieSuanInfo',
-        method: 'get',
-        params: param
-    })
-}
+
 
 //修改采购单详细
 export const updateOrderInfo = (param) => {
     return axios.request({
-        url: 'order/updateOrderInfo',
+        url: 'order/updateOrderInfo89',
         method: 'post',
         data: param
     })
@@ -603,20 +87,13 @@ export const updateOrderInfo = (param) => {
 //添加订单明细
 export const addOrderInfo = (param) => {
         return axios.request({
-            url: 'order/addOrderInfo',
+            url: 'order/addOrderInfo89',
             method: 'post',
             data: param
         })
     }
-    //修改抵扣状态
-export const updateShopMoneyJieSuanMer = (param) => {
-        return axios.request({
-            url: 'customer/updateShopMoneyJieSuanMer',
-            method: 'post',
-            data: param
-        })
-    }
-    //开票申请 1 BillingApplicationController/BillingApplication
+
+    //开票申请 1 BillingApplicationController/BillingApplication 不用改
 export const kaiPiao = (param) => {
         return axios.request({
             url: 'BillingApplicationController/BillingApplication',
@@ -627,7 +104,7 @@ export const kaiPiao = (param) => {
     //开票申请 2 /order/updateOrder
 export const kaiPiao2 = (param) => {
     return axios.request({
-        url: 'order/updateOrder',
+        url: 'order/updateOrder89',
         method: 'post',
         data: param
     })
@@ -636,13 +113,13 @@ export const kaiPiao2 = (param) => {
 //开票申请 2 /order/updateOrder
 export const addPrepaidOrdersSell = (param) => {
     return axios.request({
-        url: 'prepayment/addPrepaidOrders',
+        url: 'prepayment/addPrepaidOrders89',
         method: 'post',
         data: param
     })
 }
 
-//撤销回退接口 BillingApplicationController/invoiceback
+//撤销回退接口 BillingApplicationController/invoiceback 不改
 export const getCheXiao = (param) => {
     return axios.request({
         url: 'BillingApplicationController/invoiceback',
@@ -651,18 +128,44 @@ export const getCheXiao = (param) => {
     })
 }
 
-//汇总订单总计金额
-export const updateSell = (param) => {
+//获取类别 Steel/findSteel 不用改
+export const getLeiBie = (param) => {
     return axios.request({
-        url: 'OtherMoney/updateSell',
+        url: 'Steel/findSteel',
+        method: 'get',
+        params: param
+    })
+}
+//查询订单明细合计
+export const findOrdersInfoAllSum = (param) => {
+    return axios.request({
+        url: 'order/findOrdersInfoAllSum89',
+        method: 'get',
+        params: param
+    })
+}
+//新的 修改销售单信息接口 order/updateOrderInfo89
+export const getXiuGaiDingDan = (param) => {
+    return axios.request({
+        url: 'order/updateOrderInfo89',
         method: 'post',
         data: param
     })
 }
-//获取类别 Steel/findSteel
-export const getLeiBie = (param) => {
+
+    //修改销售单
+    export const updateOrder89 = (param) => {
+        return axios.request({
+            url: 'order/updateOrder89',
+            method: 'post',
+            data: param
+        })
+    }
+
+    //新增杂费查询列表
+export const findZaFei = (param) => {
     return axios.request({
-        url: 'Steel/findSteel',
+        url: 'OtherMoney/findOtderMoney',
         method: 'get',
         params: param
     })

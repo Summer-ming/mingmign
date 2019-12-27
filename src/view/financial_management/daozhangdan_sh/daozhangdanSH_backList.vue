@@ -420,14 +420,7 @@ export default {
                if(res.data.length>0){
                  this.changeformItem.returnBankItem = res.data[0];
 
-                  this.$Notice.success({
-                     title:'获取银行支行信息成功',
-                      duration:1,
-                 })
                }else{
-                 this.$Notice.error({
-                     title:'获取银行支行信息失败，请联系管理员添加'
-                 })
                }
                 
              }else{
@@ -506,9 +499,10 @@ export default {
                 paramB.bankAbbreviation = this.bankString //银行名称
                 paramB.bankBranchLineCity = this.Provinces //省
                 paramB.prefectureLevel = this.city //市
+                paramB.pageSize ="99999999"
                 getBankDot(paramB).then(res => {
                     if (res.code == "100") {
-                        this.bankDotList = res.data;
+                        this.bankDotList = res.data.list;
                     }
                 })
 

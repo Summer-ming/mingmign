@@ -128,13 +128,7 @@ import {
           findOrdersInfoAll(params).then(res =>{
             if(res.code =="100"){
               this.data1 = res.data.list;
-              this.$Notice.success({
-                title:'获取订单明细成功'
-              })
             }else{
-              this.$Notice.error({
-                title:'获取订单明细失败'
-              })
             }
           })
        }

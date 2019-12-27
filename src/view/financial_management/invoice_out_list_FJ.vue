@@ -8,7 +8,7 @@
 <template>
      <div>
          <row>
-             <h2 style='font-weight:400;'>开票申请列表(上海闽航)</h2>
+             <h2 style='font-weight:400;'>开票申请列表(福建亿钢)</h2>
          </row>
          <!-- 开票列表 -->
          <row style='margin-bottom:20px;padding-top:10px;background-color: #fbfbfb;-webkit-box-shadow: 1px 0 10px 1px rgba(0, 0, 0, .3);-moz-box-shadow: 1px 0 10px 1px rgba(0, 0, 0, .3);box-shadow: 1px 0 10px 1px rgba(0, 0, 0, .3);padding: 12px;'>

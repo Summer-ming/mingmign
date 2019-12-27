@@ -12,12 +12,12 @@
         <b class="font_32">基础信息</b>
         <row class='order_all'>
       <dl>
-        <dt>采购单号：{{formItem.orderNo}}</dt>
-        <dd>采购公司：{{formItem.cusOrgName}}</dd>
+        <dt>销售单号：{{formItem.orderNo}}</dt>
+        <dd>客户：{{formItem.cusOrgName}}</dd>
       </dl>
       <dl>
         <dt>供应商公司：{{formItem.shopOrgName}}</dt>
-        <dd>采购员：{{formItem.adminName}}</dd>
+        <dd>管理员：{{formItem.adminName}}</dd>
       </dl>
       <dl>
         <dt>合同金额：{{formItem.money}}</dt>
@@ -49,6 +49,7 @@ updateOrderInfo,
 addOrderInfo} from '@/api/data_8889'
 import {findOrgCusAcc } from '@/api/data'
 import { mapMutations } from 'vuex'
+import {getReceiptStatusLabel,getInvoiceStatusLabel} from '@/libs/allStatus'
 import Utils from '@/api/middle'
 export default {
     name: 'sell_order_change_info',
@@ -121,40 +122,60 @@ export default {
                              ]);
                       }
                         
-                    },
-                      {
+            },
+            {
                         title: 'ID',
                         key: 'id',
                         align: 'center',
                         width:'100'
-                    },
-                    {
+            },
+            {
                         title: '品名',
                         key: 'steelName',
                         align: 'center',
                         width:'100',
                         render:(h,params)=>{
-                          return h('Input',{
-                            props:{
-                              value:params.row.steelName,
-                              disabled:params.row.isDelete
-                            },
-                            on:{
-                              'on-blur':(event)=>{
-                                console.log(event.target.value)
-                                this.data1[params.index].steelName = event.target.value
+                         if(params.row.steelNameStatus){
+                              return h('Input',{
+                              props:{
+                                value:params.row.steelName,
+                                disabled:params.row.isDelete
+                              },
+                            
+                              on:{
+                                'on-blur':(event)=>{
+                                  this.data1[params.index].steelName = event.target.value
+                                  this.data1[params.index].steelNameStatus = false
+
+                                },
                               }
-                            }
-                          })
+                              })
+                          }else{
+                                  return h('a',{
+                                     style:{
+                                      'display':'block',
+                                      "width":"100px",
+                                      "height":'40px',
+                                      "border":"1px",
+                                      "line-height":"40px",
+                                    },
+                                on:{
+                                  'click':(event)=>{
+                                    this.data1[params.index].steelNameStatus = true
+                                  }
+                                }
+                              },params.row.steelName)
+                          }
                         }
-                    },
-                    {
+            },
+            {
                         title: '规格',
                         key: 'steelGuige',
                         align: 'center',
                         width:'100',
                         render:(h,params)=>{
-                          return h('Input',{
+                          if(params.row.steelGuigeStatus){
+                            return h('Input',{
                             props:{
                               value:params.row.steelGuige,
                               disabled:params.row.isDelete
@@ -162,21 +183,38 @@ export default {
                             },
                             on:{
                               'on-blur':(event) =>{
-                                console.log(event.target.value)
                                 this.data1[params.index].steelGuige = event.target.value
-
+                                this.data1[params.index].steelGuigeStatus = false
+                                
                               }
                             }
                           })
+                          }else{
+                             return h('a',{
+                               style:{
+                                      'display':'block',
+                                      "width":"100px",
+                                      "height":'40px',
+                                      "border":"1px",
+                                      "line-height":"40px",
+                                    },
+                                on:{
+                                  'click':(event)=>{
+                                    this.data1[params.index].steelGuigeStatus = true
+                                  }
+                                }
+                              },params.row.steelGuige)
+                          }
                         }
-                    },
-                    {
+            },
+            {
                         title: '材质',
                         key: 'steelPaihao',
                         align: 'center',
                         width:'150',
                         render:(h,params)=> {
-                          return h('Input',{
+                           if(params.row.steelPaihaoStatus){
+                            return h('Input',{
                             props:{
                               value:params.row.steelPaihao,
                               disabled:params.row.isDelete
@@ -184,21 +222,38 @@ export default {
                             },
                             on:{
                               'on-blur':(event) =>{
-                                console.log(event.target.value)
                                 this.data1[params.index].steelPaihao = event.target.value
+                                  this.data1[params.index].steelPaihaoStatus = false
 
                               }
                             }
                           })
+                          }else{
+                            return h('a',{
+                              style:{
+                                      'display':'block',
+                                      "width":"100px",
+                                      "height":'40px',
+                                      "border":"1px",
+                                      "line-height":"40px",
+                                    },
+                                on:{
+                                  'click':(event)=>{
+                                    this.data1[params.index].steelPaihaoStatus = true
+                                  }
+                                }
+                              },params.row.steelPaihao)
+                          }
                         },
-                    },
-                    {
+            },
+            {
                         title: '钢厂',
                         key: 'steelPinpai',
                         align: 'center',
                         width:'120',
                         render:(h,params)=> {
-                          return h('Input',{
+                         if(params.row.steelPinpaiStatus){
+                            return h('Input',{
                             props:{
                               value:params.row.steelPinpai,
                               disabled:params.row.isDelete
@@ -206,21 +261,38 @@ export default {
                             },
                             on:{
                               'on-blur':(event) =>{
-                                console.log(event.target.value)
                                 this.data1[params.index].steelPinpai = event.target.value
+                                  this.data1[params.index].steelPinpaiStatus = false
 
                               }
                             }
                           })
+                          }else{
+                            return h('a',{
+                              style:{
+                                      'display':'block',
+                                      "width":"100px",
+                                      "height":'40px',
+                                      "border":"1px",
+                                      "line-height":"40px",
+                                    },
+                                on:{
+                                  'click':(event)=>{
+                                    this.data1[params.index].steelPinpaiStatus = true
+                                  }
+                                }
+                              },params.row.steelPinpai)
+                          }
                         },
-                    },
-                    {
+            },//提货方式
+            {
                         title: '提货方式',
                         key: 'steelWorks',
                         align: 'center',
                         width:'100',
                         render:(h,params)=> {
-                          return h('Input',{
+                          if(params.row.steelWorksStatus){
+                            return h('Input',{
                             props:{
                               value:params.row.steelWorks,
                               disabled:params.row.isDelete
@@ -228,21 +300,38 @@ export default {
                             },
                             on:{
                               'on-blur':(event) =>{
-                                console.log(event.target.value)
                                 this.data1[params.index].steelWorks = event.target.value
+                                  this.data1[params.index].steelWorksStatus = false
 
                               }
                             }
                           })
+                          }else{
+                            return h('a',{
+                              style:{
+                                      'display':'block',
+                                      "width":"100px",
+                                      "height":'40px',
+                                      "border":"1px",
+                                      "line-height":"40px",
+                                    },
+                                on:{
+                                  'click':(event)=>{
+                                    this.data1[params.index].steelWorksStatus = true
+                                  }
+                                }
+                              },params.row.steelWorks)
+                          }
                         },
-                    },
-                     {
+            },
+            {
                         title: '交货地',
                         key: 'jiaohuodi',
                         align: 'center',
                         width:'100',
                         render:(h,params)=> {
-                          return h('Input',{
+                          if(params.row.jiaohuodiStatus){
+                            return h('Input',{
                             props:{
                               value:params.row.jiaohuodi,
                               disabled:params.row.isDelete
@@ -250,21 +339,38 @@ export default {
                             },
                             on:{
                               'on-blur':(event) =>{
-                                console.log(event.target.value)
                                 this.data1[params.index].jiaohuodi = event.target.value
+                                  this.data1[params.index].jiaohuodiStatus = false
 
                               }
                             }
                           })
+                          }else{
+                            return h('a',{
+                              style:{
+                                      'display':'block',
+                                      "width":"100px",
+                                      "height":'40px',
+                                      "border":"1px",
+                                      "line-height":"40px",
+                                    },
+                                on:{
+                                  'click':(event)=>{
+                                    this.data1[params.index].jiaohuodiStatus = true
+                                  }
+                                }
+                              },params.row.jiaohuodi)
+                          }
                         },
-                    },
-                    {
+            },
+            {
                         title: '件数',
                         key: 'jianshu',
                         align: 'center',
                         width:'100',
                         render:(h,params)=> {
-                          return h('Input',{
+                          if(params.row.jianshuStatus){
+                            return h('Input',{
                             props:{
                               value:params.row.jianshu,
                               disabled:params.row.isDelete
@@ -272,21 +378,38 @@ export default {
                             },
                             on:{
                               'on-blur':(event) =>{
-                                console.log(event.target.value)
                                 this.data1[params.index].jianshu = event.target.value
+                                  this.data1[params.index].jianshuStatus = false
 
                               }
                             }
                           })
+                          }else{
+                            return h('a',{
+                              style:{
+                                      'display':'block',
+                                      "width":"100px",
+                                      "height":'40px',
+                                      "border":"1px",
+                                      "line-height":"40px",
+                                    },
+                                on:{
+                                  'click':(event)=>{
+                                    this.data1[params.index].jianshuStatus = true
+                                  }
+                                }
+                              },params.row.jianshu)
+                          }
                         },
-                    },
-                    {
+            },
+            {
                         title: '单件重',
                         key: 'weight',
                         align: 'center',
                         width:'100',
                         render:(h,params)=>{
-                          return h('Input',{
+                          if(params.row.weightStatus){
+                             return h('Input',{
                             props:{
                               value:this.$global.accPrecision(params.row.weight,3),
                               disabled:params.row.isDelete
@@ -297,21 +420,38 @@ export default {
                             },
                             on:{
                               'on-blur':(event) =>{
-                                console.log(event.target.value)
                                 this.data1[params.index].weight = event.target.value
+                                  this.data1[params.index].weightStatus = false
 
                               }
                             }
                           })
+                          }else{
+                             return h('a',{
+                               style:{
+                                      'display':'block',
+                                      "width":"100px",
+                                      "height":'40px',
+                                      "border":"1px",
+                                      "line-height":"40px",
+                                    },
+                                on:{
+                                  'click':(event)=>{
+                                    this.data1[params.index].weightStatus = true
+                                  }
+                                }
+                              },this.$global.accPrecision(params.row.weight,3))
+                          }
                         }
-                    },
-                     {
+            },
+            {
                         title: '总重量',
                         key: 'zongzhongliang',
                         align: 'center',
                         width:'100',
                         render:(h,params)=>{
-                          return h('Input',{
+                          if(params.row.zongzhongliangStatus){
+                            return h('Input',{
                             props:{
                               value:this.$global.accPrecision(params.row.zongzhongliang,3),
                               disabled:params.row.isDelete
@@ -322,21 +462,38 @@ export default {
                             },
                             on:{
                               'on-blur':(event) =>{
-                                console.log(event.target.value)
                                 this.data1[params.index].zongzhongliang = event.target.value
+                                  this.data1[params.index].zongzhongliangStatus = false
 
                               }
                             }
                           })
+                          }else{
+                              return h('a',{
+                                style:{
+                                      'display':'block',
+                                      "width":"100px",
+                                      "height":'40px',
+                                      "border":"1px",
+                                      "line-height":"40px",
+                                    },
+                                on:{
+                                  'click':(event)=>{
+                                    this.data1[params.index].zongzhongliangStatus = true
+                                  }
+                                }
+                              },this.$global.accPrecision(params.row.zongzhongliang,3))
+                          }
                         }
-                    },
-                     {
+            },
+            {
                         title: '单价',
                         key: 'guapaijia',
                         align: 'center',
-                        width:'200',
+                        width:'100',
                         render:(h,params)=>{
-                          return h('Input',{
+                          if(params.row.guapaijiaStatus){
+                            return h('Input',{
                             props:{
                               value:this.$global.accPrecision(params.row.guapaijia,2),
                               disabled:params.row.isDelete
@@ -346,21 +503,38 @@ export default {
                             },
                             on:{
                               'on-blur':(event)=>{
-                                console.log(event.target.value)
                                 this.data1[params.index].guapaijia = event.target.value
+                                  this.data1[params.index].guapaijiaStatus = false
 
                               }
                             }
                           })
+                          }else{
+                            return h('a',{
+                              style:{
+                                      'display':'block',
+                                      "width":"100px",
+                                      "height":'40px',
+                                      "border":"1px",
+                                      "line-height":"40px",
+                                    },
+                                on:{
+                                  'click':(event)=>{
+                                    this.data1[params.index].guapaijiaStatus = true
+                                  }
+                                }
+                              },this.$global.accPrecision(params.row.guapaijia,2))
+                          }
                         }
-                    },
-                     {
+            },
+            {
                         title: '总金额',
                         key: 'cusMoney',
                         align: 'center',
                         width:'200',
                         render:(h,params)=>{
-                          return h('Input',{
+                          if(params.row.cusMoneyStatus){
+                            return h('Input',{
                             props:{
                               value:this.$global.accPrecision(params.row.cusMoney,2),
                               disabled:params.row.isDelete
@@ -370,20 +544,38 @@ export default {
                             },
                             on:{
                               'on-blur':(event)=>{
-                                console.log(event.target.value)
                                 this.data1[params.index].cusMoney = event.target.value
+                                  this.data1[params.index].cusMoneyStatus = false
 
                               }
                             }
                           })
+                          }else{
+                            return h('a',{
+                              style:{
+                                      'display':'block',
+                                      "width":"200px",
+                                      "height":'40px',
+                                      "border":"1px",
+                                      "line-height":"40px",
+                                    },
+                                on:{
+                                  'click':(event)=>{
+                                    this.data1[params.index].cusMoneyStatus = true
+                                  }
+                                }
+                              },this.$global.accPrecision(params.row.cusMoney,2))
+                          }
                         }
-                    },
-                    {
+            },
+            {
                         title: '捆包号',
                         key: 'kunbaohao',
                         align: 'center',
-                        width:'100',render:(h,params)=> {
-                          return h('Input',{
+                        width:'100',
+                        render:(h,params)=> {
+                          if(params.row.kunbaohaoStatus){
+                             return h('Input',{
                             props:{
                               value:params.row.kunbaohao,
                               disabled:params.row.isDelete
@@ -391,21 +583,38 @@ export default {
                             },
                             on:{
                               'on-blur':(event) =>{
-                                console.log(event.target.value)
                                 this.data1[params.index].kunbaohao = event.target.value
+                                  this.data1[params.index].kunbaohaoStatus = false
 
                               }
                             }
                           })
+                          }else{
+                             return h('a',{
+                               style:{
+                                      'display':'block',
+                                      "width":"100px",
+                                      "height":'40px',
+                                      "border":"1px",
+                                      "line-height":"40px",
+                                    },
+                                on:{
+                                  'click':(event)=>{
+                                    this.data1[params.index].kunbaohaoStatus = true
+                                  }
+                                }
+                              },params.row.kunbaohao)
+                          }
                         },
-                    },
-                    {
+            },
+            {
                         title: '结算重量',
                         key: 'jiesuanWeight',
                         align: 'center',
                         width:'100',
-                         render:(h,params)=>{
-                          return h('Input',{
+                        render:(h,params)=>{
+                           if(params.row.jiesuanWeightStatus){
+                              return h('Input',{
                             props:{
                               value:this.$global.accPrecision(params.row.jiesuanWeight,3),
                               disabled:params.row.isDelete
@@ -416,21 +625,39 @@ export default {
                             },
                             on:{
                               'on-blur':(event) =>{
-                                console.log(event.target.value)
                                 this.data1[params.index].jiesuanWeight = event.target.value
+                                  this.data1[params.index].jiesuanWeightStatus = false
 
                               }
                             }
                           })
+                           }else{
+                             return h('a',{
+                               style:{
+                                      'display':'block',
+                                      "width":"100px",
+                                      "height":'40px',
+                                      "border":"1px",
+                                      "line-height":"40px",
+                                    },
+                                on:{
+                                  'click':(event)=>{
+                                    this.data1[params.index].jiesuanWeightStatus = true
+                                    
+                                  }
+                                }
+                              },this.$global.accPrecision(params.row.jiesuanWeight,3))
+                           }
                         }
-                    },
-                      {
+            },
+            {
                         title: '结算金额',
                         key: 'jiesuanMoney',
                         align: 'center',
                         width:'100',
                         render:(h,params)=>{
-                          return h('Input',{
+                          if(params.row.jiesuanMoneyStatus){
+                            return h('Input',{
                             props:{
                               value:this.$global.accPrecision(params.row.jiesuanMoney,2),
                               disabled:params.row.isDelete
@@ -441,29 +668,47 @@ export default {
                             },
                             on:{
                               'on-blur':(event)=>{
-                                console.log(event.target.value)
                                 this.data1[params.index].jiesuanMoney = event.target.value
+                                  this.data1[params.index].jiesuanMoneyStatus = false
 
                               }
                             }
                           })
+                          }else{
+                               return h('a',{
+                                 style:{
+                                      'display':'block',
+                                      "width":"100px",
+                                      "height":'40px',
+                                      "border":"1px",
+                                      "line-height":"40px",
+                                    },
+                                on:{
+                                  'click':(event)=>{
+                                    this.data1[params.index].jiesuanMoneyStatus = true
+                                    
+                                  }
+                                }
+                              },this.$global.accPrecision(params.row.jiesuanMoney,2))
+                          }
                         }
-                    },
-                     {
+            },
+            {
                         title: '是否收货',
                         key: 'receiptStatus',
                         align: 'center',
                         width:'100',
                         render: (h,params)=> {
-                          return h('Select',{
+                          if(params.row.receiptStatusStatus){
+                              return h('Select',{
                             props:{
                               value:params.row.receiptStatus,
                               disabled:params.row.isDelete
                             },
                             on:{
                               'on-change':(value) =>{
-                                console.log(value)
                                 this.data1[params.index].receiptStatus = value
+                                this.data1[params.index].receiptStatusStatus = false
 
                               }
                             }
@@ -478,15 +723,33 @@ export default {
                             },type);
                           })
                           )
+                          }else{
+                            return h('a',{
+                              style:{
+                                      'display':'block',
+                                      "width":"100px",
+                                      "height":'40px',
+                                      "border":"1px",
+                                      "line-height":"40px",
+                                    },
+                                on:{
+                                  'click':(event)=>{
+                                    this.data1[params.index].receiptStatusStatus = true
+                                    
+                                  }
+                                }
+                              },getReceiptStatusLabel(params.row.receiptStatus))
+                          }
                         }
-                    },
-                      {
-                        title: '开票重量',
+            },
+            {
+                        title: '收票重量',
                         key: 'invoiceWeight',
                         align: 'center',
                         width:'100',
                          render:(h,params)=>{
-                          return h('Input',{
+                           if(params.row.invoiceWeightStatus){
+                             return h('Input',{
                             props:{
                               value:this.$global.accPrecision(params.row.invoiceWeight,3),
                               disabled:params.row.isDelete
@@ -497,21 +760,39 @@ export default {
                             },
                             on:{
                               'on-blur':(event) =>{
-                                console.log(event.target.value)
                                 this.data1[params.index].invoiceWeight = event.target.value
+                                  this.data1[params.index].invoiceWeightStatus = false
 
                               }
                             }
                           })
+                           }else{
+                             return h('a',{
+                               style:{
+                                      'display':'block',
+                                      "width":"100px",
+                                      "height":'40px',
+                                      "border":"1px",
+                                      "line-height":"40px",
+                                    },
+                                on:{
+                                  'click':(event)=>{
+                                    this.data1[params.index].invoiceWeightStatus = true
+                                    
+                                  }
+                                }
+                              },this.$global.accPrecision(params.row.invoiceWeight,3))
+                           }
                         }
-                    },
-                     {
-                        title: '开票金额',
+            },
+            {
+                        title: '收票金额',
                         key: 'invoiceMoney',
                         align: 'center',
                         width:'100',
                         render:(h,params)=>{
-                          return h('Input',{
+                          if(params.row.invoiceMoneyStatus){
+                            return h('Input',{
                             props:{
                               value:this.$global.accPrecision(params.row.invoiceMoney,2),
                               disabled:params.row.isDelete
@@ -522,21 +803,39 @@ export default {
                             },
                             on:{
                               'on-blur':(event)=>{
-                                console.log(event.target.value)
                                 this.data1[params.index].invoiceMoney = event.target.value
+                                  this.data1[params.index].invoiceMoneyStatus = false
 
                               }
                             }
                           })
+                          }else{
+                            return h('a',{
+                              style:{
+                                      'display':'block',
+                                      "width":"100px",
+                                      "height":'40px',
+                                      "border":"1px",
+                                      "line-height":"40px",
+                                    },
+                                on:{
+                                  'click':(event)=>{
+                                    this.data1[params.index].invoiceMoneyStatus = true
+                                    
+                                  }
+                                }
+                              },this.$global.accPrecision(params.row.invoiceMoney,2))
+                          }
                         }
-                    },
-                    {
-                        title: '开票号码',
+            },
+            {
+                        title: '收票号码',
                         key: 'invoiceNo',
                         align: 'center',
                         width:'200',
                         render:(h,params)=>{
-                          return h('Input',{
+                          if(params.row.invoiceNoStatus){
+                               return h('Input',{
                             props:{
                               value:params.row.invoiceNo,
                               disabled:params.row.isDelete
@@ -547,29 +846,47 @@ export default {
                             },
                             on:{
                               'on-blur':(event)=>{
-                                console.log(event.target.value)
                                 this.data1[params.index].invoiceNo = event.target.value
+                                  this.data1[params.index].invoiceNoStatus = false
 
                               }
                             }
                           })
+                          }else{
+                              return h('a',{
+                                style:{
+                                      'display':'block',
+                                      "width":"200px",
+                                      "height":'40px',
+                                      "border":"1px",
+                                      "line-height":"40px",
+                                    },
+                                on:{
+                                  'click':(event)=>{
+                                    this.data1[params.index].invoiceNoStatus = true
+                                    
+                                  }
+                                }
+                              },params.row.invoiceNo)
+                          }
                         }
-                    },
-                    {
+            },
+            {
                         title: '是否收票',
                         key: 'invoiceStatus',
                         align: 'center',
                         width:'100',
                         render: (h,params)=> {
-                          return h('Select',{
+                          if(params.row.invoiceStatusStatus){
+                            return h('Select',{
                             props:{
                               value:params.row.invoiceStatus,
                               disabled:params.row.isDelete
                             },
                             on:{
                               'on-change':(value) =>{
-                                console.log(value)
                                 this.data1[params.index].invoiceStatus = value
+                                  this.data1[params.index].invoiceStatusStatus = false
 
                               }
                             }
@@ -584,14 +901,33 @@ export default {
                             },type);
                           })
                           )
+                          }else{
+                            return h('a',{
+                              style:{
+                                      'display':'block',
+                                      "width":"100px",
+                                      "height":'40px',
+                                      "border":"1px",
+                                      "line-height":"40px",
+                                    },
+                                on:{
+                                  'click':(event)=>{
+                                    this.data1[params.index].invoiceStatusStatus = true
+                                    
+                                  }
+                                }
+                              },getInvoiceStatusLabel(params.row.invoiceStatus))
+                          }
                         }
-                    },
-                    {
+            },
+            //杂费开始
+            {
                       key:'om1Name',
                       title:'杂费1名称',
                       width:'100',
                       render:(h,params)=>{
-                          return h('Input',{
+                          if(params.row.om1NameStatus){
+                            return h('Input',{
                             props:{
                               value:params.row.om1Name,
                             
@@ -603,19 +939,39 @@ export default {
                             on:{
                               'on-blur':(event)=>{
                                    this.data1[params.index].om1Name=event.target.value
+                                  this.data1[params.index].om1NameStatus = false
+
                               }
                             }
 
                           })
+                          }else{
+                            return h('a',{
+                              style:{
+                                      'display':'block',
+                                      "width":"100px",
+                                      "height":'40px',
+                                      "border":"1px",
+                                      "line-height":"40px",
+                                    },
+                                on:{
+                                  'click':(event)=>{
+                                    this.data1[params.index].om1NameStatus = true
+                                    
+                                  }
+                                }
+                              },params.row.om1Name)
+                          }
                         }
                      
-                    },
-                     {
+            },
+            {
                       key:'om1Money',
                       title:'杂费1金额',
                       width:'100',
                      render:(h,params)=>{
-                          return h('Input',{
+                         if(params.row.om1MoneyStatus){
+                            return h('Input',{
                             props:{
                               value:params.row.om1Money,
                              
@@ -627,19 +983,39 @@ export default {
                             on:{
                               'on-blur':(event)=>{
                                    this.data1[params.index].om1Money=event.target.value
+                                  this.data1[params.index].om1MoneyStatus = false
+
                               }
                             }
 
                           })
+                         }else{
+                           return h('a',{
+                             style:{
+                                      'display':'block',
+                                      "width":"100px",
+                                      "height":'40px',
+                                      "border":"1px",
+                                      "line-height":"40px",
+                                    },
+                                on:{
+                                  'click':(event)=>{
+                                    this.data1[params.index].om1MoneyStatus = true
+                                    
+                                  }
+                                }
+                              },params.row.om1Money)
+                         }
                         } 
                      
-                    },
-                     {
-                      key:'sszafeigongsi1',
+            },
+            {
+                      key:'om1OrgNameChose',
                       title:'选择杂费1公司',
                       width:'100',
                       render:(h,params)=>{
-                        return h('Select', {
+                        if(params.row.om1OrgNameChoseStatus){
+                          return h('Select', {
                         props:{
                             filterable:true,
                             'label-in-value':true
@@ -650,9 +1026,9 @@ export default {
                             },
                             'on-change':(event) => {
                                   //select 值改变赋值
-                                 console.log(event)
                                  this.data1[params.index].om1OrgName  = event.label
                                  this.data1[params.index].om1OrgId = event.value
+                                  this.data1[params.index].om1OrgNameChoseStatus = false
                                  
                               }
                             },
@@ -667,11 +1043,28 @@ export default {
                         })
                       
                       );
+                        }else{
+                            return h('a',{
+                              style:{
+                                      'display':'block',
+                                      "width":"100px",
+                                      "height":'40px',
+                                      "border":"1px",
+                                      "line-height":"40px",
+                                    },
+                                on:{
+                                  'click':(event)=>{
+                                    this.data1[params.index].om1OrgNameChoseStatus = true
+                                    
+                                  }
+                                }
+                              },params.row.om1OrgName)
+                        }
                     }
 
                      
-                    },
-                     {
+            },
+            {
                       key:'om1OrgName',
                       title:'杂费1公司名称',
                       width:'100',
@@ -683,8 +1076,8 @@ export default {
                                    },params.row.om1OrgName),
                             ])
                         }
-                    },
-                     {
+            },
+            {
                       key:'om1OrgId',
                       title:'杂费1公司id',
                       width:'100',
@@ -699,16 +1092,16 @@ export default {
                             ])
                         }
                      
-                    },
-                     {
+            },
+            {
                       key:'om2Name',
                       title:'杂费2名称',
                       width:'100',
                       render:(h,params)=>{
-                          return h('Input',{
+                          if(params.row.om2NameStatus){
+                             return h('Input',{
                             props:{
                               value:params.row.om2Name,
-                             
                               type:'text',
                             },
                             attrs:{
@@ -717,18 +1110,38 @@ export default {
                             on:{
                               'on-blur':(event)=>{
                                    this.data1[params.index].om2Name=event.target.value
+                                  this.data1[params.index].om2NameStatus = false
+
                               }
                             }
 
                           })
+                          }else{
+                              return h('a',{
+                                style:{
+                                      'display':'block',
+                                      "width":"100px",
+                                      "height":'40px',
+                                      "border":"1px",
+                                      "line-height":"40px",
+                                    },
+                                on:{
+                                  'click':(event)=>{
+                                    this.data1[params.index].om2NameStatus = true
+                                    
+                                  }
+                                }
+                              },params.row.om2Name)
+                          }
                         } 
                      
-                    },
-                     {
+            },
+            {
                       key:'om2Money',
                       title:'2金额',
                       width:'100',
                       render:(h,params)=>{
+                        if(params.row.om2MoneyStatus){
                           return h('Input',{
                             props:{
                               value:params.row.om2Money,
@@ -741,19 +1154,38 @@ export default {
                             on:{
                               'on-blur':(event)=>{
                                    this.data1[params.index].om2Money=event.target.value
+                                  this.data1[params.index].om2MoneyStatus = false
+
                               }
                             }
 
                           })
-                        } 
+                        }else{
+                          return h('a',{
+                            style:{
+                                      'display':'block',
+                                      "width":"100px",
+                                      "height":'40px',
+                                      "border":"1px",
+                                      "line-height":"40px",
+                                    },
+                          on:{
+                          'click':(event)=>{
+                          this.data1[params.index].om2MoneyStatus = true
+                          }
+                          }
+                          },params.row.om2Money)
+                        }
+                      } 
                      
-                    },
-                     {
+            },
+            {
                       key:'gongsi2',
                       title:'选择杂费2公司名称',
                       width:'100',
                       render:(h,params)=>{
-                        return h('Select', {
+                        if(params.row.gongsi2Status){
+                          return h('Select', {
                         props:{
                             value:params.row.gongsi2,
                             filterable:true,
@@ -767,6 +1199,7 @@ export default {
                                   //select 值改变赋值
                                  this.data1[params.index].om2OrgName   = event.label
                                  this.data1[params.index].om2OrgId = event.value
+                                  this.data1[params.index].gongsi2Status = false
 
                               }
                             },
@@ -778,10 +1211,26 @@ export default {
                         })
                       
                       );
+                        }else{
+                        return h('a',{
+                          style:{
+                                      'display':'block',
+                                      "width":"100px",
+                                      "height":'40px',
+                                      "border":"1px",
+                                      "line-height":"40px",
+                                    },
+                        on:{
+                        'click':(event)=>{
+                        this.data1[params.index].gongsi2Status = true
+                        }
+                        }
+                        },params.row.om2OrgName)
+                        }
                     }
                      
-                    },
-                     {
+            },
+            {
                       key:'om2OrgName',
                       title:'杂费公司名称2',
                       width:'100',
@@ -796,8 +1245,8 @@ export default {
                             ])
                         }
                      
-                    },
-                     {
+            },
+            {
                       key:'om2OrgId',
                       title:'杂费公司2id',
                       width:'100',
@@ -812,13 +1261,14 @@ export default {
                             ])
                         }
                      
-                    },
-                     {
+            },
+            {
                       key:'om3Name',
                       title:'杂费3名称',
                       width:'100',
                       render:(h,params)=>{
-                          return h('Input',{
+                          if(params.row.om3NameStatus){
+                              return h('Input',{
                             props:{
                               value:params.row.om3Name,
                              
@@ -830,19 +1280,38 @@ export default {
                             on:{
                               'on-blur':(event)=>{
                                    this.data1[params.index].om3Name=event.target.value
+                                  this.data1[params.index].om3NameStatus = false
+
                               }
                             }
 
                           })
+                          }else{
+                            return h('a',{
+                              style:{
+                                      'display':'block',
+                                      "width":"100px",
+                                      "height":'40px',
+                                      "border":"1px",
+                                      "line-height":"40px",
+                                    },
+                              on:{
+                              'click':(event)=>{
+                                  this.data1[params.index].om3NameStatus = true
+                                 }
+                                }
+                            },params.row.om3Name)  
+                          }
                         } 
                      
-                    },
-                     {
+            },
+            {
                       key:'om3Money',
                       title:'公司3金额',
                        width:'100',
                         render:(h,params)=>{
-                          return h('Input',{
+                          if(params.row.om3MoneyStatus){
+                              return h('Input',{
                             props:{
                               value:params.row.om3Money,
                              
@@ -854,19 +1323,37 @@ export default {
                             on:{
                               'on-blur':(event)=>{
                                    this.data1[params.index].om3Money=event.target.value
+                                  this.data1[params.index].om3MoneyStatus = false
                               }
                             }
 
                           })
+                          }else{
+                            return h('a',{
+                              style:{
+                                      'display':'block',
+                                      "width":"100px",
+                                      "height":'40px',
+                                      "border":"1px",
+                                      "line-height":"40px",
+                                    },
+                              on:{
+                              'click':(event)=>{
+                                  this.data1[params.index].om3MoneyStatus = true
+                                 }
+                                }
+                            },params.row.om3Money)  
+                          }
                         } 
                      
-                    },
-                     {
+            },
+            {
                       key:'gongsi3',
                       title:'选择杂费公司3',
                        width:'100',
                         render:(h,params)=>{
-                        return h('Select', {
+                          if(params.row.gongsi3Status){
+                               return h('Select', {
                         props:{
                             value: params.row.gongsi3,
                             filterable:true,
@@ -880,8 +1367,8 @@ export default {
                                   //select 值改变赋值
                                  this.data1[params.index].om3OrgName   = event.label
                                  this.data1[params.index].om3OrgId = event.value
+                                  this.data1[params.index].gongsi3Status = false
 
-                                 console.log(event)
                               }
                             },
                         },
@@ -891,11 +1378,26 @@ export default {
                           },item.cusorgName)
                         })
                       
-                      );
+                      );}else{
+                            return h('a',{
+                              style:{
+                                      'display':'block',
+                                      "width":"100px",
+                                      "height":'40px',
+                                      "border":"1px",
+                                      "line-height":"40px",
+                                    },
+                              on:{
+                              'click':(event)=>{
+                                  this.data1[params.index].gongsi3Status = true
+                                 }
+                                }
+                            },params.row.om3OrgName)      
+                          }
                     }
                      
-                    },
-                     {
+            },
+            {
                       key:'om3OrgName',
                       title:'公司名称3',
                        width:'100',
@@ -910,8 +1412,8 @@ export default {
                             ])
                         }
                      
-                    },
-                     {
+            },
+            {
                       key:'om3OrgId',
                       title:'公司3id',
                        width:'100',
@@ -926,14 +1428,15 @@ export default {
                             ])
                         }
                      
-                    },
-                    // 1
-                             {
+            },
+            // 1
+            {
                       key:'om4Name',
                       title:'杂费4名称',
                       width:'100',
                       render:(h,params)=>{
-                          return h('Input',{
+                          if(params.row.om4NameStatus){
+                              return h('Input',{
                             props:{
                               value:params.row.om4Name,
                               type:'text',
@@ -944,19 +1447,37 @@ export default {
                             on:{
                               'on-blur':(event)=>{
                                    this.data1[params.index].om4Name=event.target.value
+                                  this.data1[params.index].om4NameStatus = false
                               }
                             }
 
                           })
+                          }else{
+                            return h('a',{
+                              style:{
+                                      'display':'block',
+                                      "width":"100px",
+                                      "height":'40px',
+                                      "border":"1px",
+                                      "line-height":"40px",
+                                    },
+                              on:{
+                              'click':(event)=>{
+                                  this.data1[params.index].om4NameStatus = true
+                                 }
+                                }
+                            },params.row.om4Name)  
+                          }
                         } 
                      
-                    },
-                     {
+            },
+            {
                       key:'om4Money',
                       title:'杂费4金额',
                        width:'100',
                        render:(h,params)=>{
-                          return h('Input',{
+                          if(params.row.om4MoneyStatus){
+                               return h('Input',{
                             props:{
                               value:params.row.om4Money,
                               type:'text',
@@ -967,19 +1488,37 @@ export default {
                             on:{
                               'on-blur':(event)=>{
                                    this.data1[params.index].om4Money=event.target.value
+                                  this.data1[params.index].om4MoneyStatus = false
                               }
                             }
 
                           })
+                          }else{
+                            return h('a',{
+                              style:{
+                                      'display':'block',
+                                      "width":"100px",
+                                      "height":'40px',
+                                      "border":"1px",
+                                      "line-height":"40px",
+                                    },
+                              on:{
+                              'click':(event)=>{
+                                  this.data1[params.index].om4MoneyStatus = true
+                                 }
+                                }
+                            },params.row.om4Money)  
+                          }
                         } 
                      
-                    },
-                     {
+            },
+            {
                       key:'gongshi4',
                       title:'选择公司4',
                        width:'100',
                            render:(h,params)=>{
-                        return h('Select', {
+                              if(params.row.gongshi4Status){
+                                  return h('Select', {
                         props:{
                             value: params.row.gongshi4,
                             filterable:true,
@@ -993,8 +1532,8 @@ export default {
                                   //select 值改变赋值
                                   this.data1[params.index].om4OrgName  = event.label
                                   this.data1[params.index].om4OrgId = event.value
+                                  this.data1[params.index].gongshi4Status = false
 
-                                 console.log(event)
                               }
                             },
                         },
@@ -1004,10 +1543,25 @@ export default {
                           },item.cusorgName)
                         })
                       
-                      );
+                      );}else{
+                                return h('a',{
+                                  style:{
+                                      'display':'block',
+                                      "width":"100px",
+                                      "height":'40px',
+                                      "border":"1px",
+                                      "line-height":"40px",
+                                    },
+                                  on:{
+                                  'click':(event)=>{
+                                      this.data1[params.index].gongshi4Status = true
+                                     }
+                                    }
+                                },params.row.om4OrgName)          
+                              }
                     }
-                    },
-                     {
+            },
+            {
                       key:'om4OrgName',
                       title:'公司4名称',
                        width:'100',
@@ -1022,8 +1576,8 @@ export default {
                             ])
                         }
                      
-                    },
-                     {
+            },
+            {
                       key:'om4OrgId',
                       title:'公司4id',
                        width:'100',
@@ -1038,14 +1592,15 @@ export default {
                             ])
                         }
                      
-                    },
-                    // 5
-                             {
+            },
+            // 5
+            {
                       key:'om5Name',
                       title:'杂费5名称',
                        width:'100',
                         render:(h,params)=>{
-                          return h('Input',{
+                          if(params.row.om5NameStatus){
+                              return h('Input',{
                             props:{
                               value:params.row.om5Name,
                              
@@ -1057,19 +1612,37 @@ export default {
                             on:{
                               'on-blur':(event)=>{
                                    this.data1[params.index].om5Name=event.target.value
+                                  this.data1[params.index].om5NameStatus = false
                               }
                             }
 
                           })
+                          }else{
+                            return h('a',{
+                              style:{
+                                      'display':'block',
+                                      "width":"100px",
+                                      "height":'40px',
+                                      "border":"1px",
+                                      "line-height":"40px",
+                                    },
+                              on:{
+                              'click':(event)=>{
+                                  this.data1[params.index].om5NameStatus = true
+                                 }
+                                }
+                            },params.row.om5Name)  
+                          }
                         } 
                      
-                    },
-                     {
+            },
+            {
                       key:'om5Money',
                       title:'杂费5金额',
                        width:'100',
                         render:(h,params)=>{
-                          return h('Input',{
+                          if(params.row.om5MoneyStatus){
+                              return h('Input',{
                             props:{
                               value:params.row.om5Money,
                              
@@ -1081,19 +1654,37 @@ export default {
                             on:{
                               'on-blur':(event)=>{
                                    this.data1[params.index].om5Money=event.target.value
+                                  this.data1[params.index].om5MoneyStatus = false
                               }
                             }
 
                           })
+                          }else{
+                            return h('a',{
+                              style:{
+                                      'display':'block',
+                                      "width":"100px",
+                                      "height":'40px',
+                                      "border":"1px",
+                                      "line-height":"40px",
+                                    },
+                              on:{
+                              'click':(event)=>{
+                                  this.data1[params.index].om5MoneyStatus = true
+                                 }
+                                }
+                            },params.row.om5Money)  
+                          }
                         } 
                      
-                    },
-                     {
+            },
+            {
                       key:'gongsi5',
                       title:'公司5',
                       width:'100',
                       render:(h,params)=>{
-                        return h('Select', {
+                        if(params.row.gongsi5Status){
+                            return h('Select', {
                         props:{
                             value: params.row.gongsi5,
                             filterable:true,
@@ -1107,8 +1698,8 @@ export default {
                                   //select 值改变赋值
                                   this.data1[params.index].om5OrgName=event.label
                                   this.data1[params.index].om5OrgId=event.value
+                                  this.data1[params.index].gongsi5Status = false
 
-                                 console.log(event)
                               }
                             },
                         },
@@ -1119,10 +1710,26 @@ export default {
                         })
                       
                       );
+                        }else{
+                          return h('a',{
+                            style:{
+                                      'display':'block',
+                                      "width":"100px",
+                                      "height":'40px',
+                                      "border":"1px",
+                                      "line-height":"40px",
+                                    },
+                            on:{
+                            'click':(event)=>{
+                                this.data1[params.index].gongsi5Status = true
+                               }
+                              }
+                          },params.row.om5OrgName)    
+                        }
                     }
                      
-                    },
-                     {
+            },
+            {
                       key:'om5OrgName',
                       title:'公司5名称',
                        width:'100',
@@ -1137,8 +1744,8 @@ export default {
                             ])
                         }
                      
-                    },
-                     {
+            },
+            {
                       key:'om5OrgId',
                       title:'公司5id',
                        width:'100',
@@ -1153,14 +1760,15 @@ export default {
                             ])
                         }
                      
-                    },
-                    // 6
-                             {
+            },
+            // 6
+            {
                       key:'om6Name',
                       title:'杂费6名称',
                        width:'100',
                         render:(h,params)=>{
-                          return h('Input',{
+                          if(params.row.om6NameStatus){
+                               return h('Input',{
                             props:{
                               value:params.row.om6Name,
                              
@@ -1172,19 +1780,37 @@ export default {
                             on:{
                               'on-blur':(event)=>{
                                    this.data1[params.index].om6Name=event.target.value
+                                  this.data1[params.index].om6NameStatus = false
                               }
                             }
 
                           })
+                          }else{
+                            return h('a',{
+                              style:{
+                                      'display':'block',
+                                      "width":"100px",
+                                      "height":'40px',
+                                      "border":"1px",
+                                      "line-height":"40px",
+                                    },
+                              on:{
+                              'click':(event)=>{
+                                  this.data1[params.index].om6NameStatus = true
+                                 }
+                                }
+                            },params.row.om6Name)  
+                          }
                         } 
                      
-                    },
-                     {
+            },
+            {
                       key:'om6Money',
                       title:'杂费6金额',
                        width:'100',
                         render:(h,params)=>{
-                          return h('Input',{
+                          if(params.row.om6MoneyStatus){
+                              return h('Input',{
                             props:{
                               value:params.row.om6Money,
                              
@@ -1196,19 +1822,37 @@ export default {
                             on:{
                               'on-blur':(event)=>{
                                    this.data1[params.index].om6Money=event.target.value
+                                  this.data1[params.index].om6MoneyStatus = false
                               }
                             }
 
                           })
+                          }else{
+                            return h('a',{
+                              style:{
+                                      'display':'block',
+                                      "width":"100px",
+                                      "height":'40px',
+                                      "border":"1px",
+                                      "line-height":"40px",
+                                    },
+                              on:{
+                              'click':(event)=>{
+                                  this.data1[params.index].om6MoneyStatus = true
+                                 }
+                                }
+                            },params.row.om6Money)  
+                          }
                         } 
                      
-                    },
-                     {
+            },
+            {
                       key:'gongshi6',
                       title:'公司6',
                        width:'100',
                         render:(h,params)=>{
-                        return h('Select', {
+                        if(params.row.gongshi6Status){
+                            return h('Select', {
                         props:{
                             value: params.row.gongshi6,
                             filterable:true,
@@ -1223,6 +1867,7 @@ export default {
                                   //select 值改变赋值
                                   this.data1[params.index].om6OrgName=event.label
                                   this.data1[params.index].om6OrgId=event.value
+                                  this.data1[params.index].gongshi6Status = false
                               }
                             },
                         },
@@ -1233,10 +1878,26 @@ export default {
                         })
                       
                       );
+                        }else{
+                          return h('a',{
+                            style:{
+                                      'display':'block',
+                                      "width":"100px",
+                                      "height":'40px',
+                                      "border":"1px",
+                                      "line-height":"40px",
+                                    },
+                            on:{
+                            'click':(event)=>{
+                                this.data1[params.index].gongshi6Status = true
+                               }
+                              }
+                          },params.row.om6OrgName)    
+                        }
                     }
                      
-                    },
-                     {
+            },
+            {
                       key:'om6OrgName',
                       title:'公司6id',
                        width:'100',
@@ -1251,8 +1912,8 @@ export default {
                             ])
                         }
                      
-                    },
-                     {
+            },
+            {
                       key:'om6OrgId',
                       title:'公司6id',
                        width:'100',
@@ -1266,10 +1927,11 @@ export default {
                                    },params.row.om6OrgId),
                             ])
                         }
-                    },
-                ],
+            },
+            //杂费结束
+          ],
                 //分割线——————————————————————————————————————————————————————————————————————
-                columns2: [
+         columns2: [
             {
                         title: '操作',
                         key: 'operate',
@@ -1296,34 +1958,59 @@ export default {
                              ]);
                       }
                         
-                    },
-                    {
+            },
+            {
                         title: '品名',
                         key: 'steelName',
                         align: 'center',
                         width:'100',
                         render:(h,params)=>{
-                          return h('Input',{
-                            props:{
-                              value:params.row.steelName,
-                              disabled:params.row.isDelete
-                            },
-                            on:{
-                              'on-blur':(event)=>{
-                                console.log(event.target.value)
-                                this.data2[params.index].steelName = event.target.value
+                            if(params.row.steelNameStatus){
+                              return h('Input',{
+                              props:{
+                                value:params.row.steelName,
+                                disabled:params.row.isDelete
+                              },
+                              on:{
+                                'on-blur':(event)=>{
+                                  this.data2[params.index].steelName = event.target.value
+                                  this.data2[params.index].steelNameStatus = false
+                                },
                               }
-                            }
-                          })
+                              })
+                          }else{
+                                  return h('a',{
+                                    props:{
+                                      
+                                    },
+                                     style:{
+                                      'display':'block',
+                                      "width":"90px",
+                                      "height":'40px',
+                                      "border-bottom":"1px solid  #ccc",
+                                      "line-height":"40px",
+                                      "text-align":"center",
+                                      "margin":"auto"
+                                    },
+                                on:{
+                                  'click':(event)=>{
+                                    this.data2[params.index].steelNameStatus = true
+                                    console.log(this.data2[params.index].steelNameStatus)
+                                  }
+                                }
+                              },params.row.steelName)
+                          }
                         }
-                    },
-                    {
+            },
+            {
                         title: '规格',
                         key: 'steelGuige',
                         align: 'center',
                         width:'100',
                         render:(h,params)=>{
-                          return h('Input',{
+                          
+                          if(params.row.steelGuigeStatus){
+                            return h('Input',{
                             props:{
                               value:params.row.steelGuige,
                               disabled:params.row.isDelete
@@ -1331,21 +2018,41 @@ export default {
                             },
                             on:{
                               'on-blur':(event) =>{
-                                console.log(event.target.value)
                                 this.data2[params.index].steelGuige = event.target.value
-
+                                this.data2[params.index].steelGuigeStatus = false
+                                
                               }
                             }
                           })
+                          }else{
+                             return h('a',{
+                               style:{
+                                      'display':'block',
+                                      "width":"90px",
+                                      "height":'40px',
+                                      "border-bottom":"1px solid  #ccc",
+                                      "line-height":"40px",
+                                      "text-align":"center",
+                                      "margin":"auto"
+
+                                    },
+                                on:{
+                                  'click':(event)=>{
+                                    this.data2[params.index].steelGuigeStatus = true
+                                  }
+                                }
+                              },params.row.steelGuige)
+                          }
                         }
-                    },
-                    {
+            },
+            {
                         title: '材质',
                         key: 'steelPaihao',
                         align: 'center',
-                        width:'150',
+                        width:'100',
                         render:(h,params)=> {
-                          return h('Input',{
+                          if(params.row.steelPaihaoStatus){
+                            return h('Input',{
                             props:{
                               value:params.row.steelPaihao,
                               disabled:params.row.isDelete
@@ -1353,21 +2060,39 @@ export default {
                             },
                             on:{
                               'on-blur':(event) =>{
-                                console.log(event.target.value)
                                 this.data2[params.index].steelPaihao = event.target.value
+                                  this.data2[params.index].steelPaihaoStatus = false
 
                               }
                             }
                           })
+                          }else{
+                            return h('a',{
+                              style:{
+                                      'display':'block',
+                                      "width":"100px",
+                                      "height":'40px',
+                                      "border-bottom":"1px solid  #ccc",
+                                      "line-height":"40px",
+                                      "text-align":"center",
+                                    },
+                                on:{
+                                  'click':(event)=>{
+                                    this.data2[params.index].steelPaihaoStatus = true
+                                  }
+                                }
+                              },params.row.steelPaihao)
+                          }
                         },
-                    },
-                    {
+            },
+            {
                         title: '钢厂',
                         key: 'steelPinpai',
                         align: 'center',
-                        width:'120',
+                        width:'100',
                         render:(h,params)=> {
-                          return h('Input',{
+                          if(params.row.steelPinpaiStatus){
+                            return h('Input',{
                             props:{
                               value:params.row.steelPinpai,
                               disabled:params.row.isDelete
@@ -1375,21 +2100,40 @@ export default {
                             },
                             on:{
                               'on-blur':(event) =>{
-                                console.log(event.target.value)
                                 this.data2[params.index].steelPinpai = event.target.value
+                                this.data2[params.index].steelPinpaiStatus = false
 
                               }
                             }
                           })
+                          }else{
+                            return h('a',{
+                              style:{
+                                      'display':'block',
+                                      "width":"100px",
+                                      "height":'40px',
+                                      "border-bottom":"1px solid  #ccc",
+                                      "line-height":"40px",
+                                      "text-align":"center",
+                                    },
+                                on:{
+                                  'click':(event)=>{
+                                    this.data2[params.index].steelPinpaiStatus = true
+                                    console.log(params)
+                                  }
+                                }
+                              },params.row.steelPinpai)
+                          }
                         },
-                    },
-                    {
+            },
+            {
                         title: '提货方式',
                         key: 'steelWorks',
                         align: 'center',
                         width:'100',
                         render:(h,params)=> {
-                          return h('Input',{
+                          if(params.row.steelWorksStatus){
+                            return h('Input',{
                             props:{
                               value:params.row.steelWorks,
                               disabled:params.row.isDelete
@@ -1397,21 +2141,39 @@ export default {
                             },
                             on:{
                               'on-blur':(event) =>{
-                                console.log(event.target.value)
                                 this.data2[params.index].steelWorks = event.target.value
+                                  this.data2[params.index].steelWorksStatus = false
 
                               }
                             }
                           })
+                          }else{
+                            return h('a',{
+                              style:{
+                                      'display':'block',
+                                      "width":"100px",
+                                      "height":'40px',
+                                      "border-bottom":"1px solid  #ccc",
+                                      "line-height":"40px",
+                                      "text-align":"center",
+                                    },
+                                on:{
+                                  'click':(event)=>{
+                                    this.data2[params.index].steelWorksStatus = true
+                                  }
+                                }
+                              },params.row.steelWorks)
+                          }
                         },
-                    },
-                     {
+            },
+            {
                         title: '交货地',
                         key: 'jiaohuodi',
                         align: 'center',
                         width:'100',
                         render:(h,params)=> {
-                          return h('Input',{
+                          if(params.row.jiaohuodiStatus){
+                            return h('Input',{
                             props:{
                               value:params.row.jiaohuodi,
                               disabled:params.row.isDelete
@@ -1419,21 +2181,39 @@ export default {
                             },
                             on:{
                               'on-blur':(event) =>{
-                                console.log(event.target.value)
                                 this.data2[params.index].jiaohuodi = event.target.value
+                                  this.data2[params.index].jiaohuodiStatus = false
 
                               }
                             }
                           })
+                          }else{
+                            return h('a',{
+                              style:{
+                                      'display':'block',
+                                      "width":"100px",
+                                      "height":'40px',
+                                      "border-bottom":"1px solid  #ccc",
+                                      "line-height":"40px",
+                                      "text-align":"center",
+                                    },
+                                on:{
+                                  'click':(event)=>{
+                                    this.data2[params.index].jiaohuodiStatus = true
+                                  }
+                                }
+                              },params.row.jiaohuodi)
+                          }
                         },
-                    },
-                    {
+            },
+            {
                         title: '件数',
                         key: 'jianshu',
                         align: 'center',
                         width:'100',
                         render:(h,params)=> {
-                          return h('Input',{
+                          if(params.row.jianshuStatus){
+                            return h('Input',{
                             props:{
                               value:params.row.jianshu,
                               disabled:params.row.isDelete
@@ -1441,21 +2221,39 @@ export default {
                             },
                             on:{
                               'on-blur':(event) =>{
-                                console.log(event.target.value)
                                 this.data2[params.index].jianshu = event.target.value
+                                  this.data2[params.index].jianshuStatus = false
 
                               }
                             }
                           })
+                          }else{
+                            return h('a',{
+                              style:{
+                                      'display':'block',
+                                      "width":"100px",
+                                      "height":'40px',
+                                      "border-bottom":"1px solid  #ccc",
+                                      "line-height":"40px",
+                                      "text-align":"center",
+                                    },
+                                on:{
+                                  'click':(event)=>{
+                                    this.data2[params.index].jianshuStatus = true
+                                  }
+                                }
+                              },params.row.jianshu)
+                          }
                         },
-                    },
-                      {
+            },
+            {
                         title: '单件重',
                         key: 'weight',
                         align: 'center',
                         width:'100',
                         render:(h,params)=>{
-                          return h('Input',{
+                          if(params.row.weightStatus){
+                             return h('Input',{
                             props:{
                               value:this.$global.accPrecision(params.row.weight,3),
                               disabled:params.row.isDelete
@@ -1466,21 +2264,39 @@ export default {
                             },
                             on:{
                               'on-blur':(event) =>{
-                                console.log(event.target.value)
                                 this.data2[params.index].weight = event.target.value
+                                  this.data2[params.index].weightStatus = false
 
                               }
                             }
                           })
+                          }else{
+                             return h('a',{
+                               style:{
+                                      'display':'block',
+                                      "width":"100px",
+                                      "height":'40px',
+                                      "border-bottom":"1px solid  #ccc",
+                                      "line-height":"40px",
+                                      "text-align":"center",
+                                    },
+                                on:{
+                                  'click':(event)=>{
+                                    this.data2[params.index].weightStatus = true
+                                  }
+                                }
+                              },params.row.weight)
+                          }
                         }
-                    },
-                     {
+            },
+            {
                         title: '总重量',
                         key: 'zongzhongliang',
                         align: 'center',
                         width:'100',
                         render:(h,params)=>{
-                          return h('Input',{
+                          if(params.row.zongzhongliangStatus){
+                            return h('Input',{
                             props:{
                               value:this.$global.accPrecision(params.row.zongzhongliang,3),
                               disabled:params.row.isDelete
@@ -1491,21 +2307,39 @@ export default {
                             },
                             on:{
                               'on-blur':(event) =>{
-                                console.log(event.target.value)
                                 this.data2[params.index].zongzhongliang = event.target.value
+                                  this.data2[params.index].zongzhongliangStatus = false
 
                               }
                             }
                           })
+                          }else{
+                              return h('a',{
+                                style:{
+                                      'display':'block',
+                                      "width":"100px",
+                                      "height":'40px',
+                                      "border-bottom":"1px solid  #ccc",
+                                      "line-height":"40px",
+                                      "text-align":"center",
+                                    },
+                                on:{
+                                  'click':(event)=>{
+                                    this.data2[params.index].zongzhongliangStatus = true
+                                  }
+                                }
+                              },params.row.zongzhongliang)
+                          }
                         }
-                    },
-                     {
+            },
+            {
                         title: '单价',
                         key: 'guapaijia',
                         align: 'center',
-                        width:'200',
+                        width:'100',
                         render:(h,params)=>{
-                          return h('Input',{
+                          if(params.row.guapaijiaStatus){
+                            return h('Input',{
                             props:{
                               value:this.$global.accPrecision(params.row.guapaijia,2),
                               disabled:params.row.isDelete
@@ -1515,21 +2349,39 @@ export default {
                             },
                             on:{
                               'on-blur':(event)=>{
-                                console.log(event.target.value)
                                 this.data2[params.index].guapaijia = event.target.value
+                                  this.data2[params.index].guapaijiaStatus = false
 
                               }
                             }
                           })
+                          }else{
+                            return h('a',{
+                              style:{
+                                      'display':'block',
+                                      "width":"100px",
+                                      "height":'40px',
+                                      "border-bottom":"1px solid  #ccc",
+                                      "line-height":"40px",
+                                      "text-align":"center",
+                                    },
+                                on:{
+                                  'click':(event)=>{
+                                    this.data2[params.index].guapaijiaStatus = true
+                                  }
+                                }
+                              },params.row.guapaijia)
+                          }
                         }
-                    },
-                     {
+            },
+            {
                         title: '总金额',
                         key: 'cusMoney',
                         align: 'center',
                         width:'200',
                         render:(h,params)=>{
-                          return h('Input',{
+                          if(params.row.cusMoneyStatus){
+                            return h('Input',{
                             props:{
                               value:this.$global.accPrecision(params.row.cusMoney,2),
                               disabled:params.row.isDelete
@@ -1539,20 +2391,219 @@ export default {
                             },
                             on:{
                               'on-blur':(event)=>{
-                                console.log(event.target.value)
-                                this.data2[params.index].cusMoney = event.target.value
+                                 this.data2[params.index].cusMoneyStatus = false
 
+                                this.data2[params.index].cusMoney = event.target.value
+                               
                               }
                             }
                           })
+                          }else{
+                            return h('a',{
+                              style:{
+                                      'display':'block',
+                                      "width":"200px",
+                                      "height":'40px',
+                                      "border-bottom":"1px solid  #ccc",
+                                      "line-height":"40px",
+                                      "text-align":"center",
+                                    },
+                                on:{
+                                  'click':(event)=>{
+                                    this.data2[params.index].cusMoneyStatus = true
+                                  }
+                                }
+                              },params.row.cusMoney)
+                          }
                         }
-                    },
-                    {
+            },
+                    //2019年5月5日14:41:17 网价4个
+            {
+                        title: '网价',
+                        key: 'internetMoney',
+                        align: 'center',
+                        width:'200',
+                        render:(h,params)=>{
+                            if(params.row.wangJiaStatus){
+                            return h('Input',{
+                            props:{
+                              value:params.row.internetMoney,
+                              disabled:params.row.isDelete
+                            },
+                            attrs:{
+                              id:params.index
+                            },
+                            on:{
+                              'on-blur':(event)=>{
+                                  this.data2[params.index].wangJiaStatus = false
+
+                                  this.data2[params.index].internetMoney = event.target.value
+                               
+                              }
+                            }
+                          })
+                          }else{
+                            return h('a',{
+                              style:{
+                                      'display':'block',
+                                      "width":"200px",
+                                      "height":'40px',
+                                      "border-bottom":"1px solid  #ccc",
+                                      "line-height":"40px",
+                                      "text-align":"center",
+                                    },
+                                on:{
+                                  'click':(event)=>{
+                                    this.data2[params.index].wangJiaStatus = true
+                                  }
+                                }
+                              },params.row.internetMoney)
+                          }
+                          // 111
+                        }
+            },
+            {
+                        title: '浮动价格',
+                        key: 'floatMoney',
+                        align: 'center',
+                        width:'200',
+                        render:(h,params)=>{
+                          if(params.row.fuDongStatus){
+                            return h('Input',{
+                            props:{
+                              value:params.row.floatMoney,
+                              disabled:params.row.isDelete
+                            },
+                            attrs:{
+                              id:params.index
+                            },
+                            on:{
+                              'on-blur':(event)=>{
+                                  this.data2[params.index].fuDongStatus = false
+
+                                  this.data2[params.index].floatMoney = event.target.value
+                               
+                              }
+                            }
+                          })
+                          }else{
+                            return h('a',{
+                              style:{
+                                      'display':'block',
+                                      "width":"200px",
+                                      "height":'40px',
+                                      "border-bottom":"1px solid  #ccc",
+                                      "line-height":"40px",
+                                      "text-align":"center",
+                                    },
+                                on:{
+                                  'click':(event)=>{
+                                    this.data2[params.index].fuDongStatus = true
+                                  }
+                                }
+                              },params.row.floatMoney)
+
+                          }
+                        }
+            },
+            {
+                        title: '网价区域',
+                        key: 'region',
+                        align: 'center',
+                        width:'200',
+                        render:(h,params)=>{
+                          if(params.row.wangJiaQu){
+                             return h('Input',{
+                            props:{
+                              value:params.row.region,
+                              disabled:params.row.isDelete
+                            },
+                            attrs:{
+                              id:params.index
+                            },
+                            on:{
+                              'on-blur':(event)=>{
+                                  this.data2[params.index].wangJiaQu = false
+
+                                  this.data2[params.index].region = event.target.value
+                               
+                              }
+                            }
+                          })
+
+                          }else{
+                             return h('a',{
+                              style:{
+                                      'display':'block',
+                                      "width":"200px",
+                                      "height":'40px',
+                                      "border-bottom":"1px solid  #ccc",
+                                      "line-height":"40px",
+                                      "text-align":"center",
+                                    },
+                                on:{
+                                  'click':(event)=>{
+                                    this.data2[params.index].wangJiaQu = true
+                                  }
+                                }
+                              },params.row.region)
+                          }
+                        }
+            },
+            {
+                        title: '网价备注',
+                        key: 'internetMoneyNote',
+                        align: 'center',
+                        width:'200',
+                        render:(h,params)=>{
+                          if(params.row.wangJiaBei){
+                            return h('Input',{
+                            props:{
+                              value:params.row.internetMoneyNote,
+                              disabled:params.row.isDelete
+                            },
+                            attrs:{
+                              id:params.index
+                            },
+                            on:{
+                              'on-blur':(event)=>{
+                                  this.data2[params.index].wangJiaBei = false
+
+                                  this.data2[params.index].internetMoneyNote = event.target.value
+                               
+                              }
+                            }
+                          })
+
+                          }else{
+                            return h('a',{
+                              style:{
+                                      'display':'block',
+                                      "width":"200px",
+                                      "height":'40px',
+                                      "border-bottom":"1px solid  #ccc",
+                                      "line-height":"40px",
+                                      "text-align":"center",
+                                    },
+                                on:{
+                                  'click':(event)=>{
+                                    this.data2[params.index].wangJiaBei = true
+                                  }
+                                }
+                              },params.row.internetMoneyNote)
+
+                          }
+                        }
+            },
+            //网价4个结束
+            {
                         title: '捆包号',
                         key: 'kunbaohao',
                         align: 'center',
-                        width:'100',render:(h,params)=> {
-                          return h('Input',{
+                        width:'100',
+                        render:(h,params)=> {
+                          if(params.row.kunbaohaoStatus){
+                             return h('Input',{
                             props:{
                               value:params.row.kunbaohao,
                               disabled:params.row.isDelete
@@ -1560,21 +2611,39 @@ export default {
                             },
                             on:{
                               'on-blur':(event) =>{
-                                console.log(event.target.value)
                                 this.data2[params.index].kunbaohao = event.target.value
+                                  this.data2[params.index].kunbaohaoStatus = false
 
                               }
                             }
                           })
+                          }else{
+                             return h('a',{
+                               style:{
+                                      'display':'block',
+                                      "width":"100px",
+                                      "height":'40px',
+                                      "border-bottom":"1px solid  #ccc",
+                                      "line-height":"40px",
+                                      "text-align":"center",
+                                    },
+                                on:{
+                                  'click':(event)=>{
+                                    this.data2[params.index].kunbaohaoStatus = true
+                                  }
+                                }
+                              },params.row.kunbaohao)
+                          }
                         },
-                    },
-                    {
+            },
+            {
                         title: '结算重量',
                         key: 'jiesuanWeight',
                         align: 'center',
                         width:'100',
                          render:(h,params)=>{
-                          return h('Input',{
+                           if(params.row.jiesuanWeightStatus){
+                              return h('Input',{
                             props:{
                               value:this.$global.accPrecision(params.row.jiesuanWeight,3),
                               disabled:params.row.isDelete
@@ -1585,21 +2654,40 @@ export default {
                             },
                             on:{
                               'on-blur':(event) =>{
-                                console.log(event.target.value)
                                 this.data2[params.index].jiesuanWeight = event.target.value
+                                  this.data2[params.index].jiesuanWeightStatus = false
 
                               }
                             }
                           })
+                           }else{
+                             return h('a',{
+                               style:{
+                                      'display':'block',
+                                      "width":"100px",
+                                      "height":'40px',
+                                      "border-bottom":"1px solid  #ccc",
+                                      "line-height":"40px",
+                                      "text-align":"center",
+                                    },
+                                on:{
+                                  'click':(event)=>{
+                                    this.data2[params.index].jiesuanWeightStatus = true
+                                    
+                                  }
+                                }
+                              },params.row.jiesuanWeight)
+                           }
                         }
-                    },
-                      {
+            },
+            {
                         title: '结算金额',
                         key: 'jiesuanMoney',
                         align: 'center',
                         width:'100',
                         render:(h,params)=>{
-                          return h('Input',{
+                          if(params.row.jiesuanMoneyStatus){
+                            return h('Input',{
                             props:{
                               value:this.$global.accPrecision(params.row.jiesuanMoney,2),
                               disabled:params.row.isDelete
@@ -1610,29 +2698,48 @@ export default {
                             },
                             on:{
                               'on-blur':(event)=>{
-                                console.log(event.target.value)
                                 this.data2[params.index].jiesuanMoney = event.target.value
+                                  this.data2[params.index].jiesuanMoneyStatus = false
 
                               }
                             }
                           })
+                          }else{
+                               return h('a',{
+                                 style:{
+                                      'display':'block',
+                                      "width":"100px",
+                                      "height":'40px',
+                                      "border-bottom":"1px solid  #ccc",
+                                      "line-height":"40px",
+                                      "text-align":"center",
+                                    },
+                                on:{
+                                  'click':(event)=>{
+                                    this.data2[params.index].jiesuanMoneyStatus = true
+                                    
+                                  }
+                                }
+                              },params.row.jiesuanMoney)
+                          }
                         }
-                    },
-                     {
+            },
+            {
                         title: '是否收货',
                         key: 'receiptStatus',
                         align: 'center',
                         width:'100',
                         render: (h,params)=> {
-                          return h('Select',{
+                          if(params.row.receiptStatusStatus){
+                              return h('Select',{
                             props:{
                               value:params.row.receiptStatus,
                               disabled:params.row.isDelete
                             },
                             on:{
                               'on-change':(value) =>{
-                                console.log(value)
                                 this.data2[params.index].receiptStatus = value
+                                  this.data2[params.index].receiptStatusStatus = false
 
                               }
                             }
@@ -1647,15 +2754,34 @@ export default {
                             },type);
                           })
                           )
+                          }else{
+                            return h('a',{
+                              style:{
+                                      'display':'block',
+                                      "width":"100px",
+                                      "height":'40px',
+                                      "border-bottom":"1px solid  #ccc",
+                                      "line-height":"40px",
+                                      "text-align":"center",
+                                    },
+                                on:{
+                                  'click':(event)=>{
+                                    this.data2[params.index].receiptStatusStatus = true
+                                    
+                                  }
+                                }
+                              },getReceiptStatusLabel(params.row.receiptStatus))
+                          }
                         }
-                    },
-                      {
+            },
+            {
                         title: '开票重量',
                         key: 'invoiceWeight',
                         align: 'center',
                         width:'100',
                          render:(h,params)=>{
-                          return h('Input',{
+                           if(params.row.kaiPiaoWeightStatus){
+                            return h('Input',{
                             props:{
                               value:this.$global.accPrecision(params.row.invoiceWeight,3),
                               disabled:params.row.isDelete
@@ -1668,19 +2794,40 @@ export default {
                               'on-blur':(event) =>{
                                 console.log(event.target.value)
                                 this.data2[params.index].invoiceWeight = event.target.value
+                                this.data2[params.index].kaiPiaoWeightStatus = false
 
                               }
                             }
                           })
+                           }else{
+                              return h('a',{
+                                 style:{
+                                      'display':'block',
+                                      "width":"100px",
+                                      "height":'40px',
+                                      "border-bottom":"1px solid  #ccc",
+                                      "line-height":"40px",
+                                      "text-align":"center",
+                                    },
+                                on:{
+                                  'click':(event)=>{
+                                    this.data2[params.index].kaiPiaoWeightStatus = true
+                                    
+                                  }
+                                }
+                              },this.$global.accPrecision(params.row.invoiceWeight,3))
+                           }
+                          
                         }
-                    },
-                     {
+            },
+            {
                         title: '开票金额',
                         key: 'invoiceMoney',
                         align: 'center',
                         width:'100',
                         render:(h,params)=>{
-                          return h('Input',{
+                          if(params.row.kaiPiaoMoneyStatus){
+                            return h('Input',{
                             props:{
                               value:this.$global.accPrecision(params.row.invoiceMoney,2),
                               disabled:params.row.isDelete
@@ -1692,20 +2839,43 @@ export default {
                             on:{
                               'on-blur':(event)=>{
                                 console.log(event.target.value)
+                                 this.data2[params.index].kaiPiaoMoneyStatus = false
+
                                 this.data2[params.index].invoiceMoney = event.target.value
 
                               }
                             }
                           })
+
+                          }else{
+                               return h('a',{
+                                 style:{
+                                      'display':'block',
+                                      "width":"100px",
+                                      "height":'40px',
+                                      "border-bottom":"1px solid  #ccc",
+                                      "line-height":"40px",
+                                      "text-align":"center",
+                                    },
+                                on:{
+                                  'click':(event)=>{
+                                    this.data2[params.index].kaiPiaoMoneyStatus = true
+                                    
+                                  }
+                                }
+                              },this.$global.accPrecision(params.row.invoiceMoney,2))
+                          }
+                       
                         }
-                    },
-                    {
+            },
+            {
                         title: '开票号码',
                         key: 'invoiceNo',
                         align: 'center',
                         width:'200',
                         render:(h,params)=>{
-                          return h('Input',{
+                          if(params.row.kaiPiaoNumberStatus){
+                             return h('Input',{
                             props:{
                               value:params.row.invoiceNo,
                               disabled:params.row.isDelete
@@ -1717,28 +2887,49 @@ export default {
                             on:{
                               'on-blur':(event)=>{
                                 console.log(event.target.value)
+                                 this.data2[params.index].kaiPiaoNumberStatus = false
                                 this.data2[params.index].invoiceNo = event.target.value
 
                               }
                             }
                           })
+                          }else{
+                              return h('a',{
+                                 style:{
+                                      'display':'block',
+                                      "width":"100px",
+                                      "height":'40px',
+                                      "border-bottom":"1px solid  #ccc",
+                                      "line-height":"40px",
+                                      "text-align":"center",
+                                    },
+                                on:{
+                                  'click':(event)=>{
+                                    this.data2[params.index].kaiPiaoNumberStatus = true
+                                    
+                                  }
+                                }
+                              },params.row.invoiceNo)
+                          }
+                         
                         }
-                    },
-                    {
+            },
+            {
                         title: '是否收票',
                         key: 'invoiceStatus',
                         align: 'center',
                         width:'100',
                         render: (h,params)=> {
-                          return h('Select',{
+                          if(params.row.isShouPiao){
+                            return h('Select',{
                             props:{
                               value:params.row.invoiceStatus,
                               disabled:params.row.isDelete
                             },
                             on:{
                               'on-change':(value) =>{
-                                console.log(value)
-                                this.data2[params.index].invoiceStatus = value
+                                  this.data2[params.index].invoiceStatus = value
+                                  this.data2[params.index].isShouPiao = false
 
                               }
                             }
@@ -1753,14 +2944,34 @@ export default {
                             },type);
                           })
                           )
+                          }else{
+                              return h('a',{
+                              style:{
+                                      'display':'block',
+                                      "width":"100px",
+                                      "height":'40px',
+                                      "border-bottom":"1px solid  #ccc",
+                                      "line-height":"40px",
+                                      "text-align":"center",
+                                    },
+                                on:{
+                                  'click':(event)=>{
+                                    this.data2[params.index].isShouPiao = true
+                                    
+                                  }
+                                }
+                              },getReceiptStatusLabel(params.row.invoiceStatus))
+
+                          }
                         }
-                    },
-                     {
+            },
+            {
                       key:'om1Name',
                       title:'杂费1名称',
                       width:'100',
                       render:(h,params)=>{
-                          return h('Input',{
+                          if(params.row.om1NameStatus){
+                            return h('Input',{
                             props:{
                               value:params.row.om1Name,
                             
@@ -1772,19 +2983,40 @@ export default {
                             on:{
                               'on-blur':(event)=>{
                                    this.data2[params.index].om1Name=event.target.value
+                                  this.data2[params.index].om1NameStatus = false
+
                               }
                             }
 
                           })
+                          }else{
+                            return h('a',{
+                              style:{
+                                      'display':'block',
+                                      "width":"100px",
+                                      "height":'40px',
+                                      "border-bottom":"1px solid  #ccc",
+                                      "line-height":"40px",
+                                      "text-align":"center",
+                                    },
+                                on:{
+                                  'click':(event)=>{
+                                    this.data2[params.index].om1NameStatus = true
+                                    
+                                  }
+                                }
+                              },params.row.om1Name)
+                          }
                         }
                      
-                    },
-                     {
+            },
+            {
                       key:'om1Money',
                       title:'杂费1金额',
                       width:'100',
                      render:(h,params)=>{
-                          return h('Input',{
+                         if(params.row.om1MoneyStatus){
+                            return h('Input',{
                             props:{
                               value:params.row.om1Money,
                              
@@ -1796,19 +3028,40 @@ export default {
                             on:{
                               'on-blur':(event)=>{
                                    this.data2[params.index].om1Money=event.target.value
+                                  this.data2[params.index].om1MoneyStatus = false
+
                               }
                             }
 
                           })
+                         }else{
+                           return h('a',{
+                             style:{
+                                      'display':'block',
+                                      "width":"100px",
+                                      "height":'40px',
+                                      "border-bottom":"1px solid  #ccc",
+                                      "line-height":"40px",
+                                      "text-align":"center",
+                                    },
+                                on:{
+                                  'click':(event)=>{
+                                    this.data2[params.index].om1MoneyStatus = true
+                                    
+                                  }
+                                }
+                              },params.row.om1Money)
+                         }
                         } 
                      
-                    },
-                     {
-                      key:'sszafeigongsi1',
+            },
+            {
+                      key:'om1OrgNameChose',
                       title:'选择杂费1公司',
                       width:'100',
                       render:(h,params)=>{
-                        return h('Select', {
+                        if(params.row.om1OrgNameChoseStatus){
+                          return h('Select', {
                         props:{
                             filterable:true,
                             'label-in-value':true
@@ -1819,9 +3072,9 @@ export default {
                             },
                             'on-change':(event) => {
                                   //select 值改变赋值
-                                 console.log(event)
                                  this.data2[params.index].om1OrgName  = event.label
                                  this.data2[params.index].om1OrgId = event.value
+                                  this.data2[params.index].om1OrgNameChoseStatus = false
                                  
                               }
                             },
@@ -1836,11 +3089,27 @@ export default {
                         })
                       
                       );
+                        }else{
+                            return h('a',{
+                              style:{
+                                      'display':'block',
+                                      "width":"100px",
+                                      "height":'40px',
+                                      "border-bottom":"1px solid  #ccc",
+                                      "line-height":"40px",
+                                      "text-align":"center",
+                                    },
+                                on:{
+                                  'click':(event)=>{
+                                    this.data2[params.index].om1OrgNameChoseStatus = true
+                                    
+                                  }
+                                }
+                              },params.row.om1OrgName)
+                        }
                     }
-
-                     
-                    },
-                     {
+            },
+            {
                       key:'om1OrgName',
                       title:'杂费1公司名称',
                       width:'100',
@@ -1852,8 +3121,8 @@ export default {
                                    },params.row.om1OrgName),
                             ])
                         }
-                    },
-                     {
+            },
+            {
                       key:'om1OrgId',
                       title:'杂费1公司id',
                       width:'100',
@@ -1868,16 +3137,16 @@ export default {
                             ])
                         }
                      
-                    },
-                     {
+            },
+            {
                       key:'om2Name',
                       title:'杂费2名称',
                       width:'100',
                       render:(h,params)=>{
-                          return h('Input',{
+                          if(params.row.om2NameStatus){
+                             return h('Input',{
                             props:{
                               value:params.row.om2Name,
-                             
                               type:'text',
                             },
                             attrs:{
@@ -1886,18 +3155,39 @@ export default {
                             on:{
                               'on-blur':(event)=>{
                                    this.data2[params.index].om2Name=event.target.value
+                                  this.data2[params.index].om2NameStatus = false
+
                               }
                             }
 
                           })
+                          }else{
+                              return h('a',{
+                                style:{
+                                      'display':'block',
+                                      "width":"100px",
+                                      "height":'40px',
+                                      "border-bottom":"1px solid  #ccc",
+                                      "line-height":"40px",
+                                      "text-align":"center",
+                                    },
+                                on:{
+                                  'click':(event)=>{
+                                    this.data2[params.index].om2NameStatus = true
+                                    
+                                  }
+                                }
+                              },params.row.om2Name)
+                          }
                         } 
                      
-                    },
-                     {
+            },
+            {
                       key:'om2Money',
                       title:'2金额',
                       width:'100',
                       render:(h,params)=>{
+                        if(params.row.om2MoneyStatus){
                           return h('Input',{
                             props:{
                               value:params.row.om2Money,
@@ -1910,19 +3200,39 @@ export default {
                             on:{
                               'on-blur':(event)=>{
                                    this.data2[params.index].om2Money=event.target.value
+                                  this.data2[params.index].om2MoneyStatus = false
+
                               }
                             }
 
                           })
-                        } 
+                        }else{
+                          return h('a',{
+                            style:{
+                                      'display':'block',
+                                      "width":"100px",
+                                      "height":'40px',
+                                      "border-bottom":"1px solid  #ccc",
+                                      "line-height":"40px",
+                                      "text-align":"center",
+                                    },
+                          on:{
+                          'click':(event)=>{
+                          this.data2[params.index].om2MoneyStatus = true
+                          }
+                          }
+                          },params.row.om2Money)
+                        }
+                      } 
                      
-                    },
-                     {
+            },
+            {
                       key:'gongsi2',
                       title:'选择杂费2公司名称',
                       width:'100',
                       render:(h,params)=>{
-                        return h('Select', {
+                        if(params.row.gongsi2Status){
+                          return h('Select', {
                         props:{
                             value:params.row.gongsi2,
                             filterable:true,
@@ -1936,6 +3246,7 @@ export default {
                                   //select 值改变赋值
                                  this.data2[params.index].om2OrgName   = event.label
                                  this.data2[params.index].om2OrgId = event.value
+                                  this.data2[params.index].gongsi2Status = false
 
                               }
                             },
@@ -1947,10 +3258,27 @@ export default {
                         })
                       
                       );
+                        }else{
+                        return h('a',{
+                          style:{
+                                      'display':'block',
+                                      "width":"100px",
+                                      "height":'40px',
+                                      "border-bottom":"1px solid  #ccc",
+                                      "line-height":"40px",
+                                      "text-align":"center",
+                                    },
+                        on:{
+                        'click':(event)=>{
+                        this.data2[params.index].gongsi2Status = true
+                        }
+                        }
+                        },params.row.om2OrgName)
+                        }
                     }
                      
-                    },
-                     {
+            },
+            {
                       key:'om2OrgName',
                       title:'杂费公司名称2',
                       width:'100',
@@ -1965,8 +3293,8 @@ export default {
                             ])
                         }
                      
-                    },
-                     {
+            },
+            {
                       key:'om2OrgId',
                       title:'杂费公司2id',
                       width:'100',
@@ -1981,13 +3309,14 @@ export default {
                             ])
                         }
                      
-                    },
-                     {
+            },
+            {
                       key:'om3Name',
                       title:'杂费3名称',
                       width:'100',
                       render:(h,params)=>{
-                          return h('Input',{
+                          if(params.row.om3NameStatus){
+                              return h('Input',{
                             props:{
                               value:params.row.om3Name,
                              
@@ -1999,19 +3328,39 @@ export default {
                             on:{
                               'on-blur':(event)=>{
                                    this.data2[params.index].om3Name=event.target.value
+                                  this.data2[params.index].om3NameStatus = false
+
                               }
                             }
 
                           })
+                          }else{
+                            return h('a',{
+                              style:{
+                                      'display':'block',
+                                      "width":"100px",
+                                      "height":'40px',
+                                      "border-bottom":"1px solid  #ccc",
+                                      "line-height":"40px",
+                                      "text-align":"center",
+                                    },
+                              on:{
+                              'click':(event)=>{
+                                  this.data2[params.index].om3NameStatus = true
+                                 }
+                                }
+                            },params.row.om3Name)  
+                          }
                         } 
                      
-                    },
-                     {
+            },
+            {
                       key:'om3Money',
                       title:'公司3金额',
                        width:'100',
                         render:(h,params)=>{
-                          return h('Input',{
+                          if(params.row.om3MoneyStatus){
+                              return h('Input',{
                             props:{
                               value:params.row.om3Money,
                              
@@ -2023,19 +3372,38 @@ export default {
                             on:{
                               'on-blur':(event)=>{
                                    this.data2[params.index].om3Money=event.target.value
+                                  this.data2[params.index].om3MoneyStatus = false
                               }
                             }
 
                           })
+                          }else{
+                            return h('a',{
+                              style:{
+                                      'display':'block',
+                                      "width":"100px",
+                                      "height":'40px',
+                                      "border-bottom":"1px solid  #ccc",
+                                      "line-height":"40px",
+                                      "text-align":"center",
+                                    },
+                              on:{
+                              'click':(event)=>{
+                                  this.data2[params.index].om3MoneyStatus = true
+                                 }
+                                }
+                            },params.row.om3Money)  
+                          }
                         } 
                      
-                    },
-                     {
+            },
+            {
                       key:'gongsi3',
                       title:'选择杂费公司3',
                        width:'100',
                         render:(h,params)=>{
-                        return h('Select', {
+                          if(params.row.gongsi3Status){
+                               return h('Select', {
                         props:{
                             value: params.row.gongsi3,
                             filterable:true,
@@ -2049,8 +3417,8 @@ export default {
                                   //select 值改变赋值
                                  this.data2[params.index].om3OrgName   = event.label
                                  this.data2[params.index].om3OrgId = event.value
+                                  this.data2[params.index].gongsi3Status = false
 
-                                 console.log(event)
                               }
                             },
                         },
@@ -2061,10 +3429,27 @@ export default {
                         })
                       
                       );
+                          }else{
+                            return h('a',{
+                              style:{
+                                      'display':'block',
+                                      "width":"100px",
+                                      "height":'40px',
+                                      "border-bottom":"1px solid  #ccc",
+                                      "line-height":"40px",
+                                      "text-align":"center",
+                                    },
+                              on:{
+                              'click':(event)=>{
+                                  this.data2[params.index].gongsi3Status = true
+                                 }
+                                }
+                            },params.row.om3OrgName)      
+                          }
                     }
                      
-                    },
-                     {
+            },
+            {
                       key:'om3OrgName',
                       title:'公司名称3',
                        width:'100',
@@ -2079,8 +3464,8 @@ export default {
                             ])
                         }
                      
-                    },
-                     {
+            },
+            {
                       key:'om3OrgId',
                       title:'公司3id',
                        width:'100',
@@ -2095,14 +3480,15 @@ export default {
                             ])
                         }
                      
-                    },
-                    // 1
-                             {
+            },
+            // 1
+            {
                       key:'om4Name',
                       title:'杂费4名称',
                       width:'100',
                       render:(h,params)=>{
-                          return h('Input',{
+                          if(params.row.om4NameStatus){
+                              return h('Input',{
                             props:{
                               value:params.row.om4Name,
                               type:'text',
@@ -2113,19 +3499,38 @@ export default {
                             on:{
                               'on-blur':(event)=>{
                                    this.data2[params.index].om4Name=event.target.value
+                                  this.data2[params.index].om4NameStatus = false
                               }
                             }
 
                           })
+                          }else{
+                            return h('a',{
+                              style:{
+                                      'display':'block',
+                                      "width":"100px",
+                                      "height":'40px',
+                                      "border-bottom":"1px solid  #ccc",
+                                      "line-height":"40px",
+                                      "text-align":"center",
+                                    },
+                              on:{
+                              'click':(event)=>{
+                                  this.data2[params.index].om4NameStatus = true
+                                 }
+                                }
+                            },params.row.om4Name)  
+                          }
                         } 
                      
-                    },
-                     {
+            },
+            {
                       key:'om4Money',
                       title:'杂费4金额',
                        width:'100',
                        render:(h,params)=>{
-                          return h('Input',{
+                          if(params.row.om4MoneyStatus){
+                               return h('Input',{
                             props:{
                               value:params.row.om4Money,
                               type:'text',
@@ -2136,19 +3541,38 @@ export default {
                             on:{
                               'on-blur':(event)=>{
                                    this.data2[params.index].om4Money=event.target.value
+                                  this.data2[params.index].om4MoneyStatus = false
                               }
                             }
 
                           })
+                          }else{
+                            return h('a',{
+                              style:{
+                                      'display':'block',
+                                      "width":"100px",
+                                      "height":'40px',
+                                      "border-bottom":"1px solid  #ccc",
+                                      "line-height":"40px",
+                                      "text-align":"center",
+                                    },
+                              on:{
+                              'click':(event)=>{
+                                  this.data2[params.index].om4MoneyStatus = true
+                                 }
+                                }
+                            },params.row.om4Money)  
+                          }
                         } 
                      
-                    },
-                     {
+            },
+            {
                       key:'gongshi4',
                       title:'选择公司4',
                        width:'100',
                            render:(h,params)=>{
-                        return h('Select', {
+                              if(params.row.gongshi4Status){
+                                  return h('Select', {
                         props:{
                             value: params.row.gongshi4,
                             filterable:true,
@@ -2162,8 +3586,8 @@ export default {
                                   //select 值改变赋值
                                   this.data2[params.index].om4OrgName  = event.label
                                   this.data2[params.index].om4OrgId = event.value
+                                  this.data2[params.index].gongshi4Status = false
 
-                                 console.log(event)
                               }
                             },
                         },
@@ -2174,9 +3598,26 @@ export default {
                         })
                       
                       );
+                              }else{
+                                return h('a',{
+                                  style:{
+                                      'display':'block',
+                                      "width":"100px",
+                                      "height":'40px',
+                                      "border-bottom":"1px solid  #ccc",
+                                      "line-height":"40px",
+                                      "text-align":"center",
+                                    },
+                                  on:{
+                                  'click':(event)=>{
+                                      this.data2[params.index].gongshi4Status = true
+                                     }
+                                    }
+                                },params.row.om4OrgName)          
+                              }
                     }
-                    },
-                     {
+            },
+            {
                       key:'om4OrgName',
                       title:'公司4名称',
                        width:'100',
@@ -2191,8 +3632,8 @@ export default {
                             ])
                         }
                      
-                    },
-                     {
+            },
+            {
                       key:'om4OrgId',
                       title:'公司4id',
                        width:'100',
@@ -2207,14 +3648,15 @@ export default {
                             ])
                         }
                      
-                    },
-                    // 5
-                             {
+            },
+            // 5
+            {
                       key:'om5Name',
                       title:'杂费5名称',
                        width:'100',
                         render:(h,params)=>{
-                          return h('Input',{
+                          if(params.row.om5NameStatus){
+                              return h('Input',{
                             props:{
                               value:params.row.om5Name,
                              
@@ -2226,19 +3668,38 @@ export default {
                             on:{
                               'on-blur':(event)=>{
                                    this.data2[params.index].om5Name=event.target.value
+                                  this.data2[params.index].om5NameStatus = false
                               }
                             }
 
                           })
+                          }else{
+                            return h('a',{
+                              style:{
+                                      'display':'block',
+                                      "width":"100px",
+                                      "height":'40px',
+                                      "border-bottom":"1px solid  #ccc",
+                                      "line-height":"40px",
+                                      "text-align":"center",
+                                    },
+                              on:{
+                              'click':(event)=>{
+                                  this.data2[params.index].om5NameStatus = true
+                                 }
+                                }
+                            },params.row.om5Name)  
+                          }
                         } 
                      
-                    },
-                     {
+            },
+            {
                       key:'om5Money',
                       title:'杂费5金额',
                        width:'100',
                         render:(h,params)=>{
-                          return h('Input',{
+                          if(params.row.om5MoneyStatus){
+                              return h('Input',{
                             props:{
                               value:params.row.om5Money,
                              
@@ -2250,19 +3711,38 @@ export default {
                             on:{
                               'on-blur':(event)=>{
                                    this.data2[params.index].om5Money=event.target.value
+                                  this.data2[params.index].om5MoneyStatus = false
                               }
                             }
 
                           })
+                          }else{
+                            return h('a',{
+                              style:{
+                                      'display':'block',
+                                      "width":"100px",
+                                      "height":'40px',
+                                      "border-bottom":"1px solid  #ccc",
+                                      "line-height":"40px",
+                                      "text-align":"center",
+                                    },
+                              on:{
+                              'click':(event)=>{
+                                  this.data2[params.index].om5MoneyStatus = true
+                                 }
+                                }
+                            },params.row.om5Money)  
+                          }
                         } 
                      
-                    },
-                     {
+            },
+            {
                       key:'gongsi5',
                       title:'公司5',
                       width:'100',
                       render:(h,params)=>{
-                        return h('Select', {
+                        if(params.row.gongsi5Status){
+                            return h('Select', {
                         props:{
                             value: params.row.gongsi5,
                             filterable:true,
@@ -2276,8 +3756,8 @@ export default {
                                   //select 值改变赋值
                                   this.data2[params.index].om5OrgName=event.label
                                   this.data2[params.index].om5OrgId=event.value
+                                  this.data2[params.index].gongsi5Status = false
 
-                                 console.log(event)
                               }
                             },
                         },
@@ -2288,10 +3768,27 @@ export default {
                         })
                       
                       );
+                        }else{
+                          return h('a',{
+                            style:{
+                                      'display':'block',
+                                      "width":"100px",
+                                      "height":'40px',
+                                      "border-bottom":"1px solid  #ccc",
+                                      "line-height":"40px",
+                                      "text-align":"center",
+                                    },
+                            on:{
+                            'click':(event)=>{
+                                this.data2[params.index].gongsi5Status = true
+                               }
+                              }
+                          },params.row.om5OrgName)    
+                        }
                     }
                      
-                    },
-                     {
+            },
+            {
                       key:'om5OrgName',
                       title:'公司5名称',
                        width:'100',
@@ -2306,8 +3803,8 @@ export default {
                             ])
                         }
                      
-                    },
-                     {
+            },
+            {
                       key:'om5OrgId',
                       title:'公司5id',
                        width:'100',
@@ -2322,17 +3819,17 @@ export default {
                             ])
                         }
                      
-                    },
-                    // 6
-                             {
+            },
+            // 6
+            {
                       key:'om6Name',
                       title:'杂费6名称',
                        width:'100',
                         render:(h,params)=>{
-                          return h('Input',{
+                          if(params.row.om6NameStatus){
+                               return h('Input',{
                             props:{
                               value:params.row.om6Name,
-                             
                               type:'text',
                             },
                             attrs:{
@@ -2341,19 +3838,38 @@ export default {
                             on:{
                               'on-blur':(event)=>{
                                    this.data2[params.index].om6Name=event.target.value
+                                  this.data2[params.index].om6NameStatus = false
                               }
                             }
 
                           })
+                          }else{
+                            return h('a',{
+                              style:{
+                                      'display':'block',
+                                      "width":"100px",
+                                      "height":'40px',
+                                      "border-bottom":"1px solid  #ccc",
+                                      "line-height":"40px",
+                                      "text-align":"center",
+                                    },
+                              on:{
+                              'click':(event)=>{
+                                  this.data2[params.index].om6NameStatus = true
+                                 }
+                                }
+                            },params.row.om6Name)  
+                          }
                         } 
                      
-                    },
-                     {
+            },
+            {
                       key:'om6Money',
                       title:'杂费6金额',
                        width:'100',
                         render:(h,params)=>{
-                          return h('Input',{
+                          if(params.row.om6MoneyStatus){
+                              return h('Input',{
                             props:{
                               value:params.row.om6Money,
                              
@@ -2365,19 +3881,38 @@ export default {
                             on:{
                               'on-blur':(event)=>{
                                    this.data2[params.index].om6Money=event.target.value
+                                  this.data2[params.index].om6MoneyStatus = false
                               }
                             }
 
                           })
+                          }else{
+                            return h('a',{
+                              style:{
+                                      'display':'block',
+                                      "width":"100px",
+                                      "height":'40px',
+                                      "border-bottom":"1px solid  #ccc",
+                                      "line-height":"40px",
+                                      "text-align":"center",
+                                    },
+                              on:{
+                              'click':(event)=>{
+                                  this.data2[params.index].om6MoneyStatus = true
+                                 }
+                                }
+                            },params.row.om6Money)  
+                          }
                         } 
                      
-                    },
-                     {
+            },
+            {
                       key:'gongshi6',
                       title:'公司6',
                        width:'100',
                         render:(h,params)=>{
-                        return h('Select', {
+                        if(params.row.gongshi6Status){
+                            return h('Select', {
                         props:{
                             value: params.row.gongshi6,
                             filterable:true,
@@ -2392,6 +3927,7 @@ export default {
                                   //select 值改变赋值
                                   this.data2[params.index].om6OrgName=event.label
                                   this.data2[params.index].om6OrgId=event.value
+                                  this.data2[params.index].gongshi6Status = false
                               }
                             },
                         },
@@ -2402,10 +3938,27 @@ export default {
                         })
                       
                       );
+                        }else{
+                          return h('a',{
+                            style:{
+                                      'display':'block',
+                                      "width":"100px",
+                                      "height":'40px',
+                                      "border-bottom":"1px solid  #ccc",
+                                      "line-height":"40px",
+                                      "text-align":"center",
+                                    },
+                            on:{
+                            'click':(event)=>{
+                                this.data2[params.index].gongshi6Status = true
+                               }
+                              }
+                          },params.row.om6OrgName)    
+                        }
                     }
                      
-                    },
-                     {
+            },
+            {
                       key:'om6OrgName',
                       title:'公司6id',
                        width:'100',
@@ -2420,8 +3973,8 @@ export default {
                             ])
                         }
                      
-                    },
-                     {
+            },
+            {
                       key:'om6OrgId',
                       title:'公司6id',
                        width:'100',
@@ -2435,9 +3988,8 @@ export default {
                                    },params.row.om6OrgId),
                             ])
                         }
-                    },
-                   
-                ],
+            },
+          ],
                 data1: [
                 ],//表格展示的数据
                 data2:[],//添加表格使用的列表
@@ -2453,6 +4005,7 @@ export default {
       //获取公司名字
          getComPany(){
              let param={};
+          param.pageSize = 999999;
               
              findOrgCusAcc(param).then(res=>{
         
@@ -2473,17 +4026,59 @@ export default {
           params.pageSize = 10000;
           findOrdersInfoAll(params).then(res =>{
             if(res.code =="100"){
-              for(var i in res.data.list){
-                res.data.list[i].isDelete = false;
+              for(var i=0;i< res.data.list.length;i++){
+               //添加默认条件进行判断
+                res.data.list[i].isDelete              = false;
+                res.data.list[i].changeStatus          = false;
+                res.data.list[i].steelNameStatus       = false;
+                res.data.list[i].steelGuigeStatus      = false;
+                res.data.list[i].steelPaihaoStatus     = false;
+                res.data.list[i].steelPinpaiStatus     = false;
+                res.data.list[i].steelWorksStatus      = false;
+                res.data.list[i].jiaohuodiStatus       = false;
+                res.data.list[i].jianshuStatus         = false;
+                res.data.list[i].weightStatus          = false;
+                res.data.list[i].zongzhongliangStatus  = false;
+                res.data.list[i].guapaijiaStatus       = false;
+                res.data.list[i].cusMoneyStatus        = false;
+                res.data.list[i].kunbaohaoStatus       = false;
+                res.data.list[i].jiesuanWeightStatus   = false;
+                res.data.list[i].jiesuanMoneyStatus    = false;
+                res.data.list[i].receiptStatusStatus   = false;
+                res.data.list[i].invoiceWeightStatus   = false;
+                res.data.list[i].invoiceMoneyStatus    = false;
+                res.data.list[i].invoiceNoStatus       = false;
+                res.data.list[i].invoiceStatusStatus   = false;
+                res.data.list[i].om1NameStatus         = false;
+                res.data.list[i].om1MoneyStatus        = false;
+                res.data.list[i].om1OrgNameChoseStatus = false;
+                res.data.list[i].om2NameStatus         = false;
+                res.data.list[i].om2MoneyStatus        = false;
+                res.data.list[i].gongsi2Status         = false;
+                res.data.list[i].om3NameStatus         = false;
+                res.data.list[i].om3MoneyStatus        = false;
+                res.data.list[i].gongsi3Status         = false;
+                res.data.list[i].om4NameStatus         = false;
+                res.data.list[i].om4MoneyStatus        = false;
+                res.data.list[i].gongshi4Status        = false;
+                res.data.list[i].om5NameStatus         = false;
+                res.data.list[i].om5MoneyStatus        = false;
+                res.data.list[i].gongsi5Status         = false;
+                res.data.list[i].om6NameStatus         = false;
+                res.data.list[i].om6MoneyStatus        = false;
+                res.data.list[i].gongshi6Status        = false;
+                res.data.list[i].wangJiaStatus         = false;//网价状态
+                res.data.list[i].fuDongStatus          = false;//浮动价格状态
+                res.data.list[i].wangJiaQu             = false;//网价区域
+                res.data.list[i].wangJiaBei            = false;//网价备注isShouPiao
+                res.data.list[i].isShouPiao            = false;//是否收票
+                res.data.list[i].kaiPiaoWeightStatus   = false;//开票重量状态
+                res.data.list[i].kaiPiaoMoneyStatus    = false;//开票金额状态
+                res.data.list[i].kaiPiaoNumberStatus    = false;//开票号码状态
+
               }
               this.data1 = res.data.list;
-              this.$Notice.success({
-                title:'获取订单明细成功'
-              })
             }else{
-              this.$Notice.error({
-                title:'获取订单明细失败'
-              })
             }
           })
       },
@@ -2499,7 +4094,8 @@ export default {
           this.addNewitemOrder();
           let params = {};
           let pageOrderInfoList = [];
-          for(var i in this.data1){
+          for(var i=0; i<this.data1.length;i++ ){
+            console.log(i);
             var item = this.data1[i];
             let dic = {};
             //是否删除 isDelete true 或者 false
@@ -2556,9 +4152,17 @@ export default {
                         dic.om6Money   = item.om6Money
                         dic.om6OrgId   = item.om6OrgId
                         dic.om6OrgName = item.om6OrgName
+                          //2019年5月5日13:40:08 新增 a:网价，b:浮动价,c:区域,d:网价备注;
+                        dic.internetMoney     = item.internetMoney
+                        dic.floatMoney        = item.floatMoney
+                        dic.region            = item.region
+                        dic.internetMoneyNote = item.internetMoneyNote
             pageOrderInfoList.push(dic);
           }
           params.pageOrderInfoList = pageOrderInfoList;
+          console.log("调试")
+          console.log(this.data1)
+          console.log(pageOrderInfoList)
           updateOrderInfo(params).then(res =>{
              if(res.code =='100'){
                  this.$Notice.success({
@@ -2567,7 +4171,6 @@ export default {
                      onClose:res =>{
                         console.log("关闭时回调")
                         this.reload();
-                      //  this.turnToOrderList();
                      }
                  })
              }else{
@@ -2585,7 +4188,7 @@ export default {
           let params ={};
           let orderInfoList = [];
           let baseItem = this.data1[0];
-          for(var i in this.data2){
+          for(var i = 0;i<this.data2.length;i++){
              let dic =  this.data2[i];
              let item = {};
              //传参时 不变的内容
@@ -2668,6 +4271,13 @@ export default {
                         item.om6Money   = dic.om6Money
                         item.om6OrgId   = dic.om6OrgId
                         item.om6OrgName = dic.om6OrgName
+
+                        //2019年5月5日13:40:08 新增 a:网价，b:浮动价,c:区域,d:网价备注;
+                        item.internetMoney     = dic.internetMoney
+                        item.floatMoney        = dic.floatMoney
+                        item.region            = dic.region
+                        item.internetMoneyNote = dic.internetMoneyNote
+
                  orderInfoList.push(item);  
           }
           params.pageOrderInfoList= orderInfoList;
@@ -2731,6 +4341,53 @@ export default {
        dic.om6Money   = ''
        dic.om6OrgId   = ''
        dic.om6OrgName = ''
+       //添加状态进行input和a标签的转变
+       dic.steelNameStatus = ""
+       dic.steelGuigeStatus="";
+       dic.steelPaihaoStatus="";
+       dic.steelPinpaiStatus="";
+       dic.steelWorksStatus="";
+       dic.jiaohuodiStatus="";
+       dic.jianshuStatus="";
+       dic.weightStatus="";
+       dic.zongzhongliangStatus="";
+       dic.guapaijiaStatus="";
+       dic.cusMoneyStatus="";
+       dic.kunbaohaoStatus="";
+       dic.jiesuanWeightStatus="";
+       dic.jiesuanMoneyStatus="";
+       dic.receiptStatusStatus="";
+       dic.invoiceWeightStatus="";
+       dic.invoiceMoneyStatus="";
+       dic.invoiceNoStatus="";
+       dic.invoiceStatusStatus="";
+       dic.om1NameStatus="";
+       dic.om1MoneyStatus="";
+       dic.om1OrgNameChoseStatus="";
+       dic.om2NameStatus="";
+       dic.om2MoneyStatus="";
+       dic.gongsi2Status="";
+       dic.om3NameStatus="";
+       dic.om3MoneyStatus="";
+       dic.gongsi3Status="";
+       dic.om4NameStatus="";
+       dic.om4MoneyStatus="";
+       dic.gongshi4Status="";
+       dic.om5NameStatus="";
+       dic.om5MoneyStatus="";
+       dic.gongsi5Status="";
+       dic.om6NameStatus="";
+       dic.om6MoneyStatus="";
+       dic.gongshi6Status="";
+       dic.wangJiaStatus='';//网价状态
+       dic.fuDongStatus='';//浮动价格
+       dic.wangJiaQu='';//网价区域
+       dic.wangJiaBei='';//网价备注
+       dic.isShouPiao='';//是否收票
+       dic.kaiPiaoWeightStatus='';//开票重量
+       dic.kaiPiaoMoneyStatus='';//开票金额
+       dic.kaiPiaoNumberStatus='';//开票号码
+
       this.data2.push(dic);
     }
 
@@ -2783,4 +4440,8 @@ export default {
 .font_32 {
         font-size: 32;
     }
+        .ivu-table-cell {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+}
 </style>

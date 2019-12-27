@@ -8,7 +8,7 @@
           <h3 style='text-indent:40px;'>基本信息</h3>
 
           <FormItem label="供应商店铺查询:">
-            <Select v-model="shopO" style="width:200px" placeholder="请输入店铺名称"  @on-change='getDian'  :label-in-value='true'>
+            <Select v-model="shopO" filterable style="width:200px" placeholder="请输入店铺名称"  @on-change='getDian'  :label-in-value='true'>
                <Option v-for="(item,index) in shopList" :value="JSON.stringify(item)" :label="item.name" :key="index" >{{ item.name }}</Option>
       
             </Select>
@@ -19,11 +19,19 @@
               <Option v-for="(item,index) in rise" :value="item.value" :key='index'>{{item.label}}</Option>
             </Select>
           </FormItem>
-
-          <FormItem label="查询代理商">
+          <FormItem label="工程名称:" >
+            <el-select size="small" v-model="addForm.engineering" clearable  filterable  default-first-option placeholder="请输入工程名称">
+             <el-option v-for="item in engineerNameList" :key="item.value" :label="item.label" :value="item.label" ></el-option>
+              </el-option>
+          </el-select>
+         </FormItem>
+          <!-- <FormItem label="查询代理商">
             <Select :label-in-value='true' v-model='dai' style="width:200px" placeholder="请选择代理商" @on-change='getChange'>
               <Option  v-for='(item,index) in daiLi' :value="item.id" :key='index'>{{item.shortName}}</Option>
             </Select>
+          </FormItem> -->
+          <FormItem label="选择下单时间">
+            <DatePicker  v-model="addForm.time" format="yyyy-MM-dd" type="date" placeholder="请选择日期" style="width:200px"></DatePicker>
           </FormItem>
         </row>
 
@@ -40,6 +48,8 @@
           <FormItem label="总件数:" prop="totalOMoney">
            <Input   style="width:200px;color:red" v-model="addForm.totalNum" placeholder="请输入总件数"/>件
          </FormItem>
+         
+          
 
       </Form>
     </row>
@@ -86,7 +96,7 @@ ref="upload"
     <!--提交取消按钮 -->
     <row style='padding-left:10px;'>
 
-      <Button   type="primary" @click='getAdd' style='margin-right:15px;'>提交</Button>
+      <Button   type="primary" @click='getAdd' style='margin-right:15px;' :disabled="isDisable">提交</Button>
 
 
       <Button   type="primary">取消</Button> 
@@ -100,13 +110,14 @@ ref="upload"
   </div>
 </template>
 <script>
-import {findShop,findOrgCusAcc} from '@/api/data';//查询店铺  查询公司
+import {findShop,findOrgCusAcc,findOrderEngineering,xiangMu} from '@/api/data';//查询店铺  查询公司
 import {getAgent,getTi,getWarehouse} from '@/api/cusData'//查询代理商
 import {companyTypeListAllName,guigeTyoeList,paihaoTypeList} from '@/libs/global_type'//公司抬头,规格的数组,牌号的数组
 import {getLeiBie} from '@/api/data_8889'//引入8889的接口
 import { constants } from 'crypto';
 import { mapMutations } from 'vuex'
-
+import { setTimeout } from 'timers';
+import Utils from '@/api/middle'
 
 export default {
   name: 'add_order_new_noInfo',
@@ -115,6 +126,8 @@ export default {
   },
   data() {
     return {
+      engineerNameList:[],//工程数组
+      isDisable:false,
       datalei:[],
       dataPin:[],
       tableNew:[],//tablle 表格
@@ -127,9 +140,11 @@ export default {
       addForm: {
         totalSum: '',//总金额
         totalDijia:'',//底价总金额
-        totalWeight: "",//总重量
-        totalNum:'',//总件数
+        totalWeight: "0",//总重量
+        totalNum:'0',//总件数
         totalOMoney:'',//总杂费金额
+        engineering:'',//工程名称
+        time:new Date(),
       },
       param1:{pageSize:"999999"},//查询店铺参数
       shopList:[],//店铺data
@@ -181,6 +196,21 @@ export default {
      ...mapMutations([
       'closeTag'
     ]),
+    //查询工程
+      getGongcheng(){
+        let p  ={};
+        p.pageSize ="99999"
+        xiangMu(p).then(res=>{
+          if(res.code =="100"){
+              res.data.list.map(item =>{
+                let dic = {};
+                dic.label =item.cname;
+                dic.value =item.id;
+                this.engineerNameList.push(dic);
+              })
+          }
+        })
+      },
        //查询店铺
        getShop(param){
          param.status = 1;
@@ -229,8 +259,6 @@ export default {
         //item= eval('(' + item + ')');
         const stingR=eval('(' + item.value + ')')
         this.showIdK=stingR.id;
-        this.agentId=stingR.id;
-        this.agentShortName=stingR.name;
         this.shopId=stingR.id;
         this.shopName=stingR.name;
         this.shopOrgName=stingR.orgName;
@@ -257,10 +285,7 @@ export default {
                 console.log('我是上传的图片')
                 const reg=/,$/gi;//此处是正则
 
-                this.uploadList.map((item)=>{
-                  console.log(this.imgString.length+'我是打印的长度')
-                     this.imgString += item.url+','    
-                })
+               
             },
             handleFormatError(file) {
                 this.$Notice.warning({
@@ -289,6 +314,14 @@ export default {
                 return check;
             },
        getAdd(){ 
+          this.uploadList.map((item)=>{
+                  console.log(this.imgString.length+'我是打印的长度')
+                     this.imgString += item.url+','    
+                })
+          if(this.bankJgId==''||this.shopId==''){
+              alert('请选择本公司抬头和供应商名称')
+              return false
+        }
          const param                = {};
                param.agentId        = this.agentId;
                param.agentShortName = this.agentShortName,            //代理商名称
@@ -297,6 +330,7 @@ export default {
                param.buyType        = "1",                            //写死
                param.createCname    = this.$global.adminInfo.cname,   //登录人的名称
                param.createEname    = this.$global.adminInfo.ename,   //登录人的英文名称
+               param.payMoneyStatus = "0"
          //cus的信息根据 bankJgId的类型来区分填写
          param.customerId          = this.customerId,            //bankJgId = 1,写死1，bankJgId = 2,写死2
          param.customerName        = this.customerName,          //bankJgId = 1,写死"上海市闽航电子商务有限公司"，bankJgId = 2,写死‘福建省亿钢电子商务有限公司’
@@ -325,13 +359,37 @@ export default {
          param.pictures            = this.imgString              //上传的图片
           //明细信息
          param.orderInfoList       = []
+         //2019年5月5日15:35:06 添加
+         param.gongcheng = this.addForm.engineering;//工程名称
+         //2019年7月9日11:16:41 添加下单日期
+        let dates = this.$global.formatDate(this.addForm.time,"yyyy-MM-dd");//选择的日期
+        let times = this.$global.formatDate(new Date(),"hh:mm:ss");
+        let allTimes = dates +' '+times;
+        param.createTimes = allTimes;//订单下单时间
+        param.createTimeFormat = this.$global.formatDate(this.addForm.time,"yyMMdd")//订单号使用的时间
+
           getTi(param).then(res=>{
               if(res.code =="100"){
+                this.isDisable=true;
                 console.log(res)
                  this.$Notice.success({
-                            title:'添加成功',
+                  title:'添加成功',
+                  duration:2,
+                  onClose:res =>{
+                    this.closeTag({
+                      name: 'add_order_new_noInfo'
                     })
-                    this.closeSelf();
+                  setTimeout(() => {
+                      const route = { 
+                        name: 'buy_order_list',
+                        query:''
+                    }
+                    this.$router.push(route)
+                    Utils.$emit('buy_order_list','reload');
+                  }, 100);
+                  }
+            })
+                //===============
             }  
           })
        },
@@ -374,6 +432,8 @@ export default {
     this.getShop(this.param1);//查询店铺
     this.getDai(this.param2);//查询代理商
     this.getComPany();//获取公司名称
+    this.getGongcheng();//查询工程
+   
   },
   watch: {
     

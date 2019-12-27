@@ -12,9 +12,11 @@
         <row>
             <h2 style='text-indent:20px;'>基本信息</h2>
              <FormItem label="公司名称:" >
-              <i-input   class="width_300 "  v-model="addForm.basic_companyName" placeholder="请输入公司名称"/>
+              <i-input   class="width_300 " @on-blur='getBlur' @on-change='getComPany'  v-model="addForm.basic_companyName" placeholder="请输入公司名称"/>
+              <time style='color:red;' v-show='company1'>未注册</time>
+              <time  style='color:red;' v-show='company2'>已注册</time>
             </FormItem>
-            <FormItem label="主联系人姓名:" >
+            <FormItem label="主联系人姓名:"  >
               <i-input class="width_300"    v-model="addForm.basic_name" placeholder="主联系人姓名"/>
             </FormItem>
             <FormItem label="主联系人电话:" >
@@ -173,8 +175,18 @@
             </Select>
           </FormItem>
 
-            <FormItem label="所在地区:" >
+            <!-- <FormItem label="所在地区:" >
              <Cascader :data="dataOne" v-model="valueOne" @on-change='getCityOne' class="width_300"></Cascader>
+            </FormItem> -->
+
+            <FormItem label="所在地区:" >
+                <el-cascader class="width_300"
+                    filterable
+                    :options="dataOne"
+                    v-model="valueOne"
+                    placeholder='请选择城市'
+                    @change='getCityOne' ref='cascaderAddr'>
+                </el-cascader>
             </FormItem>
 
 
@@ -270,8 +282,8 @@
          </row>
          <row>
            <div class="margin-top-20">
-            <Button v-show="addBtn" type="primary" @click="addNewCustomer">添加</Button>
-            <Button v-show="changeBtn"  type="primary" @click="changeCustomer">修改</Button>
+            <Button style="margin-right:10px" v-show="addBtn" type="primary" @click="addNewCustomer" :disabled="isDisable">添加</Button>
+            <Button style="margin-right:10px" v-show="changeBtn"  type="primary" @click="changeCustomer" :disabled="isDisableOne">修改</Button>
             <Button  type="primary" @click="closeSelf">关闭</Button>
 
           </div>
@@ -300,6 +312,14 @@ import {
     props:["orgItema"],
     data(){
       return {
+        comChange:'',//公司chang的值
+        company2:false,
+        company1:false,
+
+
+
+        isDisable:false,
+        isDisableOne:false,
         updateImgUrl: this.$global.updateImgUrl,
         returnBankItem:{},
         addBtn:true,
@@ -407,6 +427,34 @@ import {
       }
     },
     methods:{
+      //blur事件和获取input的值
+      getBlur(){
+              console.log('离开触发')
+                let param = {};
+                param.orgName = this.comChange //公司名称
+                    //param.aa=this.businessName //业务员名字
+                param.pageNum = this.pagesizea //分页
+                param.pageSize=999999
+                 findOrgCusAcc(param).then(res => {
+                    console.log("请求成功")
+                    if (res.msg == null|| res.msg == 'null') {
+                        this.company1=false;
+                        this.company2=true;
+                        this.isDisable=true;
+                    }else{
+                        console.log('j进来了')
+                        this.company1=true;
+                        this.company2=false;
+                        this.isDisable=false;
+                    }  
+                }) 
+      },
+      //changge事件
+      getComPany(e){
+          this.comChange=e.target.value;
+      },
+
+
       ...mapMutations([
       'closeTag'
     ]),
@@ -436,7 +484,7 @@ import {
       param.vipStatus         = "16"
       param.adminCname        = this.$global.adminInfo.cname;
       param.adminEname        = this.$global.adminInfo.ename
-      param.adminId           = this.$global.adminInfo.ename;
+      param.adminId           = this.$global.adminInfo.id;
       param.adminName         = this.$global.adminInfo.cname
       param.createCname       = this.$global.adminInfo.cname
       param.createEname       = this.$global.adminInfo.ename
@@ -534,6 +582,7 @@ import {
      param.farenCodePhoto      = this.uploadList.length>=3?this.uploadList[2].url:''
       addOrgCustomer(param).then(res =>{
                     if(res.code =="100"){
+                        this.isDisable=true;
                       if(res.data.orgId.length>0){
                         this.addNewShop(res.data)
                       }else{
@@ -542,7 +591,6 @@ import {
                         this.$Notice.success({
                             title:'添加供应商成功',
                         })
-                        // this.reload();
                     }
                 })
     },
@@ -571,8 +619,15 @@ import {
             if(res.code =="100"){
                         this.$Notice.success({
                             title:'已经新增一个店铺',
+                            duration:2,
+                            onClose:res =>{
+                                console.log('关闭时回调')
+                                  this.closeTag({
+                                      name: 'supplierList_add',
+                                      query:this.$route.query
+                                  })
+                              }
                         })
-                        this.closeSelf();
                     }
         })
     },
@@ -685,10 +740,18 @@ import {
      //修改信息
      updateOrgCus(param).then(res=>{
        if(res.code =="100"){
+         this.isDisableOne=true;
            this.$Notice.success({
                             title:'修改成功,2秒后自动刷新',
+                            duration:2,
+                            onClose:res =>{
+                                console.log('关闭时回调')
+                                  this.closeTag({
+                                      name: 'supplierList_add',
+                                      query:this.$route.query
+                                  })
+                              }
                         })
-                        this.closeSelf();
        }
       
 
@@ -697,7 +760,8 @@ import {
     closeSelf(){
       console.log("开始关闭")
        this.closeTag({
-        name: 'supplierList_add'
+        name: 'supplierList_add',
+        query:this.$route.query
       })
     },
          //上传图片
@@ -706,8 +770,7 @@ import {
             this.visible = true;
        },
        handleRemove (file) {
-            const fileList = this.$refs.upload.fileList;
-            this.$refs.upload.fileList.splice(fileList.indexOf(file), 1);
+                this.uploadList.splice(this.uploadList.indexOf(file), 1);
        },
        handleSuccess (res, file) {
           this.$Message.success('上传成功');
@@ -753,14 +816,26 @@ import {
           }
       },
       //银行所在地区
-      getCityOne(value,selectedData){
-          this.Provinces=selectedData[0].label
-          this.city=selectedData[1].label
-          if(selectedData.length =='2'){
-             this.cityStringOne= selectedData[0].label+','+ selectedData[1].label
-          }else {
-            this.cityStringOne= selectedData[0].label+','+ selectedData[1].label+','+ selectedData[2].label  
-          }
+      // getCityOne(value,selectedData){
+      //     this.Provinces=selectedData[0].label
+      //     this.city=selectedData[1].label
+      //     if(selectedData.length =='2'){
+      //        this.cityStringOne= selectedData[0].label+','+ selectedData[1].label
+      //     }else {
+      //       this.cityStringOne= selectedData[0].label+','+ selectedData[1].label+','+ selectedData[2].label  
+      //     }
+      //     this.getBankDotName();
+      // },
+      getCityOne(item){
+         let labels=this.$refs['cascaderAddr'].currentLabels
+         if (labels.length == '2') {
+                  this.cityString = labels[0] + ',' + labels[1]
+                 } else {
+                   this.cityString = labels[0]+ ',' + labels[1] + ',' + labels[2]
+                } 
+                this.Provinces=labels[0]
+                this.city=labels[1]
+                console.log("选择的银行地址："+this.cityString)
           this.getBankDotName();
       },
     //主营城市多级搜索
@@ -888,11 +963,12 @@ import {
       paramB.bankAbbreviation=this.bankString //银行名称
       paramB.bankBranchLineCity=this.Provinces //省
       paramB.prefectureLevel = this.city //市
+      paramB.pageSize ="99999999"
       getBankDot(paramB).then(res=>{
         if(res.code =="100"){
           console.log("我调用了")
           console.log(res)
-          this.bankDotList=res.data;
+          this.bankDotList=res.data.list;
           // res.data.map((value,index,arr)=>{
           //        this.bankDotList.push(arr[index].branchFullName)
           // })
@@ -965,8 +1041,8 @@ import {
       this.uploadList                     = this.$global.setDefaultImgList([this.$route.query.orgshuiwudengjiPhoto,this.$route.query.orgkaipiaoPhoto,this.$route.query.orgfarenCodePhoto]);
 
        //打款银行卡 TODO 需要赋值，然后修改
-       this.addForm.dkAccBank =  this.$route.query.dkaccBank
-       this.addForm.dkAccBankCode =  this.$route.query.dkaccBankCode
+       this.addForm.dkAccBank     = this.$route.query.dkaccBank
+       this.addForm.dkAccBankCode = this.$route.query.dkaccBankCode
       //打款银行卡结束
 
       // 退款银行卡开始

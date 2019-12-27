@@ -639,7 +639,7 @@ export default {
     },
     modal_ok(){ //提交保存
       let hetongPhoto = '';
-      for(let i in this.uploadList){
+      for(let i = 0; i< this.uploadList.length;i++){
         let item = this.uploadList[i];
         if(hetongPhoto ==''){
           hetongPhoto = item.name;
@@ -649,7 +649,7 @@ export default {
       }
 
       let hetongFujian = '';
-      for(let i in this.uploadListzips){
+      for(let i = 0; i< this.uploadListzips.length ;i++){
         let item = this.uploadListzips[i];
         if(hetongFujian ==''){
           hetongFujian = item.name;

@@ -5,539 +5,209 @@
         <div id='lay_con'>
             <!-- LEFT -->
             <div class='lay_left'>
+              <span style="font-size:24px;" >{{orgName}}</span>
               <Row class='row_left'>
                   <dl>
-                      <dt>账户余额</dt>
-                      <dd>56757<time> 万元</time></dd>
+                      <dt>客户角色余额</dt>
+                      <dd>{{this.$global.isMoneyShow(balanceMoney)}}<time> 万元</time></dd>
                   </dl>
                   <dl>
-                      <dt>可用余额</dt>
-                      <dd>56757<time> 万元</time></dd>
+                      <dt>到账金额(元)(入)</dt>
+                      <dd>{{this.$global.isMoneyShow(inMoney)}}<time> 万元</time></dd>
                   </dl>
                   <dl>
-                      <dt>冻结金额</dt>
-                      <dd>568757 <time> 万元</time> </dd>
+                      <dt>应收金额(元)(出)</dt>
+                      <dd>{{this.$global.isMoneyShow(outMoney)}} <time> 万元</time> </dd>
                   </dl>
               </Row> 
               <!-- 累计总量 -->
               <Row class='account_price'>
-                  累计采购单:<time>30</time>单&nbsp;&nbsp;&nbsp;
-                  累计采购金额:<time>5000</time>万元&nbsp;&nbsp;&nbsp;
-                  累计销售单:<time>50</time>单&nbsp;&nbsp;&nbsp;
-                  累计销售金额:<time>6000</time>万元
+                  订单剩余:<time>{{tMoneyOrder}}</time>&nbsp;&nbsp;&nbsp;
+                  到账单剩余:<time>{{tMoneyDao}}</time>&nbsp;&nbsp;&nbsp;
+                  合计:<time>{{tMoney}}</time>
+                
               </Row>
-           
-              <!-- 更多 -->
-              <Row class='row_account'>
-                  <span class='row_span'>账户流水</span>
-                  <span class=row_more>更多>> </span>
+              <!-- TABLE切换 -->
+              <Row>
+                 <Tabs value="name1">
+                    <TabPane label="订单组成" name="name1">
+                       <vxe-table size="mini" border
+                       show-footer
+                       :footer-method="footerMethod" 
+                       class="vxe-table-element" :highlight-cell='false'  :data.sync="tableDataOne"  :edit-config="{key: 'id', trigger: 'click', mode: 'row',} ">
+                         <vxe-table-column prop="ordersNo"  label="订单号" width="160">
+                           <template v-slot="{ row }">
+                            <vxe-button @click="orderBtnClick(row)" type="text">{{row.ordersNo}}</vxe-button>
+                          </template>
+                         </vxe-table-column>
+                         <vxe-table-column prop="chaMoney" :formatter="this.$global.vxeTableMoney"  label="结算差额" width="160"></vxe-table-column>
+                         <vxe-table-column prop="id"  label="ID" width="40"></vxe-table-column>
+                         <vxe-table-column prop="gongcheng"  label="工程名称" width="160"></vxe-table-column>
+                         <vxe-table-column prop="createTime"  label="下单时间" width="160"></vxe-table-column>
+                         <vxe-table-column prop="customerOrgName"  label="客户名称" width="160"></vxe-table-column>
+                         <vxe-table-column prop="shopOrgName"  label="供应商名称" width="160"></vxe-table-column>
+                         <vxe-table-column prop="zhongliangAll" :formatter="this.$global.vxeTableWeight"  label="销售合同吨位" width="160"></vxe-table-column>
+                         <vxe-table-column prop="moneyAll" :formatter="this.$global.vxeTableWeight"  label="销售合同金额" width="160"></vxe-table-column>
+                         <vxe-table-column prop="deliveryTotalWeight" :formatter="this.$global.vxeTableWeight"  label="实提吨位" width="160"></vxe-table-column>
+                         <vxe-table-column prop="deliveryTotalMoneyCus" :formatter="this.$global.vxeTableMoney"  label="实提金额" width="160"></vxe-table-column>
+                         <vxe-table-column prop="userName"  label="管理员" width="160"></vxe-table-column>
+                         <vxe-table-column prop="dikouSmoney"  :formatter="this.$global.vxeTableMoney" label="抵扣金额" width="160"></vxe-table-column>
+                         <vxe-table-column prop="tixianSMoney" :formatter="this.$global.vxeTableMoney"  label="提现金额" width="160"></vxe-table-column>
+                         <vxe-table-column prop="skSmoney" :formatter="this.$global.vxeTableMoney"  label="收款金额" width="160"></vxe-table-column>
+                         <vxe-table-column prop="receivedMoney"  :formatter="this.$global.vxeTableMoney" label="付款金额" width="160"></vxe-table-column>
+                         <vxe-table-column prop="status" :formatter="sellOrderStatus"  label="状态" width="160"></vxe-table-column>
+                         
+                        </vxe-table>
+                    </TabPane>
+                    <TabPane label="到账单余额" name="name2">
+                       <vxe-table size="mini" border class="vxe-table-element" :highlight-cell='false'  :data.sync="tableDataTwo"  :edit-config="{key: 'id', trigger: 'click', mode: 'row',} ">
+                         <vxe-table-column prop="daozhangdanId"  label="ID" width="40"></vxe-table-column>
+                         <vxe-table-column prop="creditedCompany"  label="客户名称" width="140"></vxe-table-column>
+                         <vxe-table-column prop="payMoney"  :formatter="this.$global.vxeTableMoney" label="到账金额 (元)" width="140"></vxe-table-column>
+                         <vxe-table-column prop="dealMoney"  :formatter="this.$global.vxeTableMoney" label="剩余可用到账金额 (元)" width="140"></vxe-table-column>
+                         <vxe-table-column prop="bankNo"  label="客户银行账号" width="140"></vxe-table-column>
+                         <vxe-table-column prop="bank"  label="客户开户行名" width="140"></vxe-table-column>
+                         <vxe-table-column prop="jgBankNo"  label="收款账号" width="140"></vxe-table-column>
+                         <vxe-table-column prop="type"  label="到账银行卡" width="140"></vxe-table-column>
+                         <vxe-table-column prop="dealTime"  label="到账时间" width="140"></vxe-table-column>
+                         <vxe-table-column prop="zhaiyao"  label="摘要" width="140"></vxe-table-column>
+                         <vxe-table-column prop="daozhangdanStatus"  label="状态" width="140"></vxe-table-column>
+                         <vxe-table-column prop="dealTime"  label="到账时间" width="140"></vxe-table-column>
+                         
+                        </vxe-table>
+                    </TabPane>
+                    <!-- <TabPane label="流水账单" name="name3">
+                       <vxe-table size="mini" border class="vxe-table-element" :highlight-cell='false'  :data.sync="tableDataTwo"  :edit-config="{key: 'id', trigger: 'click', mode: 'row',} ">
+                         <vxe-table-column prop="ordersNo" label="订单号" width="140"></vxe-table-column>
+                         <vxe-table-column prop="chaMoney" label="结算金额" min-width="140"></vxe-table-column>
+                         <vxe-table-column prop="companyName" label="买家名称" min-width="140"></vxe-table-column>
+                        </vxe-table>
+                    </!--> -->
+                </Tabs>
               </Row>
-              <!-- 账户流水 表格height="447"-->
             <Row>        
-                <Table border   ref="selection" :columns="columns4" :data="data1" @on-select='selectOne' style='margin-bottom:10px;'></Table>
-                
-                
-                <Row span='8' style="margin-bottom:20px;display:flex;">
-                    <!-- 功能添加删除 -->
-                    <div style='flex:1'>
-                    <Button  icon="md-add" type="primary"  @click='modal3=true'>采购下单</Button>
-            
-            
-                    <Button  icon="md-add" type="primary">销售合同</Button>
-            
-            
-                    <Button  icon="ios-trash-outline" type="primary">指派</Button>
-            
-                    <Button  icon="ios-trash-outline" type="primary">部门</Button>
-                    <Button  icon="ios-trash-outline" type="primary" @click='modal5=true'>联系人</Button>
-                    <Button  icon="ios-trash-outline" type="primary"  @click='modal4=true'>地址</Button>
-                    <Button  icon="ios-trash-outline" type="primary">升级为供应商</Button>
-                   
-                    </div>
-            
-                    <!-- 分页 -->
-                    <!-- <Page  @on-change='changePage'  :total="totalM"  show-elevator show-sizer  show-total style='flex:1'/> -->
-                
-                </Row>
+               <!-- TABLE -->
             </Row>
             </div>
-            <!-- right -->
-            <div class='lay_right'>
-                <!-- 基本信息 -->
-                <div class='basicInfo'>
-                    <h1 class='h_info'>基本信息</h1>
-                    <div class='info_con'>
-                        <p>单元来源：平台注册</p>
-                        <p>单位名称：福建亿钢钢厂</p>
-                        <p>单位简称：亿钢</p>
-                        <p>单位类型：钢厂</p>
-                        <p>成立日期：2017-12-22</p>
-                        <p>单位性质：民企</p>
-                        <p>法人名称：陈魁</p>
-                        <p>法人身份证号：350123434423455</p>
-                        <p>注册资金：80000万元</p>
-                        <p>单位地址：福建省泉州XXXXXXXXXXX</p>
-                        <p>单位电话：</p>
-                        <p>单位传真:</p>
-                    </div>
-
-                </div>
-                <!-- 主联系人 开票信息 -->
-                <div class='phone_info'>
-                    <h1 class="phone_title">主联系人:<time>李先生</time></h1>
-                </div>
-                <!-- 手机   qq -->
-                <div class='phone_qq' style='display:flex; width:100%;margin-bottom:10px;
-            border:1px solid rgba(221,221,221,1);border-top:0;margin-bottom:20px;'>
-                    <Button disabled style='    padding-left: 5px;color:rgba(51,51,51,1);font-size:14px;border:none;flex:1;padding-right:0;' type="" icon="ios-phone-portrait">15936911908</Button>
-                    <Button disabled style='    padding-left: 5px;color:rgba(51,51,51,1);font-size:14px;border:none;flex:1;' type="" icon="logo-snapchat">1374265277</Button>
-                </div>
-                <!-- 开票信息 -->
-                 <div class='infoF'>
-                     <span class='spanKai'>开票信息</span>
-                     <div class='iconT'>  
-                       <Icon type="ios-share-alt-outline" /> 
-                       <Icon type="ios-trash-outline" />
-                     </div>
-                 </div>
-                 <div class='p_con'>
-                       <p>*税号:这个不能改</p>
-                       <p>*联系电话:05050550505</p>
-                       <p>*公司地址:上海市宝山区许竞争</p>
-                       <p>*开户银行:建设银行上海分行</p>
-                       <p>*银行账号:11313131313131313</p>
-                       <p>*退款银行账号:1131313131215151</p>
-                       <p>*退款银行开户网点:建设银行上海分行</p>
-                       <p>*采购打款账号:1113313313</p>
-                  </div>
-
-            </div>
+          
         </div>
       </Layout>
-      <!-- 2 -->
-    <!-- 弹窗1 -->
-    <Modal v-model="modal3" width='722px' :mask-closable="false"  :closable="false">
-          <Row class='contacts'>
-              <span class='span_contacts'>该公司联系人</span>
-              <Col class='span_btn'><Button  type='error'  icon="md-add">新增</Button></Col>
-          </Row>
-          <!-- TAB表格 -->
-          <Row>
-              <Table border   :columns="columnsShop" :data="dataShop"></Table>
-          </Row>
-    </Modal>
-    <!-- 弹窗地址 -->
-     <Modal v-model="modal4" width='777px' :mask-closable="false"  :closable="false">
-          <Row class='contacts'>
-              <span class='span_contacts'>该公司联系人</span>
-              <Col class='span_btn'><Button  type='error'  icon="md-add">新增</Button></Col>
-          </Row>
-          <!-- TAB表格 -->
-          <Row>
-              <Table border   :columns="columnsAdd" :data="dataAdd"></Table>
-          </Row>
-    </Modal>
-
-    <!-- 弹窗联系人 -->
-     <Modal v-model="modal5" width='1067px' :mask-closable="false"  :closable="false">
-          <Row class='contacts'>
-              <span class='span_contacts'>该公司联系人</span>
-              <Col class='span_btn'><Button  type='error'  icon="md-add">新增</Button></Col>
-          </Row>
-          <!-- TAB表格 -->
-          <Row>
-              <Table border   :columns="columnsCon" :data="dataCon"></Table>
-          </Row>
-    </Modal>
 
   </div>
 </template>
 <script>
-import {accountManagement} from '@/api/data'
+import XEUtils from 'xe-utils'
+import {findOrdersAll} from '@/api/data_8889'
+import {accountManagement,findDaoZhangDanAll} from '@/api/data'
+import {getBuyOrderStatus} from '@/libs/allStatus'
   export default {
     name: 'cusInformation',
     data(){
       return {
-        modal3:false,
-        modal4:false,
-        modal5:false,
-        totalM:0, //表格分页总天数
-        pagesizea:1,//默认分页第一页
-        columns4: [
-                    {   title: '选中',
-                        type: 'selection',
-                        width: '60',
-                        align: 'center'
-                    },
-                    {
-                        title: '发生时间',
-                        key: 'id',
-                       align: 'center',
-                        width:'90'
-                       
-                    },
-                    {
-                        title: '账单类型',
-                        key: 'createCname',
-                         align: 'center',
-                         width:'90'
-                    },
-                    {
-                        title: '发生金额',
-                        key: 'postW',
-                        align: 'center',
-                         width:'90'
-                    },
-                     {
-                        title: '账户余额',
-                        key: 'departmentName',
-                        align: 'center',
-                        width:'90'
-                    },
-                      {
-                        title: '账户可用余额',
-                        key: 'sex',
-                         align: 'center',
-                         width:'110'
-                    },
-                      {
-                        title: '账户冻结金额',
-                        key: 'acount',
-                        align: 'center',
-                        width:'110'
-                        
-                    },
-                     
-                     {
-                        title: '账单备注',
-                        key: 'mail',
-                        align: 'center',
-                         width:'150'
+        tMoneyOrder:'0',//订单剩余
+        tMoneyDao:'0',//到账单剩余
+        tMoney:"0",//合计
+         orgName:'',//公司名称
+         balanceMoney:0,//客户角色余额
+         inMoney:0,//入金额
+         outMoney:0,//出金额
+         tableDataOne:[],//订单组成的table
+         tableDataTwo:[],//到账单余额
+         dataSession:null,//获取前面存起来的数据
 
-                     
-                    },
-                    
-                ],
-                data1: [],//表格展示的数据
-                columnsShop:[
-                    
-                    {
-                        title: '部门Id',
-                        key: 'id',
-                        align: 'center',
-                        width:'110'
-                       
-                    },
-                    {
-                        title: '部门名称',
-                        key: 'shopCname',
-                        align: 'center',
-                         width:'110'
-                    },
-                    {
-                        title: '部门负责人',
-                        key: 'postW',
-                        align: 'center',
-                         width:'110'
-                    },
-                     {
-                        title: '部门地址',
-                        key: 'departmentName',
-                        align: 'center',
-                        width:'100'
-                    },
-                      {
-                        title: '部门备注',
-                        key: 'sex',
-                        align: 'center',
-                         width:'100'
-                    },
-                     {
-                        title: '操作',
-                        key: 'operate',
-                        align: 'center',
-                        width:'130',
-                        render: (h, params) => {
-                            return h('div', [
-                                h('Button', {
-                                    props: {
-                                        type: 'primary',
-                                        size: 'small'
-                                    },
-                                    style: {
-                                        marginRight: '5px'
-                                    },
-                                    on: {
-                                        click: () => {
-                                            this.show(params.index)
-                                        }
-                                    }
-                                }, '编辑'),
-                                   h('Button', {
-                                    props: {
-                                        type: 'primary',
-                                        size: 'small'
-                                    },
-                                    style: {
-                                      
-                                    },
-                                    on: {
-                                        click: () => {
-                                            this.show(params.index)
-                                        }
-                                    }
-                                }, '删除'),
-                             ]);
-                    }
-                        
-                    },
-                    
-                ],
-                dataShop:[
-                     {
-                        id: '12',
-                        shopCname: '福建建刚钢厂',
-                        postW: '开通',
-                        departmentName: '现货交易',
-                        sex:'上海市宝山区许竞争',
-                    },
-                ],//店铺表格
-                columnsAdd:[
-                    
-                    {
-                        title: 'ID',
-                        key: 'id',
-                        align: 'center',
-                        width:'110'
-                       
-                    },
-                    {
-                        title: '部门负责人',
-                        key: 'shopCname',
-                        align: 'center',
-                         width:'110'
-                    },
-                    {
-                        title: '联系人类型',
-                        key: 'postW',
-                        align: 'center',
-                         width:'125'
-                    },
-                     {
-                        title: '所属部门',
-                        key: 'departmentName',
-                        align: 'center',
-                        width:'120'
-                    },
-                      {
-                        title: '联系人电话',
-                        key: 'sex',
-                        align: 'center',
-                         width:'120'
-                    },
-                 
-                     {
-                        title: '操作',
-                        key: 'operate',
-                        align: 'center',
-                        width:'130',
-                        render: (h, params) => {
-                            return h('div', [
-                                h('Button', {
-                                    props: {
-                                        type: 'primary',
-                                        size: 'small'
-                                    },
-                                    style: {
-                                        marginRight: '5px'
-                                    },
-                                    on: {
-                                        click: () => {
-                                            this.show(params.index)
-                                        }
-                                    }
-                                }, '编辑'),
-                                   h('Button', {
-                                    props: {
-                                        type: 'primary',
-                                        size: 'small'
-                                    },
-                                    style: {
-                                      
-                                    },
-                                    on: {
-                                        click: () => {
-                                            this.show(params.index)
-                                        }
-                                    }
-                                }, '删除'),
-                             ]);
-                    }
-                        
-                    },
-                    
-                ],//表格地址
-                dataAdd:[
-                     {
-                        id: '12',
-                        shopCname: '福建建刚钢厂',
-                        postW: '开通',
-                        departmentName: '现货交易',
-                        sex:'上海市宝山区许竞争',
-                    },
-                ],//表格地址
-                 columnsCon:[
-                    
-                    {
-                        title: '售票信息Id',
-                        key: 'id',
-                        align: 'center',
-                        width:'110'
-                       
-                    },
-                    {
-                        title: '售票人',
-                        key: 'shopCname',
-                        align: 'center',
-                         width:'90'
-                    },
-                    {
-                        title: '售票人联系方式',
-                        key: 'postW',
-                        align: 'center',
-                         width:'125'
-                    },
-                     {
-                        title: '收票人地址',
-                        key: 'departmentName',
-                        align: 'center',
-                        width:'120'
-                    },
-                      {
-                        title: '默认售票地址',
-                        key: 'sex',
-                        align: 'center',
-                         width:'120'
-                    },
-                       {
-                        title: 'QQ',
-                        key: 'qq',
-                        align: 'center',
-                         width:'90'
-                    },
-                     {
-                        title: '微信号',
-                        key: 'weChat',
-                        align: 'center',
-                         width:'90'
-                    },
-                     {
-                        title: '邮箱',
-                        key: 'eMail',
-                        align: 'center',
-                         width:'90'
-                    },
-                     {
-                        title: '操作',
-                        key: 'operate',
-                        align: 'center',
-                        width:'170',
-                        render: (h, params) => {
-                            return h('div', [
-                                h('Button', {
-                                    props: {
-                                        type: 'primary',
-                                        size: 'small'
-                                    },
-                                    style: {
-                                        marginRight: '5px'
-                                    },
-                                    on: {
-                                        click: () => {
-                                            this.show(params.index)
-                                        }
-                                    }
-                                }, '沟通'),
-                                h('Button', {
-                                    props: {
-                                        type: 'primary',
-                                        size: 'small'
-                                    },
-                                    style: {
-                                        marginRight: '5px'
-                                    },
-                                    on: {
-                                        click: () => {
-                                            this.show(params.index)
-                                        }
-                                    }
-                                }, '编辑'),
-                                   h('Button', {
-                                    props: {
-                                        type: 'primary',
-                                        size: 'small'
-                                    },
-                                    style: {
-                                      
-                                    },
-                                    on: {
-                                        click: () => {
-                                            this.show(params.index)
-                                        }
-                                    }
-                                }, '删除'),
-                             ]);
-                    }
-                        
-                    },
-                    
-                ],//表格联系人
-                dataCon:[
-                     {
-                        id: '12',
-                        shopCname: '福建建刚钢厂',
-                        postW: '开通',
-                        qq:'1221212',
-                        departmentName: '现货交易',
-                        eMail:'你好',
-                        weChat:'121212',
-                        sex:'上海市宝山区许竞争',
-                    },
-                ],//表格联系人
       }
     },
     methods:{
-       selectOne(row){
-         console.log(row)
+       //footer 合计
+       footerMethod ({ columns, data }) {
+              return [
+                columns.map((column, columnIndex) => {
+                  if (columnIndex === 0) {
+                    return '合'
+                  }
+                  if (['chaMoney'//金额返回2位小数点
+                    ].includes(column.property)) {
+                    return this.$global.accPrecision(XEUtils.sum(data, column.property),2)
+                  }
+                  return '-'
+                })
+              ]
        },
+      sellOrderStatus({cellValue, row, column}){
+        return getBuyOrderStatus(row.status)
+      },
+      orderBtnClick(row){
+       row.operateType  ="1"//查看
+         const route = {
+                         name: 'sell_order_info',
+                         query: row
+                        }
+                          this.$router.push(route)
+      },
+      setInfo(){//赋值
+      // params.row.key1 //客户角色余额
+      // 到账金额 params.row.inMoney
+      // 应收金额 params.row.outMoney
+          this.balanceMoney = this.dataSession.key1;
+          this.inMoney = this.dataSession.inMoney;
+          this.outMoney = this.dataSession.outMoney;
+          this.orgName = this.dataSession.orgName
+      },
        //查询表格
-       searchM(){
+       searchM(){ //
          //获取查询的input的值
-         let param={};
-         param.pageNum=this.pagesizea//分页
-         this.getSerch(param)
-       },
-       //查询接口
-       getSerch(param){
-         accountManagement(param).then(res=>{
+         let param             = {};
+             param.cusMerName  = this.dataSession.orgName  //客户名称
+             param.beginStatus = "-1";
+             param.endStatus   = "90";
+             param.pageSize    = "999999"
+         findOrdersAll(param).then(res=>{
             if(res.code =="100"){
-            this.data1=res.data.list;
-            this.totalM=res.data.total; 
-            console.log(res.data.total);//总条数 
-          }  
-         })
+                res.data.list.map(item=>{
+                  item.chaMoney =  this.$global.accMinus(item.receivedMoney,item.deliveryTotalMoneyCus)
+                })
+               this.tableDataOne=res.data.list
+              }
+          })  
+       },
+       searchDaozhangdan(){
+          //获取查询的input的值
+         let param             = {};
+             param.allEqualcreditedCompany  = this.dataSession.orgName  //客户名称
+             param.beginDaozhangdanStatus = "1";
+             param.endDaozhangdanStatus   = "3";
+             param.pageSize    = "999999"
+             param.tranType    = "1"
+             param.beginDtype    = "1"
+             param.endDtype    = "1"
+            //  param.jgBank    = "2"
+         findDaoZhangDanAll(param).then(res=>{
+            if(res.code =="100"){
+               this.tableDataTwo=res.data.list
+              }
+          })  
        }
     },
     mounted(){
-      //账户管理接口
-     this.searchM();
+       this.searchM();//table的查询数据
+       this.searchDaozhangdan();//查询到账单列表数据
+       this.setInfo();
+       
     },
     created(){
-    
+      this.dataSession=JSON.parse(sessionStorage.getItem('compay'));
     },
   }
 </script>
 <style <style lang="less">
+
+.ivu-tabs-nav .ivu-tabs-tab-active{
+    background:#2d8cf0!important;
+    color:#fff;
+}
+.ivu-tabs-tab-active:hover{
+    color:#fff!important;
+}
 #lay_con{
     display: flex;
     .lay_left{
@@ -746,7 +416,7 @@ import {accountManagement} from '@/api/data'
 .account_price{
     height:50px;
     line-height:50px;
-    text-align:right;
+    // text-align:right;
     time{
         font-size:16px;
         color:red;

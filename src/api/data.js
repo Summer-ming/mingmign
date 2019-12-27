@@ -1,3 +1,9 @@
+/*
+ * @Description: 
+ * @Author: gmm
+ * @Date: 2019-10-15 11:19:43
+ * @其他: 
+ */
 import axios from '@/libs/api.request'
 
 
@@ -25,7 +31,7 @@ export const getJgLoginTest = (param) => {
         params: param
     })
 }
-
+//修改订单
 export const updateOrderStatus = (param) => {
         return axios.request({
             url: 'order/updateOrder',
@@ -575,7 +581,7 @@ export const updateFukuanZhenghe = (param) => {
             data: param
         })
     }
-    //查询抵扣列表
+    //查询抵扣列表 采购单
 export const findJgJieSuanInfo = (param) => {
     return axios.request({
         url: 'customer/findJgJieSuanInfo',
@@ -583,6 +589,14 @@ export const findJgJieSuanInfo = (param) => {
         params: param
     })
 }
+    //查询抵扣列表 销售单
+    export const findJgJieSuanInfoSellOrders = (param) => {
+        return axios.request({
+            url: 'customer/findJgJieSuanInfoSellOrders',
+            method: 'get',
+            params: param
+        })
+    }
 
 //修改采购单详细
 export const updateOrderInfo = (param) => {
@@ -618,6 +632,14 @@ export const findInStock = (param) => {
             params: param
         })
     }
+//查询库存列表信息 汇总
+export const findInStockSum = (param) => {
+    return axios.request({
+        url: 'order/findInStockSum',
+        method: 'get',
+        params: param
+    })
+}
     //修改库存信息
 export const updateInStock = (param) => {
     return axios.request({
@@ -635,6 +657,30 @@ export const findOrdersInfoAllSum = (param) => {
             params: param
         })
     }
+//查询销售订单明细合计
+export const findOrdersInfoAllSum89 = (param) => {
+    return axios.request({
+        url: 'order/findOrdersInfoAllSum89',
+        method: 'get',
+        params: param
+    })
+}
+//查询销售单利润合计
+export const findOrdersInfoAllSum89Sum = (param) => {
+    return axios.request({
+        url: 'order/findOrdersInfoAllSum89Sum',
+        method: 'get',
+        params: param
+    })
+}
+//查询销售单明细金额总计的接口
+export const findOrdersInfoAllSum89Zong = (param) => {
+    return axios.request({
+        url: 'order/findOrdersInfoAllSum89Zong',
+        method: 'get',
+        params: param
+    })
+}
     //查询到账单列表福建应
 export const findDaoZhangDanAll = (param) => {
         return axios.request({
@@ -768,7 +814,7 @@ export const findOrderCaozuoRecord = (param) => {
             params: param
         })
     }
-    //汇总订单总计金额
+    //汇总采购单订单总计金额
 export const updateBuy = (param) => {
     return axios.request({
         url: 'OtherMoney/updateBuy',
@@ -776,3 +822,393 @@ export const updateBuy = (param) => {
         data: param
     })
 }
+    //汇总销售单订单总计金额
+    export const updateSell = (param) => {
+        return axios.request({
+            url: 'OtherMoney/updateSell',
+            method: 'post',
+            data: param
+        })
+    }
+
+    //批量修改结算单状态；
+    export const updateJieSuanForStatus1 = (param) => {
+        return axios.request({
+            url: 'customer/updateJieSuanForStatus1',
+            method: 'post',
+            data: param
+        })
+    }
+       //批量修改结算单状态；全部可以批量的接口
+       export const updateJiSuanPidBatch = (param) => {
+        return axios.request({
+            url: 'customer/updateJiSuanPidBatch',
+            method: 'post',
+            data: param
+        })
+    }
+        //查找订单付款申请流水记录总和
+export const findZhidanApplySum = (param) => {
+    return axios.request({
+        url: 'customer/findZhidanApplySum',
+        method: 'get',
+        params: param
+    })
+}
+//批量添加到账单
+export const addDaoZhangDanBatch = (param) => {
+    return axios.request({
+        url: 'daozhangdan/addDaoZhangDanBatch',
+        method: 'post',
+        data: param
+    })
+}
+
+//确认到账单有效
+export const updateDaoZhangDanBatch2 = (param) => {
+    return axios.request({
+        url: 'daozhangdan/updateDaoZhangDanBatch2',
+        method: 'post',
+        data: param
+    })
+}
+
+//量确认到账单有效进入流水中
+export const addOrgMoneyRecord = (param) => {
+    return axios.request({
+        url: 'orginization/addOrgMoneyRecord ',
+        method: 'post',
+        data: param
+    })
+}
+    //查询客户供应商流水
+    export const findOrgMoneyRecord = (param) => {
+     return axios.request({
+         url: 'orginization/findOrgMoneyRecord',
+         method: 'get',
+         params: param
+     })
+ }
+
+ //量确认到账单有效进入流水中
+export const updateOrgMoneyRecord = (param) => {
+    return axios.request({
+        url: 'orginization/updateOrgMoneyRecord',
+        method: 'post',
+        data: param
+    })
+}
+ //查询客户供应商流水
+ export const findOrgMoneyRecordSum = (param) => {
+    return axios.request({
+        url: 'orginization/findOrgMoneyRecordSum',
+        method: 'get',
+        params: param
+    })
+}
+
+ //查询客户余额汇总
+ export const findOrgMoneyRecordMoneySum = (param) => {
+    return axios.request({
+        url: 'orginization/findOrgMoneyRecordMoneySum',
+        method: 'get',
+        params: param
+    })
+}
+
+ //添加制单申请表
+ export const addJgJieSuan = (param) => {
+    return axios.request({
+        url: 'customer/addJgJieSuan',
+        method: 'post',
+        data: param
+    })
+}
+//添加流水到公司流水表 orginization/addOrgMoneyRecord
+export const getLiuShuiBiao = (param) => {
+    return axios.request({
+        url: 'orginization/addOrgMoneyRecord',
+        method: 'post',
+        data: param
+    })
+}
+
+ //查询采购订单合计
+ export const findOrdersAllSum = (param) => {
+    return axios.request({
+        url: 'order/findOrdersAllSum',
+        method: 'get',
+        params: param
+    })
+}
+//查询销售订单合计
+export const findOrdersAllSum89 = (param) => {
+    return axios.request({
+        url: 'order/findOrdersAllSum89',
+        method: 'get',
+        params: param
+    })
+}
+
+//判断采购单订单状态，是否可以变更成已收票；不需要处理返回结果
+export const updateOrderStatusByInvoiceStatus = (param) => {
+    return axios.request({
+        url: 'order/updateOrderStatusByInvoiceStatus',
+        method: 'post',
+        data: param
+    })
+}
+
+//判断销售单订单状态，是否可以变更成已收票；不需要处理返回结果
+export const updateOrderStatusByInvoiceStatus89 = (param) => {
+    return axios.request({
+        url: 'order/updateOrderStatusByInvoiceStatus89',
+        method: 'post',
+        data: param
+    })
+}
+
+//查询杂费余额
+export const findMoney = (param) => {
+    return axios.request({
+        url: 'OtherMoney/findMoney',
+        method: 'get',
+        params: param
+    })
+}
+//查询客户票额
+export const findOrgGroup = (param) => {
+    return axios.request({
+        url: 'customer/findOrgGroup',
+        method: 'get',
+        params: param
+    })
+}
+
+//查询工程名称
+export const findOrderEngineering = (param) => {
+    return axios.request({
+        url: 'order/findOrderEngineering',
+        method: 'get',
+        params: param
+    })
+}
+
+//添加利息
+export const addInterest = (param) => {
+    return axios.request({
+        url: 'Interest/addInterest',
+        method: 'post',
+        data: param
+    })
+}
+//修改利息
+export const updateInterest = (param) => {
+    return axios.request({
+        url: 'Interest/updateInterest',
+        method: 'post',
+        data: param
+    })
+}
+//查询利息
+export const findInterest = (param) => {
+    return axios.request({
+        url: 'Interest/findInterest',
+        method: 'get',
+        params: param
+    })
+}
+
+//电商结算流水
+//查询 汇总
+export const findBillFlowSum = (param) => {
+    return axios.request({
+        url: 'billFlow/findBillFlowSum',
+        method: 'get',
+        params: param
+    })
+}
+//查询 列表
+export const findBillFlow = (param) => {
+    return axios.request({
+        url: 'billFlow/findBillFlow',
+        method: 'get',
+        params: param
+    })
+}
+//修改
+export const updateBillFlow = (param) => {
+    return axios.request({
+        url: 'billFlow/updateBillFlow',
+        method: 'post',
+        data: param
+    })
+}
+//添加
+export const addBillFlow = (param) => {
+    return axios.request({
+        url: 'billFlow/addBillFlow',
+        method: 'post',
+        data: param
+    })
+}
+
+//查询 杂费关联采购单接口
+export const findOtderMoneyBuy = (param) => {
+    return axios.request({
+        url: 'OtherMoney/findOtderMoneyBuy',
+        method: 'get',
+        params: param
+    })
+}
+//查询 杂费关联销售单接口
+export const findOtderMoneySell = (param) => {
+    return axios.request({
+        url: 'OtherMoney/findOtderMoneySell',
+        method: 'get',
+        params: param
+    })
+}
+
+//修改 杂费信息
+export const updateOtherMoneyBatch = (param) => {
+    return axios.request({
+        url: 'OtherMoney/updateOtherMoneyBatch',
+        method: 'post',
+        data: param
+    })
+}
+// 
+//查询 杂费总金额
+export const findOtherMoneySum = (param) => {
+    return axios.request({
+        url: 'OtherMoney/findOtherMoneySum',
+        method: 'get',
+        params: param
+    })
+}
+// order/updateOrderAuditApply
+export const jueP = (param) => {
+    return axios.request({
+        url: 'order/updateOrderAuditApply',
+        method: 'post',
+        data: param
+    })
+}
+// project/ findProject
+export const xiangMu = (param) => {
+    return axios.request({
+        url: 'project/findProject',
+        method: 'get',
+        params: param
+    })
+}
+///project/ findProjectDept 传
+export const xiangMuDetail = (param) => {
+    return axios.request({
+        url: 'project/findProjectDept',
+        method: 'get',
+        params: param
+    })
+}
+// 跟新基本信息/project/ updateProject 
+export const xiangGeng = (param) => {
+    return axios.request({
+        url: 'project/updateProject',
+        method: 'post',
+        data: param
+    })
+}
+//更新干系人信息project/ updateProjectDept
+export const genZhu = (param) => {
+    return axios.request({
+        url: 'project/updateProjectDept',
+        method: 'post',
+        data: param
+    })
+}
+//新增接口/project/ addProjectDept
+export const genAdd = (param) => {
+    return axios.request({
+        url: 'project/addProjectDept',
+        method: 'post',
+        data: param
+    })
+}
+//new /project/ addProject
+export const getAdd = (param) => {
+    return axios.request({
+        url: 'project/addProject',
+        method: 'post',
+        data: param
+    })
+}
+//打印采购合同
+export const buyOrderPdf = (param) => {
+    return axios.request({
+        url: 'order/buyOrderPdf',
+        method: 'post',
+        data: param
+    })
+}
+//查询工程、对账批次汇总
+export const findEngineeringMoney = (param) => {
+    return axios.request({
+        url: 'order/findEngineeringMoney',
+        method: 'get',
+        params: param
+    })
+}
+
+//查询采购销售利润订单表
+export const findOrderProfit = (param) => {
+    return axios.request({
+        url: 'order/findOrderProfit',
+        method: 'get',
+        params: param
+    })
+}
+
+//查询采购销售利润订单表汇总
+export const findOrderProfitSum = (param) => {
+    return axios.request({
+        url: 'order/findOrderProfitSum',
+        method: 'get',
+        params: param
+    })
+}
+//项目三级tree接口查询
+export const findProject = (param) => {
+    return axios.request({
+        url: 'project/findProject',
+        method: 'get',
+        params: param
+    })
+}
+
+//批量修改采购单的发票金额、发票号码、从订单明细中汇总来
+export const updateOrderBuyMoneyBatch = (param) => {
+    return axios.request({
+        url: 'order/updateOrderBuyMoneyBatch',
+        method: 'post',
+        data: param
+    })
+}
+//批量修改采购单的发票金额、发票号码、从订单明细中汇总来
+export const updateOrderSellMoneyBatch = (param) => {
+    return axios.request({
+        url: 'order/updateOrderSellMoneyBatch',
+        method: 'post',
+        data: param
+    })
+}
+//tree数组表格order/findOrdersAllTree89
+
+export const findTree = (param) => {
+    return axios.request({
+        url: 'order/findOrdersAllTree89',
+        method: 'get',
+        params: param
+    })
+}
+

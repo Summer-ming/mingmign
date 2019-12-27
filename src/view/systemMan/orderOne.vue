@@ -102,8 +102,10 @@ ref="upload"
 
     <!--提交取消按钮 -->
     <row style='padding-left:10px;'>
-      <Button   type="primary" @click='getAdd'>提交</Button>
-      <Button   type="primary">取消</Button> 
+      <Button   style="margin-left:20px"  type="primary" @click='getAdd'>提交</Button>
+      <Button  style="margin-left:20px"   type="primary">取消</Button> 
+      <Button style="margin-left:20px"   type="primary" @click='exportExcel'>测试导出excel</Button>
+
     </row>
 
 
@@ -117,7 +119,7 @@ ref="upload"
 import {findShop} from '@/api/data';//查询店铺
 import {getAgent,getTi} from '@/api/cusData'//查询代理商
 import {companyTypeListAllName} from '@/libs/global_type'//公司抬头
-
+import excel from '@/libs/excel'
 export default {
   name: 'listOrder',
   components: {
@@ -271,9 +273,50 @@ export default {
       defaultList: [],
       uploadList: [],
       imgString:"",//图片的参数
+      tableTitle: [
+        {
+          title: '一级分类',
+          key: 'category1'
+        },
+        {
+          title: '二级分类',
+          key: 'category2'
+        },
+        {
+          title: '三级分类',
+          key: 'category3'
+        }
+      ],
+      tableData: [
+        {
+          category1: 1,
+          category2: 2,
+          category3: 3
+        },
+        {
+          category1: 4,
+          category2: 5,
+          category3: 6
+        },
+        {
+          category1: 7,
+          category2: 8,
+          category3: 9
+        }
+      ]
     }
   },
   methods: {
+    exportExcel(){
+         const params = {
+          title: ['一级分类', '二级分类', '三级分类'],
+          key: ['category1', 'category2', 'category3'],
+          data: this.tableData,
+          autoWidth: true,
+          filename: '分类列表'
+        }
+        excel.export_array_to_excel(params)
+    },
        //查询店铺
        getShop(param){
           findShop(param).then(res=>{
@@ -410,7 +453,7 @@ export default {
            this.dataOne.splice(index,1)
           //  this.dataTwo.splice(index,1)
 
-           for(var i in this.dataTwo){
+           for( var i=0; i<this.dataTwo.length;i++ ){
              if(this.dataTwo[i].shopSteelId == row.shopSteelId){
                this.dataTwo.splice(i,1)
              }
@@ -435,10 +478,7 @@ export default {
                 console.log('我是上传的图片')
                 const reg=/,$/gi;//此处是正则
 
-                this.uploadList.map((item)=>{
-                  console.log(this.imgString.length+'我是打印的长度')
-                     this.imgString += item.url+','    
-                })
+               
             },
             handleFormatError(file) {
                 this.$Notice.warning({
@@ -513,6 +553,10 @@ export default {
                   })
        },
        getAdd(){ //TODO:
+        this.uploadList.map((item)=>{
+                  console.log(this.imgString.length+'我是打印的长度')
+                     this.imgString += item.url+','    
+                })
        this.reloadData();
          const param                = {};
                param.agentId        = this.agentId;
